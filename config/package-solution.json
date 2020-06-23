@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "cbr-pks-calendar-spfx-client-side-solution",
+    "id": "c75c31fb-bcf9-49f8-9ed4-38218ddba615",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true
+  },
+  "paths": {
+    "zippedPackage": "solution/cbr-pks-calendar-spfx.sppkg"
+  }
+}

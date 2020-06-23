@@ -1,0 +1,11 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "isCreatingSolution": true,
+    "environment": "onprem19",
+    "version": "1.10.0",
+    "libraryName": "cbr-pks-calendar-spfx",
+    "libraryId": "c75c31fb-bcf9-49f8-9ed4-38218ddba615",
+    "packageManager": "npm",
+    "componentType": "webpart"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "rcr-calendar-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/rcrCalendar/RcrCalendarWebPart.js",
+          "manifest": "./src/webparts/rcrCalendar/RcrCalendarWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "RcrCalendarWebPartStrings": "lib/webparts/rcrCalendar/loc/{locale}.js"
+  }
+}
