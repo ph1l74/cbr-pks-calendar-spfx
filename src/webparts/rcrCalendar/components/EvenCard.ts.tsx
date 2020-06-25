@@ -2,8 +2,6 @@ import * as React from 'react';
 import styles from './RcrCalendar.module.scss';
 import { IRcrCalendarProps } from './IRcrCalendarProps';
 import { escape } from '@microsoft/sp-lodash-subset';
-import Dashboard from './Dashboard';
-import Content from './Content';
 
 export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> {
   public render(): React.ReactElement<IRcrCalendarProps> {
@@ -15,10 +13,6 @@ export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> 
               <span className={styles.title}>{escape(this.props.description)}</span>
             </div>
             <div className={styles.row}>
-              <div className={styles.column}>
-              <Content></Content>
-              <Dashboard></Dashboard>
-              </div>
             </div>
           </div>
         </div>
