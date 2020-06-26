@@ -1,3 +1,2 @@
-export interface IRcrCalendarProps {
-  description: string;
+export interface IEventCardProps {
 }
