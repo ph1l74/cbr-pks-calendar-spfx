@@ -1,0 +1,79 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.card {
+  width: 100%;
+  margin: 20px;
+
+  .dates {
+    width: 150px;
+    display: inline-block;
+    vertical-align: top;
+
+    .dateFrom,
+    .dateTo {
+      width: 100%;
+    }
+
+    .dateFrom,
+    .dateTo {
+      span {
+        display: inline-block;
+      }
+    }
+  }
+
+  .info {
+    width: calc(100%-150px);
+    display: inline-block;
+
+    .header {
+      margin-bottom: 10px;
+
+      .time,
+      .status {
+        display: inline;
+      }
+
+      .status {
+        float: right;
+      }
+
+      .location {
+        font-size: 1.1em;
+      }
+    }
+
+    .title {
+      font-size: 1.4em;
+    }
+    .code, .provider {
+      font-size: 0.8em;
+    }
+    .tags {
+      margin: 6px;
+      ul {
+        list-style: none; 
+        padding: 0;
+        li {
+          display: inline;
+          margin-right: 6px;
+          padding: 6px;
+          border: 1px solid black;
+          border-radius: 50px;
+          cursor: pointer;
+        }
+      }
+    }
+    .footer {
+      div {
+        display: inline-block;
+        margin-right: 6px;
+      }
+      .feedback {
+        float: right;
+        margin-right: 0;
+      }
+    }
+  }
+
+}
