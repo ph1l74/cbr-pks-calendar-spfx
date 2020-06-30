@@ -1,26 +1,95 @@
-## cbr-pks-calendar-spfx
+# cbr-pks-calendar-spfx
 
-This is where you include your WebPart documentation.
+Календарь событий реализованный на Sharepoint Framework (SPFx).
 
-### Building the code
+## Запуск проекта
+### Как запустить проект
 
 ```bash
 git clone the repo
 npm i
 npm i -g gulp
-gulp
+gulp 
 ```
 
-This package produces the following:
+При построении проекта будут созданы сделующие директории:
 
-* lib/* - intermediate-stage commonjs build artifacts
-* dist/* - the bundled script, along with other resources
-* deploy/* - all resources which should be uploaded to a CDN.
+* lib/* - артифакты построения проекта промежуточной стадии.
+* dist/* - итоговый бандл скриптв, включающий зависимости.
+* deploy/* - все ресурсы, которые необходимо загрузить при деплое на CDN.
 
-### Build options
+### Параметры построения проекта
 
-gulp clean - TODO
-gulp test - TODO
-gulp serve - TODO
-gulp bundle - TODO
-gulp package-solution - TODO
+gulp serve - запустить решение на локальном сервере SP Workbench.
+gulp package-solution - упаковать решение.
+
+
+## Компоненты
+### RcrCalendar
+
+Главный компонент. Используется в качестве контейнера.
+
+### Content
+
+Контейнер для отображения контента.
+
+### Dashboard
+
+Контейнер для отображения боковой панели.
+
+### EventCard
+
+Компонент карточки события. Отображает информацию по событию. Использует React Hooks (useState) для взаимодействия с состоянием компонента*. 
+
+*в текущей реализации используются hardcode-данные для тестового отображения.
+
+Модель объекта с информацией о событии:
+
+```
+{
+    dates: {
+      dateFrom: "2020-10-05T14:48:00.000Z",
+      dateTo: "2020-10-10T14:48:00.000Z"
+    },
+    time: {
+      allDay: true,
+      from: null,
+      to: null
+    },
+    status: true,
+    location: "Москва, 1-й Волоколамский проезд д.10 строение 3.",
+    title: "Курс: Основы визуального моделирования с использованием UML 2.x",
+    code: "REQ-001",
+    provider: "Luxoft Training",
+    tags: ["Прочие события"],
+    participants: ["65afa", "65chdv", "65gsv"],
+    materials: ["material"],
+    feedback: [{ author: "65afa", comment: "nice" }, { author: "65chdv", comment: "not nice" }]
+  }
+```
+
+| Поле         | Назначение                                                        | Тип              |
+| ------------ | ----------------------------------------------------------------- | ---------------- |
+| dates        | Содержит поля dateFrom и dateTo                                   | Object           |
+| dateFrom     | Значение даты начала события                                      | String*          |
+| dateTo       | Значение даты окончания события                                   | String*          |
+| time         | Содержит поля allDay, from, to                                    | Object           |
+| allDay       | Флаг, обозначающий событие на весь день                           | Boolean          |
+| from         | Время начала события                                              | String**         |
+| status       | Флаг, обозначающий статус участия текущего пользователя в событии | Boolean          |
+| location     | Место проведения                                                  | String           |
+| title        | Название события                                                  | String           |
+| code         | Код события                                                       | String           |
+| provider     | Организатор события                                               | String**         |
+| tags         | Массив с тегами                                                   | Array<String>    |
+| participants | Массив с ID участинков события                                    | Array<String>*** |
+| materials    | Массив с материалами                                              | Array<String>*** |
+| feedback     | Время окончания события                                           | Array<Object>*** |
+
+\* **dateFrom, dateTo** - Запись осуществляется в формате ISO. Например: *"2020-10-05T14:48:00.000Z"*.
+\** **from, to** - Запись осуществляется в обычном текстовом формате. Например: *"14:00"*.
+\*** **participants**, **materials**, **feedback** - Тип данных для этих полей еще не определён.
+
+## TODO
+* EventCard: Привести стили карточки к виду ПКС.
+* Написать компоненты модального окна.
