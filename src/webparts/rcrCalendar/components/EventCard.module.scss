@@ -23,8 +23,11 @@
   }
 
   .info {
-    width: calc(100%-150px);
+    width: calc(100%-152px);
     display: inline-block;
+    border: 2px solid black;
+    border-width: 0px 0px 0px 2px;
+    height: 100%;
 
     .header {
       margin-bottom: 10px;
