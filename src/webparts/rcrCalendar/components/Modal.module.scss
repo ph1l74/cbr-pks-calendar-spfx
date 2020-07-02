@@ -1,0 +1,21 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+
+  .bg {
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    background-color: rgba(0,0,0,0.9);
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    .window {
+      background-color: rgba(255,255,255,1);
+      border-radius: 20px;
+      margin: auto;
+      max-width: 650px;
+      margin-top: 20vh;
+      min-height: 650px;
+    }
+  }
