@@ -10,10 +10,12 @@ const Modal: React.FunctionComponent<IModalProps> = (props) => {
 
     return (
         <div className={styles.bg}>
-            <div className={styles.window}>
-                <div className="header">{props.title}</div>
-                <div className="close"><button onClick={props.closeModalFn}>Close</button></div>
-                {props.children}
+            <div className={styles.border}>
+                <div className={styles.title}>{props.title}</div>
+                <div className={styles.close} onClick={props.closeModalFn}></div>
+                <div className={styles.window}>
+                    {props.children}
+                </div>
             </div>
         </div>
     );

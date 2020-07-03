@@ -10,12 +10,54 @@
     top: 0;
     left: 0;
 
-    .window {
-      background-color: rgba(255,255,255,1);
-      border-radius: 20px;
+    .border {
+      background-color: rgb(65, 151, 231);
       margin: auto;
-      max-width: 650px;
+      width: 650px;
       margin-top: 20vh;
-      min-height: 650px;
+      height: 650px;
+      border-radius: 20px;
+      padding: 40px;
+      .title {
+        color: rgba(255,255,255,1);
+        font-weight: 400;
+        font-size: 1.4em;
+        display: inline-block;
+        margin-bottom: 20px;
+      }
+      .close {
+        float: right;
+        width: 16px;
+        height: 16px;
+        opacity: 0.5;
+        cursor: pointer;
+        position: relative;
+        }
+      .close:hover {
+        opacity: 1;
+      }
+      .close:before, .close:after {
+        position: absolute;
+        left: 15px;
+        content: ' ';
+        height: 14px;
+        width: 2px;
+        background-color: rgb(255, 255, 255);
+      }
+      .close:before {
+        transform: rotate(45deg);
+      }
+      .close:after {
+        transform: rotate(-45deg);
+      }
+      
+      .window {
+        background-color: rgba(255,255,255,1);
+        border-radius: 20px;
+        width: 610px;
+        height: 560px;
+        padding: 20px;
+
+      }
     }
   }
