@@ -1,5 +1,7 @@
 import * as React from 'react';
 import styles from './EventCard.module.scss';
+import Modal from './Modal';
+import Participants from './Participants';
 
 const EventCard = () => {
 
@@ -31,8 +33,27 @@ const EventCard = () => {
     "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
   ];
 
+
+  const modalTypes = ["Участники", "Материалы", "Отзывы"]
+
   // react hooks instead of props
   const [cardInfo, setCardInfo] = React.useState(cardInfoInit);
+
+  // open modal state
+
+  const [stateModal, setModal] = React.useState(false);
+  const [modalType, setModalType] = React.useState(null);
+
+  function openModal(type: number): void {
+    setModalType(type);
+    setModal(true);
+  }
+
+
+  function closeModal(): void {
+    console.log("closed modal");
+    setModal(false);
+  }
 
 
   return (
@@ -78,17 +99,31 @@ const EventCard = () => {
           </ul>
         </div>
         <div className={styles.footer}>
-          <div className="participants">Список участников ({cardInfo.participants.length})</div>
+          <div className="participants" onClick={() => { openModal(0) }}>Список участников ({cardInfo.participants.length})</div>
           {
             cardInfo.materials && cardInfo.materials.length > 0 ?
-              <div className="materials">Материалы ({cardInfo.materials.length})</div>
+              <div className="materials" onClick={() => { openModal(1) }}>Материалы ({cardInfo.materials.length})</div>
               :
               null
           }
-          <div className={styles.feedback}>Отзывы {cardInfo.feedback && cardInfo.feedback.length > 0 ? `(${cardInfo.feedback.length})` : null}</div>
+          <div className={styles.feedback} onClick={() => { openModal(2) }}>Отзывы {cardInfo.feedback && cardInfo.feedback.length > 0 ? `(${cardInfo.feedback.length})` : null}</div>
         </div>
       </div>
-
+      {
+        stateModal ?
+          <Modal title={modalTypes[modalType]} closeModalFn={closeModal}>
+            {
+              modalType === 0 ?
+                <Participants />
+                : modalType === 1 ?
+                  <div>Материалы</div>
+                  :
+                  <div>Отзывы</div>
+            }
+          </Modal>
+          :
+          null
+      }
     </div>
   )
 }
