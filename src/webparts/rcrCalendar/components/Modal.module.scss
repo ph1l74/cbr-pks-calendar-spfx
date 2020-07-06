@@ -13,22 +13,23 @@
     .border {
       background-color: rgb(65, 151, 231);
       margin: auto;
-      width: 650px;
+      width: 688px;
       margin-top: 20vh;
-      height: 650px;
-      border-radius: 20px;
-      padding: 40px;
+      height: 492px;
+      border-radius: 6px;
+      padding: 36px;
+      position: relative;
       .title {
         color: rgba(255,255,255,1);
-        font-weight: 400;
-        font-size: 1.4em;
+        font-weight: 800;
+        font-size: 1.2em;
         display: inline-block;
         margin-bottom: 20px;
       }
       .close {
         float: right;
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
         opacity: 0.5;
         cursor: pointer;
         position: relative;
@@ -38,10 +39,10 @@
       }
       .close:before, .close:after {
         position: absolute;
-        left: 15px;
+        left: 10px;
         content: ' ';
-        height: 14px;
-        width: 2px;
+        height: 20px;
+        width: 1px;
         background-color: rgb(255, 255, 255);
       }
       .close:before {
@@ -53,11 +54,10 @@
       
       .window {
         background-color: rgba(255,255,255,1);
-        border-radius: 20px;
-        width: 610px;
-        height: 560px;
+        border-radius: 6px;
+        width: calc(100%-36px);
+        height: calc(100%-86px);
         padding: 20px;
-
       }
     }
   }
