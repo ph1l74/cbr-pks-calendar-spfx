@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './EventCard.module.scss';
 import Modal from './Modal';
 import Participants from './Participants';
+import Materials from './Materials';
 
 const EventCard = () => {
 
@@ -116,7 +117,7 @@ const EventCard = () => {
               modalType === 0 ?
                 <Participants />
                 : modalType === 1 ?
-                  <div>Материалы</div>
+                  <Materials />
                   :
                   <div>Отзывы</div>
             }
