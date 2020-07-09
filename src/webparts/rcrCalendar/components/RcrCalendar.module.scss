@@ -1,6 +1,7 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 
 .rcrCalendar {
+  font-family: Arial, sans-serif;
   .container {
     max-width: 100%;
     margin: 0px auto;
@@ -22,10 +23,12 @@
   }
 
   .title {
-    @include ms-font-l;
-    color: #333333;
-    font-weight: 800;
-    font-family: Tahoma, sans-serif;
+    padding: 0px 40px 20px;
+    margin: 0;
+    color: #000000;
+    font-family: Arial, sans-serif;
+    font-size: 21px;
+    font-weight: 700;
   }
 
   .subTitle {
@@ -73,11 +76,28 @@
     }
   }
   .content {
-    width: 100%;
+    width: calc(100%-290px);
+    padding: 0px 40px;
   }
 
   .dashboard {
-    width: 350px;
+    width: 250px;
+    padding-left: 40px;
+  }
+
+  .header {
+    padding: 0px 40px 20px;
+    margin: 0;
+    color: #000000;
+    font-family: Arial, sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    background: #f2f3f3;
+  }
+
+  .app {
+    padding: 0px 40px;
+    background: #f2f3f3
   }
   
 }

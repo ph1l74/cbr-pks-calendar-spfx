@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './EventCard.module.scss';
 import Modal from './Modal';
 import Participants from './Participants';
+import Materials from './Materials';
 
 const EventCard = () => {
 
@@ -20,8 +21,7 @@ const EventCard = () => {
     status: true,
     location: "Москва, 1-й Волоколамский проезд д.10 строение 3.",
     title: "Курс: Основы визуального моделирования с использованием UML 2.x",
-    code: "REQ-001",
-    provider: "Luxoft Training",
+    description: "<p>Код</p><p>Организатор</p>",
     tags: ["Прочие события"],
     participants: ["65afa", "65chdv", "65gsv"],
     materials: ["material"],
@@ -60,16 +60,16 @@ const EventCard = () => {
     <div className={styles.card}>
       <div className={styles.dates}>
         <div className={styles.dateFrom}>
-          <span>с</span>
-          <span className="date">{new Date(cardInfo.dates.dateFrom).getUTCDate()}</span>
-          <span className="month">{monthNames[new Date(cardInfo.dates.dateFrom).getMonth()]}</span>
-          <span className="year">{new Date(cardInfo.dates.dateFrom).getUTCFullYear()}</span>
+          <span className={styles.dateDest}>с</span>
+          <span className={styles.dateDay}>{new Date(cardInfo.dates.dateFrom).getUTCDate()}</span>
+          <span className={styles.dateMonth}>{monthNames[new Date(cardInfo.dates.dateFrom).getMonth()]}</span>
+          <span className={styles.dateYear}>{new Date(cardInfo.dates.dateFrom).getUTCFullYear()}</span>
         </div>
         <div className={styles.dateTo}>
-          <span>по</span>
-          <span className="date">{new Date(cardInfo.dates.dateTo).getUTCDate()}</span>
-          <span className="month">{monthNames[new Date(cardInfo.dates.dateTo).getMonth()]}</span>
-          <span className="year">{new Date(cardInfo.dates.dateTo).getUTCFullYear()}</span>
+          <span className={styles.dateDest}>по</span>
+          <span className={styles.dateDay}>{new Date(cardInfo.dates.dateTo).getUTCDate()}</span>
+          <span className={styles.dateMonth}>{monthNames[new Date(cardInfo.dates.dateTo).getMonth()]}</span>
+          <span className={styles.dateYear}>{new Date(cardInfo.dates.dateTo).getUTCFullYear()}</span>
         </div>
       </div>
       <div className={styles.info}>
@@ -86,11 +86,10 @@ const EventCard = () => {
               :
               null
           }
-          <div className="location">{cardInfo.location}</div>
+          <div className={styles.location}>{cardInfo.location}</div>
         </div>
         <div className={styles.title}>{cardInfo.title}</div>
-        <div className={styles.code}>код {cardInfo.code}</div>
-        <div className={styles.provider}>Организатор - {cardInfo.provider}</div>
+        <div dangerouslySetInnerHTML={{ __html: cardInfo.description }}></div>
         <div className={styles.tags}>
           <ul>
             {cardInfo.tags.map((tag) => (
@@ -116,7 +115,7 @@ const EventCard = () => {
               modalType === 0 ?
                 <Participants />
                 : modalType === 1 ?
-                  <div>Материалы</div>
+                  <Materials />
                   :
                   <div>Отзывы</div>
             }
