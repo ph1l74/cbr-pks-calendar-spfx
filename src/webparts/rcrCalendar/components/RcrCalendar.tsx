@@ -10,13 +10,15 @@ export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> 
   public render(): React.ReactElement<IRcrCalendarProps> {
     return (
       <div className={styles.rcrCalendar}>
-        <div className="header">{escape(this.props.description)}</div>
-        <Content>
-          <EventCard></EventCard>
-          <EventCard></EventCard>
-          <EventCard></EventCard>
-        </Content>
-        <Dashboard></Dashboard>
+        <div className={styles.header}>{escape(this.props.description)}</div>
+        <div className={styles.app}>
+          <Content>
+            <EventCard></EventCard>
+            <EventCard></EventCard>
+            <EventCard></EventCard>
+          </Content>
+          <Dashboard></Dashboard>
+        </div>
       </div>
     );
   }

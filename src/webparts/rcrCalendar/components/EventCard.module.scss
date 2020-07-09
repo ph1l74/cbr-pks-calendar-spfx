@@ -1,33 +1,82 @@
-@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
 .card {
   width: 100%;
-  margin: 20px;
+  padding: 20px 40px 40px;
+  margin-bottom: 20px;
+  background: #fff;
+  border-radius: 4px;
 
   .dates {
+    float: left;
     width: 150px;
-    display: inline-block;
-    vertical-align: top;
 
     .dateFrom,
     .dateTo {
-      width: 100%;
+      position: relative;
+    }
+
+    .dateFrom::before,
+    .dateTo::before,
+    .dateFrom::after,
+    .dateTo::after {
+      display: table;
+      line-height: 0;
+      content: "";
+    }
+
+    .dateFrom::after,
+    .dateTo::after {
+      clear: both;
     }
 
     .dateFrom,
     .dateTo {
       span {
-        display: inline-block;
+        display: block;
+      }
+
+      .dateDest {
+        position: absolute;
+        top: 24px;
+        left: -18px;
+        color: #8f979b;
+        font-size: 20px;
+        font-weight: 100;
+      }
+
+      .dateDay {
+        float: left;
+        width: 71px;
+        color: #f24f4b;
+        font-size: 48px;
+        font-weight: 100;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      .dateMonth {
+        padding-top: 13px;
+        padding-bottom: 2px;
+        font-size: 13px;
+        font-weight: 100;
+        text-transform: uppercase;
+      }
+
+      .dateYear {
+        color: #8f979b;
+        font-size: 11px;
+        font-weight: 100;
       }
     }
   }
 
   .info {
-    width: calc(100%-152px);
+    width: calc(100%-172px);
+    padding-left: 20px;
+    border-left: 2px solid;
     display: inline-block;
-    border: 2px solid black;
-    border-width: 0px 0px 0px 2px;
-    height: 100%;
 
     .header {
       margin-bottom: 10px;
@@ -35,42 +84,58 @@
       .time,
       .status {
         display: inline;
+        margin-bottom: 10px;
+        color: #000000;
+        font-size: 13px;
+        font-weight: 100;
       }
 
       .status {
         float: right;
+        margin-bottom: 10px;
+        color: #000000;
+        font-size: 13px;
+        font-weight: 100;
       }
 
       .location {
         font-size: 1.1em;
+        margin-bottom: 10px;
+        color: #000000;
+        font-size: 13px;
+        font-weight: 100;
       }
     }
 
     .title {
       font-size: 1.4em;
     }
-    .code, .provider {
-      font-size: 0.8em;
-    }
     .tags {
-      margin: 6px;
+      margin-top: 10px;
+
       ul {
-        list-style: none; 
+        list-style: none;
         padding: 0;
         li {
+          padding: 4px 10px;
+          border: 1.5px solid;
+          border-radius: 20px;
+          font-size: 13px;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          -webkit-user-select: none;
+          user-select: none;
           display: inline;
-          margin-right: 6px;
-          padding: 6px;
-          border: 1px solid black;
-          border-radius: 50px;
-          cursor: pointer;
         }
       }
     }
     .footer {
+      padding: 15px 0px;
       div {
         display: inline-block;
-        margin-right: 6px;
+        font-size: 14px;
+        color: #4689b9;
+        margin-right: 15px;
         cursor: pointer;
       }
       .feedback {
@@ -79,5 +144,4 @@
       }
     }
   }
-
 }
