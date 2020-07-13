@@ -1,6 +1,7 @@
 import * as React from 'react'
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Calendar as ReactCalendar } from 'react-modern-calendar-datepicker'
+import styles from './Calendar.module.scss';
 
 
 const myCustomLocale = {
@@ -117,7 +118,7 @@ const Calendar = () => {
             onChange={setSelectedDay}
             colorPrimary="#9c88ff" // added this
             locale={myCustomLocale}
-            calendarClassName="rcr-modern-calendar" // and this
+            calendarClassName={styles["rcr-modern-calendar"]} // and this
             calendarTodayClassName="custom-today-day" // also this
             shouldHighlightWeekends
         />
