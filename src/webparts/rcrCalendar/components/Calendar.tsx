@@ -3,7 +3,6 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Calendar as ReactCalendar } from 'react-modern-calendar-datepicker'
 
 
-
 const myCustomLocale = {
     // months list by order
     months: [
