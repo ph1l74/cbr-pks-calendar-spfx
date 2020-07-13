@@ -4,6 +4,7 @@ import { IRcrCalendarProps } from './IRcrCalendarProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import Dashboard from './Dashboard';
 import Content from './Content';
+import Calendar from './Calendar';
 import EventCard from './EventCard';
 
 export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> {
@@ -17,7 +18,9 @@ export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> 
             <EventCard></EventCard>
             <EventCard></EventCard>
           </Content>
-          <Dashboard></Dashboard>
+          <Dashboard>
+            <Calendar></Calendar>
+          </Dashboard>
         </div>
       </div>
     );

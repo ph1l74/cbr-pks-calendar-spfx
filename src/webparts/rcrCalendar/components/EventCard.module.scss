@@ -2,7 +2,7 @@
 
 .card {
   width: 100%;
-  padding: 20px 40px 40px;
+  padding: 20px 40px 20px 40px;
   margin-bottom: 20px;
   background: #fff;
   border-radius: 4px;
@@ -73,7 +73,7 @@
   }
 
   .info {
-    width: calc(100%-172px);
+    width: calc(100% - 172px);
     padding-left: 20px;
     border-left: 2px solid;
     display: inline-block;
