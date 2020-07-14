@@ -1,4 +1,3 @@
-import "@pnp/polyfill-ie11"; 
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
@@ -10,9 +9,10 @@ import {
 
 import * as strings from 'RcrCalendarWebPartStrings';
 import RcrCalendar from './components/RcrCalendar';
-import { IRcrCalendarProps } from './components/IRcrCalendarProps'; 
+import { IRcrCalendarProps } from './components/IRcrCalendarProps';
 
 export interface IRcrCalendarWebPartProps {
+  title: string;
   description: string;
 }
 
@@ -22,6 +22,7 @@ export default class RcrCalendarWebPart extends BaseClientSideWebPart<IRcrCalend
     const element: React.ReactElement<IRcrCalendarProps > = React.createElement(
       RcrCalendar,
       {
+        title: this.properties.title,
         description: this.properties.description
       }
     );
@@ -48,6 +49,9 @@ export default class RcrCalendarWebPart extends BaseClientSideWebPart<IRcrCalend
             {
               groupName: strings.BasicGroupName,
               groupFields: [
+                PropertyPaneTextField('title', {
+                  label: strings.TitleFieldLabel
+                }),
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
                 })
