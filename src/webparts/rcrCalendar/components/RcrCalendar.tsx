@@ -6,6 +6,7 @@ import Dashboard from './Dashboard';
 import Content from './Content';
 import Calendar from './Calendar';
 import EventCard from './EventCard';
+import "@pnp/polyfill-ie11";
 
 export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> {
   public render(): React.ReactElement<IRcrCalendarProps> {
