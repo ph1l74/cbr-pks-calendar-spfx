@@ -1,16 +1,16 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 
 .rcrCalendar {
+  font-family: Arial, sans-serif;
   .container {
-    max-width: 700px;
+    max-width: 100%;
     margin: 0px auto;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
   }
 
   .row {
     @include ms-Grid-row;
-    @include ms-fontColor-white;
-    background-color: $ms-color-themeDark;
+    color: #333333;
+    background-color: transparent;
     padding: 20px;
   }
 
@@ -23,8 +23,12 @@
   }
 
   .title {
-    @include ms-font-xl;
-    @include ms-fontColor-white;
+    padding: 0px 40px 20px;
+    margin: 0;
+    color: #000000;
+    font-family: Arial, sans-serif;
+    font-size: 21px;
+    font-weight: 700;
   }
 
   .subTitle {
@@ -71,4 +75,32 @@
       display: inline-block;
     }
   }
+  .content {
+    width: calc(100% - 370px);
+    display: inline-block;
+    margin-right: 80px;
+  }
+
+  .dashboard {
+    display: inline-block;
+    vertical-align: top;
+    width: 250px;
+    margin-left: 40px;
+  }
+
+  .header {
+    padding: 0px 40px 20px;
+    margin: 0;
+    color: #000000;
+    font-family: Arial, sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    background: #f2f3f3;
+  }
+
+  .app {
+    padding: 0px 40px;
+    background: #f2f3f3
+  }
+  
 }
