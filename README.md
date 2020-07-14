@@ -46,45 +46,54 @@ gulp package-solution - упаковать решение.
 Модель объекта с информацией о событии:
 
 ```javascript
-{
-    dates: {
-      dateFrom: "2020-10-05T14:48:00.000Z",
-      dateTo: "2020-10-10T14:48:00.000Z"
-    },
-    time: {
-      allDay: true,
-      from: null,
-      to: null
-    },
-    status: true,
-    location: "Москва, 1-й Волоколамский проезд д.10 строение 3.",
-    title: "Курс: Основы визуального моделирования с использованием UML 2.x",
-    code: "REQ-001",
-    provider: "Luxoft Training",
-    tags: ["Прочие события"],
-    participants: ["65afa", "65chdv", "65gsv"],
-    materials: ["material"],
-    feedback: [{ author: "65afa", comment: "nice" }, { author: "65chdv", comment: "not nice" }]
-  }
+[
+	{
+        "Key": "2020-06-01T00:00:00",
+        "Value": [
+			{
+                "allDay": true,
+                "attachmentsCount": 89,
+                "category": {
+                    "id": 1,
+                    "name": "Мероприятия",
+                    "color": "#000000"
+                },
+                "endDate": "2020-07-04T00:42:37.3002723",
+                "feedbacksCount": 4,
+                "freeVisit": true,
+                "id": 17,
+                "isParticipant": false,
+                "linksCount": 98,
+                "location": "Location 058",
+                "participantsCount": 13,
+                "startDate": "2020-06-16T00:42:37.3002723",
+                "title": "Event 058"
+            },
+			...
+		]
+	},
+	...
+]
 ```
 
-| Поле         | Назначение                                                        | Тип              |
-| ------------ | ----------------------------------------------------------------- | ---------------- |
-| **dates**        | Содержит поля dateFrom и dateTo                                   | Object           |
-| **dateFrom**     | Значение даты начала события                                      | String*          |
-| **dateTo**       | Значение даты окончания события                                   | String*          |
-| **time**         | Содержит поля allDay, from, to                                    | Object           |
-| **allDay**       | Флаг, обозначающий событие на весь день                           | Boolean          |
-| **from**         | Время начала события                                              | String**         |
-| **status**       | Флаг, обозначающий статус участия текущего пользователя в событии | Boolean          |
-| **location**     | Место проведения                                                  | String           |
-| **title**        | Название события                                                  | String           |
-| **code**         | Код события                                                       | String           |
-| **provider**     | Организатор события                                               | String**         |
-| **tags**         | Массив с тегами                                                   | Array<String>    |
-| **participants** | Массив с ID участинков события                                    | Array<String>*** |
-| **materials**    | Массив с материалами                                              | Array<String>*** |
-| **feedback**     | Время окончания события                                           | Array<Object>*** |
+| Поле                  | Назначение                                                        | Тип              |
+| --------------------- | ----------------------------------------------------------------- | ---------------- |
+| **dates**             | Содержит поля dateFrom и dateTo                                   | Object           |
+| **startDate**         | Значение даты начала события                                      | String*          |
+| **endDate**           | Значение даты окончания события                                   | String*          |
+| **time**              | Содержит поля allDay, from, to                                    | Object           |
+| **allDay**            | Флаг, обозначающий событие на весь день                           | Boolean          |
+| **from**              | Время начала события                                              | String**         |
+| **isParticipant**     | Флаг, обозначающий статус участия текущего пользователя в событии | Boolean          |
+| **freeVisit**         | Флаг, обозначающий статус участия текущего пользователя в событии | Boolean          |
+| **location**          | Место проведения                                                  | String           |
+| **title**             | Название события                                                  | String           |
+| **code**              | Код события                                                       | String           |
+| **provider**          | Организатор события                                               | String**         |
+| **tags**              | Массив с тегами                                                   | Array<String>    |
+| **participantsCount** | Массив с ID участинков события                                    | Array<String>*** |
+| **attachmentsCount**  | Массив с материалами                                              | Array<String>*** |
+| **feedbacksCount**    | Время окончания события                                           | Array<Object>*** |
 
 \* **dateFrom, dateTo** - Запись осуществляется в формате ISO. Например: *"2020-10-05T14:48:00.000Z"*.  
 \** **from, to** - Запись осуществляется в обычном текстовом формате. Например: *"14:00"*.  
