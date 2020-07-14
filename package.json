@@ -22,6 +22,7 @@
     "@types/es6-promise": "0.0.33",
     "@types/webpack-env": "1.13.1",
     "antd": "^4.4.2",
+    "axios": "^0.19.2",
     "es6-shim": "^0.35.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
