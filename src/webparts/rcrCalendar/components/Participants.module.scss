@@ -1,0 +1,26 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.participant {
+    float: left;
+    width: 300px;
+    height: 100px;
+    text-decoration: none;
+    padding-bottom: 22px;
+    overflow: hidden;
+    color: black;
+    
+    .avatar {
+        width: 43px;
+        height: 43px;
+        background-position: center;
+        background-size: cover;
+        border-radius: 50%;
+        float: left;
+    }
+
+    .name {
+        word-wrap: break-word;
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+}

@@ -1,3 +1,4 @@
+import "@pnp/polyfill-ie11"; 
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
@@ -9,7 +10,7 @@ import {
 
 import * as strings from 'RcrCalendarWebPartStrings';
 import RcrCalendar from './components/RcrCalendar';
-import { IRcrCalendarProps } from './components/IRcrCalendarProps';
+import { IRcrCalendarProps } from './components/IRcrCalendarProps'; 
 
 export interface IRcrCalendarWebPartProps {
   description: string;

@@ -1,0 +1,64 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.bg {
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.9);
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  .border {
+    background-color: #2f92ba;
+    margin: 100px auto;
+    width: 809px;
+    border-radius: 4px;
+    padding: 40px;
+    position: relative;
+    .title {
+      color: rgba(255, 255, 255, 1);
+      font-weight: 700;
+      font-size: 21px;
+      margin-bottom: 30px;
+      font-family: Arial, sans-serif;
+    }
+    .close {
+      float: right;
+      width: 17px;
+      height: 17px;
+      opacity: 0.5;
+      cursor: pointer;
+      position: relative;
+      right: -20px;
+      top: -20px;
+    }
+    .close:hover {
+      opacity: 1;
+    }
+    .close:before,
+    .close:after {
+      position: absolute;
+      left: 9px;
+      content: " ";
+      height: 17px;
+      width: 1px;
+      background-color: rgb(255, 255, 255);
+    }
+    .close:before {
+      transform: rotate(45deg);
+    }
+    .close:after {
+      transform: rotate(-45deg);
+    }
+
+    .window {
+      background-color: rgba(255, 255, 255, 1);
+      border-radius: 4px;
+      width: auto;
+      overflow: hidden;
+      max-height: 500px;
+      padding: 40px;
+    }
+  }
+}

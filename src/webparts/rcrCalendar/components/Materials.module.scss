@@ -1,0 +1,11 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.materials {
+    .element {
+        display: block;
+        text-decoration: none;
+        color: #4689b9;
+        font-size: 13px;
+        padding-bottom: 10px;
+    }
+}

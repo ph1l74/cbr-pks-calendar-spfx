@@ -1,26 +1,105 @@
-## cbr-pks-calendar-spfx
+# cbr-pks-calendar-spfx
 
-This is where you include your WebPart documentation.
+Календарь событий реализованный на Sharepoint Framework (SPFx).
 
-### Building the code
+## Запуск проекта
+### Как запустить проект
 
 ```bash
 git clone the repo
 npm i
 npm i -g gulp
-gulp
+gulp 
 ```
 
-This package produces the following:
+При построении проекта будут созданы сделующие директории:
 
-* lib/* - intermediate-stage commonjs build artifacts
-* dist/* - the bundled script, along with other resources
-* deploy/* - all resources which should be uploaded to a CDN.
+* lib/* - артифакты построения проекта промежуточной стадии.
+* dist/* - итоговый бандл скриптв, включающий зависимости.
+* deploy/* - все ресурсы, которые необходимо загрузить при деплое на CDN.
 
-### Build options
+### Параметры построения проекта
 
-gulp clean - TODO
-gulp test - TODO
-gulp serve - TODO
-gulp bundle - TODO
-gulp package-solution - TODO
+gulp serve - запустить решение на локальном сервере SP Workbench.
+gulp package-solution - упаковать решение.
+
+
+## Компоненты
+### RcrCalendar
+
+Главный компонент. Используется в качестве контейнера.
+
+### Content
+
+Контейнер для отображения контента.
+
+### Dashboard
+
+Контейнер для отображения боковой панели.
+
+### EventCard
+
+Компонент карточки события. Отображает информацию по событию. Использует React Hooks (useState) для взаимодействия с состоянием компонента*. 
+
+*в текущей реализации используются hardcode-данные для тестового отображения.
+
+Модель объекта с информацией о событии:
+
+```javascript
+[
+	{
+        "Key": "2020-06-01T00:00:00",
+        "Value": [
+			{
+                "allDay": true,
+                "attachmentsCount": 89,
+                "category": {
+                    "id": 1,
+                    "name": "Мероприятия",
+                    "color": "#000000"
+                },
+                "endDate": "2020-07-04T00:42:37.3002723",
+                "feedbacksCount": 4,
+                "freeVisit": true,
+                "id": 17,
+                "isParticipant": false,
+                "linksCount": 98,
+                "location": "Location 058",
+                "participantsCount": 13,
+                "startDate": "2020-06-16T00:42:37.3002723",
+                "title": "Event 058"
+            },
+			...
+		]
+	},
+	...
+]
+```
+
+| Поле                  | Назначение                                                        | Тип              |
+| --------------------- | ----------------------------------------------------------------- | ---------------- |
+| **dates**             | Содержит поля dateFrom и dateTo                                   | Object           |
+| **startDate**         | Значение даты начала события                                      | String*          |
+| **endDate**           | Значение даты окончания события                                   | String*          |
+| **time**              | Содержит поля allDay, from, to                                    | Object           |
+| **allDay**            | Флаг, обозначающий событие на весь день                           | Boolean          |
+| **from**              | Время начала события                                              | String**         |
+| **isParticipant**     | Флаг, обозначающий статус участия текущего пользователя в событии | Boolean          |
+| **freeVisit**         | Флаг, обозначающий статус участия текущего пользователя в событии | Boolean          |
+| **location**          | Место проведения                                                  | String           |
+| **title**             | Название события                                                  | String           |
+| **code**              | Код события                                                       | String           |
+| **provider**          | Организатор события                                               | String**         |
+| **tags**              | Массив с тегами                                                   | Array<String>    |
+| **participantsCount** | Массив с ID участинков события                                    | Array<String>*** |
+| **attachmentsCount**  | Массив с материалами                                              | Array<String>*** |
+| **feedbacksCount**    | Время окончания события                                           | Array<Object>*** |
+
+\* **dateFrom, dateTo** - Запись осуществляется в формате ISO. Например: *"2020-10-05T14:48:00.000Z"*.  
+\** **from, to** - Запись осуществляется в обычном текстовом формате. Например: *"14:00"*.  
+\*** **participants**, **materials**, **feedback** - Тип данных для этих полей еще не определён.  
+
+## TODO
+- [x]  EventCard: Привести стили карточки к виду ПКС.
+- [x]  Написать компоненты модального окна.
+- [x]  Подключить компонент Календаря.
