@@ -21,7 +21,7 @@ const EventCard = () => {
     status: true,
     location: "Москва, 1-й Волоколамский проезд д.10 строение 3.",
     title: "Курс: Основы визуального моделирования с использованием UML 2.x",
-    description: "<p>Код</p><p>Организатор</p>",
+    description: "Код: REQ-001</br>Организатор: Luxoft Training",
     tags: ["Прочие события"],
     participants: ["65afa", "65chdv", "65gsv"],
     materials: ["material"],
@@ -76,7 +76,7 @@ const EventCard = () => {
         <div className={styles.header}>
           {
             cardInfo.time.allDay ?
-              <div className={styles.time}>Весь день</div>
+              <div className={styles.time}>Событие на весь день</div>
               :
               <div className={styles.time}>{cardInfo.time.from} - {cardInfo.time.from}</div>
           }
@@ -89,7 +89,7 @@ const EventCard = () => {
           <div className={styles.location}>{cardInfo.location}</div>
         </div>
         <div className={styles.title}>{cardInfo.title}</div>
-        <div dangerouslySetInnerHTML={{ __html: cardInfo.description }}></div>
+        <div className={styles.description} dangerouslySetInnerHTML={{ __html: cardInfo.description }}></div>
         <div className={styles.tags}>
           <ul>
             {cardInfo.tags.map((tag) => (

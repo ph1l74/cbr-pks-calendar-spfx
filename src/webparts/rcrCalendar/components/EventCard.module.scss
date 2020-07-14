@@ -2,10 +2,13 @@
 
 .card {
   width: 100%;
-  padding: 20px 40px 20px 40px;
-  margin-bottom: 20px;
-  background: #fff;
+  //padding: 20px 40px 20px 40px;
+  //margin-bottom: 20px;
+  //background: #fff;
+  padding-bottom: 28px;
   border-radius: 4px;
+  padding-top: 28px;
+  border-bottom: 1px solid #e6e9ec;
 
   .dates {
     float: left;
@@ -54,6 +57,7 @@
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
+        padding-left: 10px;
       }
 
       .dateMonth {
@@ -75,47 +79,45 @@
   .info {
     width: calc(100% - 172px);
     padding-left: 20px;
+    
     border-left: 2px solid;
     display: inline-block;
 
     .header {
-      margin-bottom: 10px;
+      color: #000;
+      font-size: 13px;
+      font-weight: 100;
+      position: relative;
 
       .time,
-      .status {
-        display: inline;
-        margin-bottom: 10px;
-        color: #000000;
-        font-size: 13px;
-        font-weight: 100;
-      }
-
-      .status {
-        float: right;
-        margin-bottom: 10px;
-        color: #000000;
-        font-size: 13px;
-        font-weight: 100;
-      }
-
       .location {
-        font-size: 1.1em;
-        margin-bottom: 10px;
-        color: #000000;
-        font-size: 13px;
-        font-weight: 100;
+        margin: 0 0 10px;
+      }
+
+      .status {
+        position: absolute;
+        top: 0;
+        right: 0;
       }
     }
 
     .title {
-      font-size: 1.4em;
+      font-size: 17px;
+      font-weight: 100;
+    }
+    .description{
+      color: #727678;
+      font-size: 14px;
+      font-weight: 100;
+      max-width: 850px;
     }
     .tags {
-      margin-top: 10px;
+      margin-top: 14px;
 
       ul {
         list-style: none;
         padding: 0;
+        margin: 0;
         li {
           padding: 4px 10px;
           border: 1.5px solid;
@@ -130,7 +132,7 @@
       }
     }
     .footer {
-      padding: 15px 0px;
+      padding: 19px 0px 15px;
       div {
         display: inline-block;
         font-size: 14px;

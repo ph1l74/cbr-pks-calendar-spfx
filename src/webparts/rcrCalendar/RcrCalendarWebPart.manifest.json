@@ -20,7 +20,8 @@
     "description": { "default": "SPFX WebApp that provides to browse events in calendar veiw" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "RCR.Calendar"
+      "title":"Обучение, конференции, форумы",
+      "description": "Описание"
     }
   }]
 }
