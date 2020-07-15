@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Form, Input, Checkbox, Button, Select, Upload } from 'antd';
+import { Form, Input, Checkbox, Button, Select, Upload, message } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import { DatePicker, TimePicker } from 'antd';
 import * as moment from "moment";
 import { DatePickerTSX } from './DatePickerTSX';
@@ -97,7 +98,7 @@ const EditForm = () => {
                 label="Расположение"
                 name="location"
             >
-                <Input />
+                <Input maxLength={255} />
             </Form.Item>
 
             <Form.Item
@@ -123,9 +124,11 @@ const EditForm = () => {
             >
                 <DatePickerTSX />
                 <TimePicker
+                    placeholder="00:"
                     format={"HH"}
                 />
                 <TimePicker
+                    placeholder="00"
                     format={"mm"}
                 />
             </Form.Item>
@@ -139,7 +142,7 @@ const EditForm = () => {
                 label="Описание"
                 name="description"
             >
-                <TextArea rows={4} />
+                <TextArea autoSize={{ minRows: 3, maxRows: 3 }} />
             </Form.Item>
 
             <Form.Item {...tailLayout} name="remember" valuePropName="checked" label="Свободное посещение">
@@ -147,32 +150,32 @@ const EditForm = () => {
             </Form.Item>
 
             <Form.Item {...tailLayout} label="Участники"
-                name="participants"> 
+                name="participants">
                 <Select
                     mode="multiple"
                     style={{ width: '100%' }}
                     placeholder="Please select"
                     defaultValue={['Астахов Филат Александрович', 'Баталов Илья Николаевич']}
                 >
-                </Select>,
+                </Select>
             </Form.Item>
 
 
             <Form.Item {...tailLayout} label="Материалы"
                 name="materials">
-                <Upload {...props}>
+                <Upload  {...props}>
                     <Button>
                         Загрузить
                     </Button>
-                </Upload>
+                </Upload >
             </Form.Item>
 
 
             <Form.Item {...tailLayout} label="Ссылки"
                 name="links">
                 <Select mode="tags" style={{ width: '100%' }} placeholder="Введите ссылку и нажмите Etner">
-                    
-                </Select>,
+
+                </Select>
             </Form.Item>
 
             <Form.Item >

@@ -61,7 +61,7 @@ const CommentEditForm = () => {
                 label="Описание"
                 name="description"
             >
-                <TextArea rows={4} />
+                <TextArea autoSize={{ minRows: 3, maxRows: 3 }}/>
             </Form.Item>
 
             <Form.Item {...tailLayout} label="Ссылки"
