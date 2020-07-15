@@ -9,12 +9,13 @@ const Participant = ({ userInfo }) => {
     }
 
     return (
-        <a className={styles.participant} href={userInfo.url}>
+        <a className={styles.participant} href={userInfo.login}>
             <div className={styles.avatar} style={avatarStyle}>
                 {userInfo.img && userInfo.img.length > 0 ? <img src={userInfo.img}></img> : null}
             </div>
-            <div>{userInfo.surname}</div>
-            <div>{userInfo.name}</div>
+            <div>{userInfo.firstName}</div>
+            <div>{userInfo.patronymic}</div>
+            <div>{userInfo.lastName}</div>
         </a >
     );
 }
