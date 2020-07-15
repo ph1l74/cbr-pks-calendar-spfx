@@ -21,6 +21,7 @@
     "@pnp/sp": "^2.0.6",
     "@types/es6-promise": "0.0.33",
     "@types/webpack-env": "1.13.1",
+    "antd": "^4.4.2",
     "axios": "^0.19.2",
     "moment": "^2.27.0",
     "es6-shim": "^0.35.5",
