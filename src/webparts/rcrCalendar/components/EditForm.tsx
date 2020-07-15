@@ -1,13 +1,40 @@
 import * as React from 'react';
-import { Form, Input, Checkbox, Button } from 'antd';
+import { Form, Input, Checkbox, Button, Select, Upload } from 'antd';
+import { DatePicker, TimePicker } from 'antd';
+import * as moment from "moment";
+
+const DatePickerJS: any = DatePicker;
+
+class DatePickerTSX extends React.Component {
+    public render() {
+        return <DatePickerJS />
+    }
+}
 
 const EditForm = () => {
+
+    const [form] = Form.useForm();
+
+
+
+    const fileListInit = [
+        {
+            uid: '-1',
+            name: 'xxx.png',
+            status: 'done',
+            url: 'http://www.baidu.com/xxx.png',
+        },
+    ];
+
+
+    const [fileList, setFileList] = React.useState(fileListInit);
+
     const layout = {
-        labelCol: { span: 8 },
+        labelCol: { span: 6 },
         wrapperCol: { span: 16 },
     };
     const tailLayout = {
-        wrapperCol: { offset: 8, span: 16 },
+        wrapperCol: { offset: 2, span: 16 },
     };
 
 
@@ -19,6 +46,28 @@ const EditForm = () => {
         console.log('Failed:', errorInfo);
     };
 
+    const onGenderChange = value => {
+        switch (value) {
+            case "male":
+                form.setFieldsValue({ note: "Hi, man!" });
+                return;
+            case "female":
+                form.setFieldsValue({ note: "Hi, lady!" });
+                return;
+            case "other":
+                form.setFieldsValue({ note: "Hi there!" });
+                return;
+        }
+    };
+
+    const props = {
+        action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+        onChange: this.handleChange,
+        multiple: true,
+    };
+
+
+
     return (
         <Form
             {...layout}
@@ -28,28 +77,115 @@ const EditForm = () => {
             onFinishFailed={onFinishFailed}
         >
             <Form.Item
-                label="Username"
-                name="username"
-                rules={[{ required: true, message: 'Please input your username!' }]}
+                {...tailLayout}
+                label="Название"
+                name="eventName"
+                rules={[{ required: true, message: 'Пожалуйста, введите название события.' }]}
             >
                 <Input />
             </Form.Item>
 
             <Form.Item
-                label="Password"
-                name="password"
-                rules={[{ required: true, message: 'Please input your password!' }]}
+                {...tailLayout} name="gender" label="Категория события" rules={[{ required: true }]}>
+                <Select
+                    placeholder=""
+                    // onChange={onGenderChange}
+                    allowClear
+                >
+                    <Select.Option value="external">Внешнее обучение</Select.Option>
+                    <Select.Option value="other">Прочие события</Select.Option>
+                </Select>
+            </Form.Item>
+
+            <Form.Item
+                {...tailLayout}
+                label="Расположение"
+                name="location"
             >
-                <Input.Password />
+                <Input />
             </Form.Item>
 
-            <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-                <Checkbox>Remember me</Checkbox>
+            <Form.Item
+                {...tailLayout}
+                label="Время начала"
+                name="dateFrom"
+                rules={[{ required: true }]}
+            >
+                <DatePickerTSX />
+                <TimePicker
+                    format={"HH"}
+                />
+                <TimePicker
+                    format={"mm"}
+                />
             </Form.Item>
 
-            <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit">
-                    Submit
+            <Form.Item
+                {...tailLayout}
+                label="Время окончания"
+                name="dateTo"
+                rules={[{ required: true }]}
+            >
+                <DatePickerTSX />
+                <TimePicker
+                    format={"HH"}
+                />
+                <TimePicker
+                    format={"mm"}
+                />
+            </Form.Item>
+
+            <Form.Item {...tailLayout} name="remember" valuePropName="checked" label="Событие на весь день">
+                <Checkbox />
+            </Form.Item>
+
+            <Form.Item
+                {...tailLayout}
+                label="Описание"
+                name="description"
+            >
+                <Input />
+            </Form.Item>
+
+            <Form.Item {...tailLayout} name="remember" valuePropName="checked" label="Свободное посещение">
+                <Checkbox />
+            </Form.Item>
+
+            <Form.Item {...tailLayout} label="Участники"
+                name="participants"> 
+                <Select
+                    mode="multiple"
+                    style={{ width: '100%' }}
+                    placeholder="Please select"
+                    defaultValue={['Астахов Филат Александрович', 'Баталов Илья Николаевич']}
+                >
+                </Select>,
+            </Form.Item>
+
+
+            <Form.Item {...tailLayout} label="Материалы"
+                name="materials">
+                <Upload {...props}>
+                    <Button>
+                        Загрузить
+                    </Button>
+                </Upload>
+            </Form.Item>
+
+
+            <Form.Item {...tailLayout} label="Ссылки"
+                name="links">
+                <Select mode="tags" style={{ width: '100%' }} placeholder="Введите ссылку и нажмите Etner">
+                    
+                </Select>,
+            </Form.Item>
+
+            <Form.Item >
+                <Button type="primary" htmlType="submit" shape="round" size="large">
+                    Сохранить
+                </Button>
+                <Button htmlType="submit" shape="round" size="large">
+                    Отмена
             </Button>
             </Form.Item>
         </Form>
