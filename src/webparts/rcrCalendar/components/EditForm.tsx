@@ -102,7 +102,7 @@ const EditForm = () => {
                 label="Расположение"
                 name="location"
             >
-                <Input />
+                <Input maxLength={255} />
             </Form.Item>
 
             <Form.Item
@@ -128,9 +128,11 @@ const EditForm = () => {
             >
                 <DatePickerTSX />
                 <TimePicker
+                    placeholder="00:"
                     format={"HH"}
                 />
                 <TimePicker
+                    placeholder="00"
                     format={"mm"}
                 />
             </Form.Item>
@@ -144,7 +146,9 @@ const EditForm = () => {
                 label="Описание"
                 name="description"
             >
-                <Input />
+                <Input.TextArea
+                    autoSize={{ minRows: 3, maxRows: 3 }}
+                />
             </Form.Item>
 
             <Form.Item {...tailLayout} name="remember" valuePropName="checked" label="Свободное посещение">
@@ -152,14 +156,14 @@ const EditForm = () => {
             </Form.Item>
 
             <Form.Item {...tailLayout} label="Участники"
-                name="participants"> 
+                name="participants">
                 <Select
                     mode="multiple"
                     style={{ width: '100%' }}
                     placeholder="Please select"
                     defaultValue={['Астахов Филат Александрович', 'Баталов Илья Николаевич']}
                 >
-                </Select>,
+                </Select>
             </Form.Item>
 
 
@@ -176,8 +180,8 @@ const EditForm = () => {
             <Form.Item {...tailLayout} label="Ссылки"
                 name="links">
                 <Select mode="tags" style={{ width: '100%' }} placeholder="Введите ссылку и нажмите Etner">
-                    
-                </Select>,
+
+                </Select>
             </Form.Item>
 
             <Form.Item >
