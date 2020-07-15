@@ -11,7 +11,7 @@ class DatePickerTSX extends React.Component {
     }
 }
 
-const EditForm = () => {
+const EditFormCard = () => {
 
     const [form] = Form.useForm();
 
@@ -196,4 +196,4 @@ const EditForm = () => {
     );
 }
 
-export default EditForm;
+export default EditFormCard;
