@@ -6,7 +6,10 @@ export default class Content extends React.Component<IContentProps, {}> {
   public render(): React.ReactElement<IContentProps> {
     return (
       <div className={styles.content} >
-        {this.props.children}
+        <div className={styles.month} >
+          <div className={styles["month-header"]}>Октябрь</div>
+          {this.props.children}
+        </div>
       </div >
     );
   }
