@@ -1,6 +1,7 @@
 declare interface IRcrCalendarWebPartStrings {
   PropertyPaneDescription: string;
   BasicGroupName: string;
+  TitleFieldLabel: string;
   DescriptionFieldLabel: string;
 }
 

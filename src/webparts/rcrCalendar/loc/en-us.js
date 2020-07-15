@@ -1,7 +1,8 @@
 define([], function() {
   return {
-    "PropertyPaneDescription": "Description",
-    "BasicGroupName": "Group Name",
-    "DescriptionFieldLabel": "Description Field"
+    "PropertyPaneDescription": "Веб-часть 'Календарь событий'",
+    "BasicGroupName": "Базовые поля",
+    "TitleFieldLabel":"Заголовок",
+    "DescriptionFieldLabel": "Описание"
   }
 });

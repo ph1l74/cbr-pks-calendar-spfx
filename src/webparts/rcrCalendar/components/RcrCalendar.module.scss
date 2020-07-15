@@ -79,6 +79,21 @@
     width: calc(100% - 370px);
     display: inline-block;
     margin-right: 80px;
+    .month {
+      background: #fff;
+      width: 100%;
+      padding: 20px 40px;
+      border-radius: 4px;
+      box-shadow: 0 1em 4em rgba(0,0,0,.07);
+      .month-header {
+        margin: 0px;
+        padding-top: 20px;
+        font-weight: 700;
+        font-size: 21px;
+        text-transform: capitalize;
+        color: #000000;
+      }
+    }
   }
 
   .dashboard {
@@ -89,7 +104,7 @@
   }
 
   .header {
-    padding: 0px 40px 20px;
+    padding: 20px 40px;
     margin: 0;
     color: #000000;
     font-family: Arial, sans-serif;
@@ -99,8 +114,10 @@
   }
 
   .app {
-    padding: 0px 40px;
+    padding: 0px 40px 20px;
     background: #f2f3f3
   }
+
+
   
 }
