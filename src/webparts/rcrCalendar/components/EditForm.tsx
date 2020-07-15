@@ -2,14 +2,9 @@ import * as React from 'react';
 import { Form, Input, Checkbox, Button, Select, Upload } from 'antd';
 import { DatePicker, TimePicker } from 'antd';
 import * as moment from "moment";
+import { DatePickerTSX } from './DatePickerTSX';
 
-const DatePickerJS: any = DatePicker;
-
-class DatePickerTSX extends React.Component {
-    public render() {
-        return <DatePickerJS />
-    }
-}
+const { TextArea } = Input
 
 const EditForm = () => {
 
@@ -144,7 +139,7 @@ const EditForm = () => {
                 label="Описание"
                 name="description"
             >
-                <Input />
+                <TextArea rows={4} />
             </Form.Item>
 
             <Form.Item {...tailLayout} name="remember" valuePropName="checked" label="Свободное посещение">
