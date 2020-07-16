@@ -13,6 +13,7 @@
     "fixbuild": "rimraf .\\node_modules\\@microsoft\\gulp-core-build-typescript\\node_modules\\typescript"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.10.4",
     "@microsoft/sp-core-library": "~1.4.0",
     "@microsoft/sp-lodash-subset": "~1.4.0",
     "@microsoft/sp-office-ui-fabric-core": "~1.4.0",
@@ -23,7 +24,6 @@
     "@types/webpack-env": "1.13.1",
     "antd": "^4.4.2",
     "axios": "^0.19.2",
-    "moment": "^2.27.0",
     "es6-shim": "^0.35.5",
     "moment": "^2.27.0",
     "react": "^16.13.1",

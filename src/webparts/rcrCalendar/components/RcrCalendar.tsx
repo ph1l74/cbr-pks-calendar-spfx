@@ -1,3 +1,5 @@
+import "@pnp/polyfill-ie11";
+import "@babel/polyfill";
 import * as React from 'react';
 import styles from './RcrCalendar.module.scss';
 import { IRcrCalendarProps } from './IRcrCalendarProps';
@@ -6,7 +8,6 @@ import Dashboard from './Dashboard';
 import Content from './Content';
 import Calendar from './Calendar';
 import EventCard from './EventCard';
-import "@pnp/polyfill-ie11";
 import EditFormCard from './EditFormCard';
 
 export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> {
@@ -15,7 +16,6 @@ export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> 
       <div className={styles.rcrCalendar}>
         <div className={styles.header}>{escape(this.props.title)}</div>
         <div className={styles.app}>
-          <EditFormCard />
           <Content>
             <EventCard></EventCard>
             <EventCard></EventCard>
