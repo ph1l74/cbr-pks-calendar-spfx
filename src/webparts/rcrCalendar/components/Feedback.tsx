@@ -30,7 +30,7 @@ const Feedback = () => {
 
     return (
         <ul style={styles}>
-            <li><FeedbackEl /></li>
+            {/* <li><FeedbackEl  /></li> */}
         </ul>
     )
 
