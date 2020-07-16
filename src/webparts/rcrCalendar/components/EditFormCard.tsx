@@ -1,17 +1,13 @@
 import * as React from 'react';
-import { Form, Input, Checkbox, Button, Select, Upload } from 'antd';
+import { Form, Input, Checkbox, Button, Select, Upload, message } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import { DatePicker, TimePicker } from 'antd';
 import * as moment from "moment";
+import { DatePickerTSX } from './DatePickerTSX';
 
-const DatePickerJS: any = DatePicker;
+const { TextArea } = Input
 
-class DatePickerTSX extends React.Component {
-    public render() {
-        return <DatePickerJS />
-    }
-}
-
-const EditForm = () => {
+const EditFormCard = () => {
 
     const [form] = Form.useForm();
 
@@ -146,9 +142,7 @@ const EditForm = () => {
                 label="Описание"
                 name="description"
             >
-                <Input.TextArea
-                    autoSize={{ minRows: 3, maxRows: 3 }}
-                />
+                <TextArea autoSize={{ minRows: 3, maxRows: 3 }} />
             </Form.Item>
 
             <Form.Item {...tailLayout} name="remember" valuePropName="checked" label="Свободное посещение">
@@ -169,11 +163,11 @@ const EditForm = () => {
 
             <Form.Item {...tailLayout} label="Материалы"
                 name="materials">
-                <Upload {...props}>
+                <Upload  {...props}>
                     <Button>
                         Загрузить
                     </Button>
-                </Upload>
+                </Upload >
             </Form.Item>
 
 
@@ -196,4 +190,4 @@ const EditForm = () => {
     );
 }
 
-export default EditForm;
+export default EditFormCard;
