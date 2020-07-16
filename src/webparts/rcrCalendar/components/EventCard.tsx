@@ -92,8 +92,8 @@ const EventCard = () => {
         <div className={styles.description} dangerouslySetInnerHTML={{ __html: cardInfo.description }}></div>
         <div className={styles.tags}>
           <ul>
-            {cardInfo.tags.map((tag) => (
-              <li>{tag}</li>
+            {cardInfo.tags.map((tag, i) => (
+              <li key={i}>{tag}</li>
             ))}
           </ul>
         </div>
