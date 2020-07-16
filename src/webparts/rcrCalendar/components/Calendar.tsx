@@ -107,7 +107,7 @@ const Calendar = () => {
 
     const defaultValue = {
         year: 2020,
-        month: 6,
+        month: 7,
         day: 15,
     };
     const [selectedDay, setSelectedDay] = React.useState(defaultValue);
