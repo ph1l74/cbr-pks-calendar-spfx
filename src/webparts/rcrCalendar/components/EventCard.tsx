@@ -95,13 +95,7 @@ const EventCard = () => {
         <div className={styles.description} dangerouslySetInnerHTML={{ __html: cardInfo.description }}></div>
         <div className={styles.tags}>
           <ul>
-<<<<<<< HEAD
-            {cardInfo.tags.map((tag, i) => (
-              <li key={i}>{tag}</li>
-            ))}
-=======
             <li>{cardInfo.category.name}</li>
->>>>>>> e944cb4580c1a8d0a4bf287892c73a21c7a1519b
           </ul>
         </div>
         <div className={styles.footer}>
