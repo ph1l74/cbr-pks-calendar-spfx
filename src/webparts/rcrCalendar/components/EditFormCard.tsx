@@ -7,7 +7,7 @@ import { DatePickerTSX } from './DatePickerTSX';
 
 const { TextArea } = Input
 
-const EditForm = () => {
+const EditFormCard = () => {
 
     const [form] = Form.useForm();
 
@@ -190,4 +190,4 @@ const EditForm = () => {
     );
 }
 
-export default EditForm;
+export default EditFormCard;
