@@ -1,0 +1,43 @@
+.feedback {
+    li {
+        margin: 0px 40px;
+        
+        .avatar {
+            width: 200px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .content {
+            font-size: 13px;
+            font-family: Arial, sans-serif;
+            width: 500px;
+            display: inline-block;
+            vertical-align: top;
+            .name {
+                display: inline-block;
+                margin-right: 20px;
+            }
+            .date {
+                display: inline-block;
+                margin-right: 20px;
+                color: #999;
+            }
+            .controls {
+                display: inline-block;
+            }
+            .comment {
+                display: block;
+                color: rgba(0, 0, 0, 1);
+            }
+            .materials {
+                display: block;
+                color: #4689b9;
+            }
+            .links {
+                display: block;
+                color: #4689b9;
+            }
+        }
+    }
+}
