@@ -95,18 +95,18 @@ const EventCard = (eventCard: any) => {
         <div className={styles.description} dangerouslySetInnerHTML={{ __html: cardInfo.eventCard.description }}></div>
         <div className={styles.tags}>
           <ul>
-            {/* <li>{cardInfo.category.name}</li> */}
+            <li>{cardInfo.eventCard.category.name}</li>
           </ul>
         </div>
         <div className={styles.footer}>
-          {/* <div className="participants" onClick={() => { openModal(0) }}>Список участников ({cardInfo.participantsCount})</div>
+          <div className="participants" onClick={() => { openModal(0) }}>Список участников ({cardInfo.eventCard.participantsCount})</div>
           {
             cardInfo.attachmentsCount > 0 ?
-              <div className="materials" onClick={() => { openModal(1) }}>Материалы ({cardInfo.attachmentsCount})</div>
+              <div className="materials" onClick={() => { openModal(1) }}>Материалы ({cardInfo.eventCard.attachmentsCount})</div>
               :
               null
           }
-          <div className={styles.feedback} onClick={() => { openModal(2) }}>Отзывы {cardInfo.feedbacksCount > 0 ? `(${cardInfo.feedbacksCount})` : null}</div> */}
+          <div className={styles.feedback} onClick={() => { openModal(2) }}>Отзывы {cardInfo.eventCard.feedbacksCount > 0 ? `(${cardInfo.eventCard.feedbacksCount})` : null}</div>
         </div>
       </div>
       {
