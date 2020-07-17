@@ -4,7 +4,7 @@ import Modal from './Modal';
 import Participants from './Participants';
 import Materials from './Materials';
 
-const EventCard = () => {
+const EventCard = (eventCard: any) => {
 
 
   // hardcode test data
@@ -40,7 +40,7 @@ const EventCard = () => {
   const modalTypes = ["Участники", "Материалы", "Отзывы"]
 
   // react hooks instead of props
-  const [cardInfo, setCardInfo] = React.useState(cardInfoInit);
+  const [cardInfo, setCardInfo] = React.useState(eventCard);
 
   // open modal state
 
@@ -64,49 +64,49 @@ const EventCard = () => {
       <div className={styles.dates}>
         <div className={styles.dateFrom}>
           <span className={styles.dateDest}>с</span>
-          <span className={styles.dateDay}>{new Date(cardInfo.startDate).getUTCDate()}</span>
-          <span className={styles.dateMonth}>{monthNames[new Date(cardInfo.startDate).getMonth()]}</span>
-          <span className={styles.dateYear}>{new Date(cardInfo.startDate).getUTCFullYear()}</span>
+          <span className={styles.dateDay}>{new Date(cardInfo.eventCard.startDate).getUTCDate()}</span>
+          <span className={styles.dateMonth}>{monthNames[new Date(cardInfo.eventCard.startDate).getMonth()]}</span>
+          <span className={styles.dateYear}>{new Date(cardInfo.eventCard.startDate).getUTCFullYear()}</span>
         </div>
         <div className={styles.dateTo}>
           <span className={styles.dateDest}>по</span>
-          <span className={styles.dateDay}>{new Date(cardInfo.endDate).getUTCDate()}</span>
-          <span className={styles.dateMonth}>{monthNames[new Date(cardInfo.endDate).getMonth()]}</span>
-          <span className={styles.dateYear}>{new Date(cardInfo.endDate).getUTCFullYear()}</span>
+          <span className={styles.dateDay}>{new Date(cardInfo.eventCard.endDate).getUTCDate()}</span>
+          <span className={styles.dateMonth}>{monthNames[new Date(cardInfo.eventCard.endDate).getMonth()]}</span>
+          <span className={styles.dateYear}>{new Date(cardInfo.eventCard.endDate).getUTCFullYear()}</span>
         </div>
       </div>
       <div className={styles.info}>
         <div className={styles.header}>
           {
-            cardInfo.allDay ?
+            cardInfo.eventCard.allDay ?
               <div className={styles.time}>Событие на весь день</div>
               :
-              <div className={styles.time}>{new Date(cardInfo.startDate).getHours()} - {new Date(cardInfo.endDate).getHours()}</div>
+              <div className={styles.time}>{new Date(cardInfo.eventCard.startDate).getHours()} - {new Date(cardInfo.eventCard.endDate).getHours()}</div>
           }
           {
-            cardInfo.isParticipant ?
+            cardInfo.eventCard.isParticipant ?
               <div className={styles.status}>Вы участник</div>
               :
               null
           }
-          <div className={styles.location}>{cardInfo.location}</div>
+          <div className={styles.location}>{cardInfo.eventCard.location}</div>
         </div>
-        <div className={styles.title}>{cardInfo.title}</div>
-        <div className={styles.description} dangerouslySetInnerHTML={{ __html: cardInfo.description }}></div>
+        <div className={styles.title}>{cardInfo.eventCard.title}</div>
+        <div className={styles.description} dangerouslySetInnerHTML={{ __html: cardInfo.eventCard.description }}></div>
         <div className={styles.tags}>
           <ul>
-            <li>{cardInfo.category.name}</li>
+            {/* <li>{cardInfo.category.name}</li> */}
           </ul>
         </div>
         <div className={styles.footer}>
-          <div className="participants" onClick={() => { openModal(0) }}>Список участников ({cardInfo.participantsCount})</div>
+          {/* <div className="participants" onClick={() => { openModal(0) }}>Список участников ({cardInfo.participantsCount})</div>
           {
             cardInfo.attachmentsCount > 0 ?
               <div className="materials" onClick={() => { openModal(1) }}>Материалы ({cardInfo.attachmentsCount})</div>
               :
               null
           }
-          <div className={styles.feedback} onClick={() => { openModal(2) }}>Отзывы {cardInfo.feedbacksCount > 0 ? `(${cardInfo.feedbacksCount})` : null}</div>
+          <div className={styles.feedback} onClick={() => { openModal(2) }}>Отзывы {cardInfo.feedbacksCount > 0 ? `(${cardInfo.feedbacksCount})` : null}</div> */}
         </div>
       </div>
       {
