@@ -13,6 +13,7 @@
     "fixbuild": "rimraf .\\node_modules\\@microsoft\\gulp-core-build-typescript\\node_modules\\typescript"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.10.4",
     "@microsoft/sp-core-library": "~1.4.0",
     "@microsoft/sp-lodash-subset": "~1.4.0",
     "@microsoft/sp-office-ui-fabric-core": "~1.4.0",
@@ -24,11 +25,13 @@
     "antd": "^4.4.2",
     "axios": "^0.19.2",
     "moment": "^2.27.0",
-    "es6-shim": "^0.35.5",
     "react": "^16.13.1",
+    "react-datetime": "^2.16.3",
     "react-dom": "^16.13.1",
     "react-hooks": "^1.0.1",
-    "react-modern-calendar-datepicker": "^3.1.6"
+    "react-modern-calendar-datepicker": "^3.1.6",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5"
   },
   "resolutions": {
     "@types/react": "16.8.8"
@@ -40,7 +43,7 @@
     "@types/chai": "3.4.34",
     "@types/mocha": "2.2.38",
     "@types/react": "16.8.8",
-    "@types/react-dom": "16.8.3",
+    "@types/react-dom": "^16.8.3",
     "ajv": "~5.2.2",
     "gulp": "~3.9.1",
     "rimraf": "^3.0.2",

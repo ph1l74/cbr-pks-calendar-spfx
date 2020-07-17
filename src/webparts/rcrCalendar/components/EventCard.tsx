@@ -3,60 +3,39 @@ import styles from './EventCard.module.scss';
 import Modal from './Modal';
 import Participants from './Participants';
 import Materials from './Materials';
-import Event from '../Models/Event';
-import * as moment from 'moment';
 
 const EventCard = (eventCard: any) => {
 
 
   // hardcode test data
-  const cardInfoInit = {
-    dates: {
-      startDate: "2020-10-05T14:48:00.000Z",
-      endDate: "2020-10-10T14:48:00.000Z"
+  const cardInfoInit =
+  {
+    "allDay": true,
+    "attachmentsCount": 89,
+    "category": {
+      "id": 1,
+      "name": "Мероприятия",
+      "color": "#000000"
     },
-    time: {
-      allDay: true,
-      from: null,
-      to: null
-    },
-    status: true,
-    location: "Москва, 1-й Волоколамский проезд д.10 строение 3.",
-    title: "Курс: Основы визуального моделирования с использованием UML 2.x",
-    description: "Код: REQ-001</br>Организатор: Luxoft Training",
-    tags: ["Прочие события"],
-    participants: ["65afa", "65chdv", "65gsv"],
-    materials: ["material"],
-    feedback: [{ author: "65afa", comment: "nice" }, { author: "65chdv", comment: "not nice" }]
+    "description": "<p> Метания копья в зале. </p>",
+    "endDate": "2020-07-04T00:42:37.3002723",
+    "feedbacksCount": 4,
+    "freeVisit": true,
+    "id": 17,
+    "isParticipant": false,
+    "linksCount": 98,
+    "location": "Location 058",
+    "participantsCount": 13,
+    "startDate": "2020-06-16T00:42:37.3002723",
+    "title": "Event 058"
   }
 
-
-  const renderDate = (ev: any) => {
-    const startDate = moment(ev.eventCard.startDate as Date);
-    const endDate = moment(ev.eventCard.endDate);
-    //console.log(ev, ev.eventCard.startDate, ev.eventCard.endDate as Date, startDate, endDate);
-    return (
-      <div className={styles.dates}>
-        <div className={styles.dateFrom}>
-          <span className={styles.dateDest}>с</span>
-          <span className={styles.dateDay}>{startDate.date()}</span>
-          <span className={styles.dateMonth}>{monthNames[startDate.month()]}</span>
-          <span className={styles.dateYear}>{startDate.year()}</span>
-        </div>
-        <div className={styles.dateTo}>
-          <span className={styles.dateDest}>по</span>
-          <span className={styles.dateDay}>{endDate.date()}</span>
-          <span className={styles.dateMonth}>{monthNames[endDate.month()]}</span>
-          <span className={styles.dateYear}>{endDate.year()}</span>
-        </div>
-      </div>
-    )
-  }
 
   // month names for translation
   const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
     "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
   ];
+
 
   const modalTypes = ["Участники", "Материалы", "Отзывы"]
 
@@ -79,27 +58,33 @@ const EventCard = (eventCard: any) => {
     setModal(false);
   }
 
+
   return (
     <div className={styles.card}>
-      {renderDate(cardInfo)}
-      {/* <div className={styles.dates}>
+      <div className={styles.dates}>
+        <div className={styles.dateFrom}>
+          <span className={styles.dateDest}>с</span>
+          <span className={styles.dateDay}>{new Date(cardInfo.eventCard.startDate).getUTCDate()}</span>
+          <span className={styles.dateMonth}>{monthNames[new Date(cardInfo.eventCard.startDate).getMonth()]}</span>
+          <span className={styles.dateYear}>{new Date(cardInfo.eventCard.startDate).getUTCFullYear()}</span>
+        </div>
         <div className={styles.dateTo}>
           <span className={styles.dateDest}>по</span>
-          <span className={styles.dateDay}>{new Date(cardInfo.endDate).getUTCDate()}</span>
-          <span className={styles.dateMonth}>{monthNames[new Date(cardInfo.endDate).getMonth()]}</span>
-          <span className={styles.dateYear}>{new Date(cardInfo.endDate).getUTCFullYear()}</span>
-        </div> 
-      </div> */}
+          <span className={styles.dateDay}>{new Date(cardInfo.eventCard.endDate).getUTCDate()}</span>
+          <span className={styles.dateMonth}>{monthNames[new Date(cardInfo.eventCard.endDate).getMonth()]}</span>
+          <span className={styles.dateYear}>{new Date(cardInfo.eventCard.endDate).getUTCFullYear()}</span>
+        </div>
+      </div>
       <div className={styles.info}>
         <div className={styles.header}>
           {
             cardInfo.eventCard.allDay ?
               <div className={styles.time}>Событие на весь день</div>
               :
-              <div className={styles.time}>{cardInfo.eventCard.startDate.toString()} - {cardInfo.eventCard.endDate.toString()}</div>
+              <div className={styles.time}>{new Date(cardInfo.eventCard.startDate).getHours()} - {new Date(cardInfo.eventCard.endDate).getHours()}</div>
           }
           {
-            cardInfo.eventCard.status ?
+            cardInfo.eventCard.isParticipant ?
               <div className={styles.status}>Вы участник</div>
               :
               null
@@ -109,23 +94,19 @@ const EventCard = (eventCard: any) => {
         <div className={styles.title}>{cardInfo.eventCard.title}</div>
         <div className={styles.description} dangerouslySetInnerHTML={{ __html: cardInfo.eventCard.description }}></div>
         <div className={styles.tags}>
-          {/* <ul>
-            {cardInfo.tags ? cardInfo.tags.map((tag) => (
-              <li key={tag}>{tag}</li>
-            ))
-              : null
-            }
-          </ul> */}
+          <ul>
+            {/* <li>{cardInfo.category.name}</li> */}
+          </ul>
         </div>
         <div className={styles.footer}>
-          {/* <div className="participants" onClick={() => { openModal(0) }}>Список участников ({cardInfo.participants ? cardInfo.participants.length : "-"})</div>
+          {/* <div className="participants" onClick={() => { openModal(0) }}>Список участников ({cardInfo.participantsCount})</div>
           {
-            cardInfo.materials && cardInfo.materials.length > 0 ?
-              <div className="materials" onClick={() => { openModal(1) }}>Материалы ({cardInfo.materials ? cardInfo.materials.length : "-"})</div>
+            cardInfo.attachmentsCount > 0 ?
+              <div className="materials" onClick={() => { openModal(1) }}>Материалы ({cardInfo.attachmentsCount})</div>
               :
               null
           }
-          <div className={styles.feedback} onClick={() => { openModal(2) }}>Отзывы {cardInfo.feedback && cardInfo.feedback.length > 0 ? `(${cardInfo.feedback.length})` : null}</div> */}
+          <div className={styles.feedback} onClick={() => { openModal(2) }}>Отзывы {cardInfo.feedbacksCount > 0 ? `(${cardInfo.feedbacksCount})` : null}</div> */}
         </div>
       </div>
       {
