@@ -11,12 +11,12 @@ export default class Event implements Model {
     public description: string;
     public authorLogin: string;
     public fullDay: boolean;
-    public startDate: Date;
-    public endDate: Date;
+    public startDate: string;
+    public endDate: string;
     public freeVisiting: boolean;
-    public comments: Comment[];
+    public comments?: Comment[];
     // tslint:disable-next-line:variable-name
     public _links: BaseLink;
-    [key: string]: string | number | Date | BaseLink | Category | boolean | Comment[];
+    [key: string]: string | number | BaseLink | Category | boolean | Comment[];
 
 }

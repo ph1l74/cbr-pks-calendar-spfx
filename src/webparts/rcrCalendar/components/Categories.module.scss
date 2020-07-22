@@ -1,0 +1,32 @@
+.categories {
+    display: block;
+    width: 250px;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 4px;
+    font-size: 12px;
+    margin-top: 20px;
+    padding: 20px 10px;
+
+    .header {
+        font-size: 16px;
+        font-weight: 600;
+        width: 100%;
+        border: 1px solid rgba(144, 144, 144, 1);
+        border-width: 0px 0px 1px 0px;
+        margin-bottom: 20px;
+    }
+    .categorie {
+        cursor: pointer;
+        display: block;
+        .box {
+            float: left;
+            margin-right: 6px;
+            height: 16px;
+            width: 16px;
+            border: 1px solid rgba(144, 144, 144, 1);
+        }
+        .name {
+            display: inline-block;
+        }
+    }
+}

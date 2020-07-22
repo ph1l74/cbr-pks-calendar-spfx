@@ -21,7 +21,8 @@ const initState =
   {
     room: null,
     conStatus: null
-  }
+  },
+  editMode: null
 }
 
 const store = createStore(rootReducer, initState

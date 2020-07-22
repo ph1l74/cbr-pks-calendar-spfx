@@ -12,7 +12,8 @@ const initState =
     {
         room: null,
         conStatus: null
-    }
+    },
+    editMode: null
 }
 
 const rootReducer = (state = initState, action) => {
@@ -31,6 +32,9 @@ const rootReducer = (state = initState, action) => {
             return { ...state, activeGame: { room: null, conStatus: null } }
         case types.SET_CON_STATUS:
             return { ...state, activeGame: { ...state.activeGame, conStatus: action.value } }
+        // new reducers start here:
+        case types.SET_EDIT_MODE:
+            return {...state, editMode: action.value}
         default:
             return state
     }

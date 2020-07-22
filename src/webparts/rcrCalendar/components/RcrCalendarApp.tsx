@@ -5,12 +5,16 @@ import Content from './Content';
 import Calendar from './Calendar';
 import EventCard from './EventCard';
 import { EventService } from '../services/Services';
+import Categories from '../components/Categories';
+import { useSelector } from 'react-redux';
 import GroupingEvent from '../Models/GroupingEvent';
+import EditFormCard from '../../../../lib/webparts/rcrCalendar/components/EditFormCard';
 
 
 const RcrCalendarApp = () => {
 
     const [events, setEvents] = React.useState([]);
+    const editMode = useSelector(state => state.editMode);
     const filterSelectedDay = (selectedDay: Date) => {
         console.log('fetch');
         EventService.searchGet(`/?startDate=${selectedDay.getDate()}.0${selectedDay.getMonth()}.${selectedDay.getFullYear()}`)
@@ -25,26 +29,35 @@ const RcrCalendarApp = () => {
 
     filterSelectedDay(new Date());
 
-    const renderEvents = () => {
-        console.log('render events', events);
-        return events.map(evg => {
-            const evGr = evg as GroupingEvent;
-            console.log(evGr.Value);
-            return (evGr.Value).map(ev => <EventCard eventCard={ev}></EventCard>);
-        });
-    }
+    // const renderEvents = () => {
+    //     console.log('render events', events);
+    //     return events.map(evg => {
+    //         const evGr = evg as GroupingEvent;
+    //         console.log(evGr.Value);
+    //         return (evGr.Value).map(ev => <EventCard eventCard={ev}></EventCard>);
+    //     });
+    // }
 
     return (
         <div className={styles.app}>
-            <Content>
-                {renderEvents()}
-                {/* <EventCard></EventCard>
-                <EventCard></EventCard>
-                <EventCard></EventCard> */}
-            </Content>
-            <Dashboard>
-                <Calendar></Calendar>
-            </Dashboard>
+            {
+                editMode && editMode === 1 ?
+                    <EditFormCard></EditFormCard>
+                    :
+                    (
+                        <div>
+                            <Content>
+                                {/* {renderEvents()} */}
+                                <EventCard />
+                            </Content>
+                            <Dashboard>
+                                <Calendar />
+                                <Categories />
+                            </Dashboard>
+                        </div>
+                    )
+            }
+
         </div>
     );
 }
