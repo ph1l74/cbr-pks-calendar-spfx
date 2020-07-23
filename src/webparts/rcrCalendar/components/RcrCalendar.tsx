@@ -5,9 +5,11 @@ import styles from './RcrCalendar.module.scss';
 import { IRcrCalendarProps } from './IRcrCalendarProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { Provider } from "react-redux";
-import { createStore } from 'redux';
-import rootReducer from '../Reducers';
+import { createStore, applyMiddleware } from 'redux';
+import reducers from '../Reducers';
 import RcrCalendarApp from "./RcrCalendarApp";
+import thunk from 'redux-thunk';
+import { createLogger } from 'redux-logger';
 
 const initState =
 {
@@ -17,6 +19,7 @@ const initState =
     id: null
   },
   rooms: [],
+  events: [],
   activeGame:
   {
     room: null,
@@ -24,9 +27,12 @@ const initState =
   }
 }
 
-const store = createStore(rootReducer, initState
+const middleware = [thunk, createLogger({ collapsed: true })];
+
+export const store = createStore(reducers, applyMiddleware(...middleware));
+// const store = createStore(rootReducer, initState)
   // + window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-)
+// )
 
 
 export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> {
@@ -35,7 +41,7 @@ export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> 
       <Provider store={store}>
         <div className={styles.rcrCalendar}>
           <div className={styles.header}>{escape(this.props.title)}</div>
-          <RcrCalendarApp />
+          <RcrCalendarApp records={[]}/>
         </div>
       </Provider>
     );

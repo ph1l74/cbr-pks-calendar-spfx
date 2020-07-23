@@ -1,7 +1,12 @@
 import * as types from '../constants';
+import Event from '../Models/Event';
+import { combineReducers } from 'redux'
+import { EventService } from '../services/Services';
+import GroupingEvent from '../../../../lib/webparts/rcrCalendar/Models/GroupingEvent';
 
 const initState =
 {
+    events: [],
     user:
     {
         name: null,
@@ -35,5 +40,48 @@ const rootReducer = (state = initState, action) => {
             return state
     }
 }
+const eventReducer = (state = { date: Date, events: [], isFetching: false }, action) => {
+    switch (action.type) {
+        case 'ADD_EVENT':
+            return [
+                ...state.events,
+                {
+                    id: action.id,
+                    text: action.text,
+                    completed: false
+                }
+            ]
+        case 'FIND_EVENT':
+            let findObjs = state.events.filter(ob => ob.id === action.id);
+            return findObjs.length > 0 ? findObjs[0] : null;
 
-export default rootReducer;
+        case 'CHANGE_DATE':
+            return { ...state, date: action.payload, isFetching: true }
+
+        case 'CHANGE_DATE_SUCCESS':
+            return { ...state, events: action.payload, isFetching: false }
+
+        // case 'CHANGE_DATE':
+        //     console.log('CHANGE_DATE');
+        //     const selectedDay = action.date;
+        //     const day = selectedDay.days() > 9 ? selectedDay.days() : '0' + selectedDay.days();
+        //     const month = selectedDay.months() > 9 ? selectedDay.months() : '0' + selectedDay.months();
+        //     return EventService.searchGet(`/?startDate=${day}.${month}.${selectedDay.years()}`)
+        //         .then(ob => {
+        //             state.events = ob;
+        //             return ob;
+        //         })
+        //         .catch(err => {
+        //             throw err;
+        //         });
+        default:
+            return state
+    }
+}
+
+// export default rootReducer;
+
+export default combineReducers({
+    root: rootReducer,
+    event: eventReducer
+})
