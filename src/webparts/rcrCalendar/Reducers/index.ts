@@ -17,7 +17,8 @@ const initState =
     {
         room: null,
         conStatus: null
-    }
+    },
+    editMode: null,
 }
 
 const rootReducer = (state = initState, action) => {
@@ -38,6 +39,7 @@ const rootReducer = (state = initState, action) => {
             return { ...state, activeGame: { ...state.activeGame, conStatus: action.value } }
         // new reducers start here:
         case types.SET_EDIT_MODE:
+            console.log('showing editForm');
             return { ...state, editMode: action.value }
         default:
             return state

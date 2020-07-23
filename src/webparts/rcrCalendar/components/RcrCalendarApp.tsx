@@ -19,7 +19,7 @@ import { useSelector } from 'react-redux';
 import EditFormCard from './EditFormCard';
 
 const RcrCalendarApp = (events: GroupingEvent[], setDateChange: (date: Date) => void) => {
-    const editMode = useSelector(state => state.editMode);
+    const editMode = useSelector(state => state.root.editMode);
     //const [events, setEvents] = React.useState([]);
 
     // const filterSelectedDay = async (selectedDay: Date) => {

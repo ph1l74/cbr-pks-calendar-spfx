@@ -66,7 +66,7 @@ const EventCard = (eventCard: any) => {
 
 
   // 
-  const openEditForm = (e) => {
+  const openEditForm = () => {
     console.log('send open editform');
     dispatch(setEditMode(1))
   }
@@ -99,9 +99,9 @@ const EventCard = (eventCard: any) => {
         </div>
       </div>
       <div className={styles.info} style={categorieBorderStyle}>
-        <div className={styles.editLink} onClick={openEditForm}>
+        <a className={styles.editLink} onClick={openEditForm}>
           <img src={editIcon} className={styles.editIcon} />
-        </div>
+        </a>
         <div className={styles.header}>
           {
             cardInfo.eventCard.allDay ?
