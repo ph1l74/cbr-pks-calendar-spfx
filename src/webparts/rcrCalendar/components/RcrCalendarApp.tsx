@@ -14,8 +14,12 @@ import "@pnp/sp/sites";
 import { IContextInfo } from "@pnp/sp/sites";
 import { connect } from 'react-redux'
 import { changeCalendarDate } from '../Actions';
+import Categories from '../components/Categories';
+import { useSelector } from 'react-redux';
+import EditFormCard from './EditFormCard';
 
-const RcrCalendarApp = (events: GroupingEvent[], setDateChange: (date:Date) => void) => {
+const RcrCalendarApp = (events: GroupingEvent[], setDateChange: (date: Date) => void) => {
+    const editMode = useSelector(state => state.editMode);
     //const [events, setEvents] = React.useState([]);
 
     // const filterSelectedDay = async (selectedDay: Date) => {
@@ -73,23 +77,26 @@ const RcrCalendarApp = (events: GroupingEvent[], setDateChange: (date:Date) => v
         console.log('render events', events);
         return events.events.map(evg => {
             const evGr = evg as GroupingEvent;
-            console.log(evGr.Value);
+            // console.log(evGr.Value);
             return (evGr.Value).map(ev => <EventCard eventCard={ev}></EventCard>);
         });
     }
 
     return (
-        <div className={styles.app}>
-            <Content>
-                {renderEvents(events)}
-                {/* <EventCard></EventCard>
-                <EventCard></EventCard>
-                <EventCard></EventCard> */}
-            </Content>
-            <Dashboard>
-                <Calendar ></Calendar>
-            </Dashboard>
-        </div>
+        editMode && editMode === 1 ?
+            <EditFormCard></EditFormCard>
+            :
+            (
+                <div className={styles.app}>
+                    <Content>
+                        {renderEvents(events)}
+                    </Content>
+                    <Dashboard>
+                        <Calendar ></Calendar>
+                        <Categories />
+                    </Dashboard>
+                </div>
+            )
     );
 }
 
@@ -103,7 +110,7 @@ const mapStateToProps = (store: any) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-      // setDate: year => dispatch(changeCalendarDate(year)) // [1]
+        // setDate: year => dispatch(changeCalendarDate(year)) // [1]
     }
 }
 

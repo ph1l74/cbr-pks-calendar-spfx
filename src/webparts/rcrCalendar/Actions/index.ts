@@ -1,5 +1,6 @@
 import { EventService } from "../services/Services"
 import * as moment from "moment";
+import * as types from '../constants';
 
 
 let nextTodoId = 0
@@ -83,4 +84,11 @@ export const VisibilityFilters = {
 
 export const EventFilters = {
   SHOW_ALL: 'SHOW_ALL'
+}
+
+export const setEditMode = (value) => {
+  return {
+      type: types.SET_EDIT_MODE,
+      value
+  }
 }

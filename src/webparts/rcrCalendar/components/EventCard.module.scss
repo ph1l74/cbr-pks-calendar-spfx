@@ -79,10 +79,17 @@
   .info {
     width: calc(100% - 172px);
     padding-left: 20px;
-    
+
     border-left: 2px solid;
     display: inline-block;
-
+    .editLink {
+      z-index: 150;
+      float: right;
+      cursor: pointer;
+      .editIcon {
+        height: 16px;
+      }
+    }
     .header {
       color: #000;
       font-size: 13px;
@@ -105,7 +112,7 @@
       font-size: 17px;
       font-weight: 100;
     }
-    .description{
+    .description {
       color: #727678;
       font-size: 14px;
       font-weight: 100;

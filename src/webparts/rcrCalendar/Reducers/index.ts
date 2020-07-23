@@ -36,11 +36,15 @@ const rootReducer = (state = initState, action) => {
             return { ...state, activeGame: { room: null, conStatus: null } }
         case types.SET_CON_STATUS:
             return { ...state, activeGame: { ...state.activeGame, conStatus: action.value } }
+        // new reducers start here:
+        case types.SET_EDIT_MODE:
+            return { ...state, editMode: action.value }
         default:
             return state
     }
 }
-const eventReducer = (state = { date: Date, events: [], isFetching: false }, action) => {
+const eventInit = { date: Date, events: [], isFetching: false };
+const eventReducer = (state = eventInit, action) => {
     switch (action.type) {
         case 'ADD_EVENT':
             return [
