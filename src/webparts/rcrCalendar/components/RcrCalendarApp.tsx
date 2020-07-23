@@ -14,9 +14,10 @@ import "@pnp/sp/sites";
 import { IContextInfo } from "@pnp/sp/sites";
 import { connect } from 'react-redux'
 import { changeCalendarDate } from '../Actions';
-import Categories from '../components/Categories';
+import Categories from './Categories';
 import { useSelector } from 'react-redux';
 import EditFormCard from './EditFormCard';
+import Category from '../Models/Category';
 
 const RcrCalendarApp = (events: GroupingEvent[], setDateChange: (date: Date) => void) => {
     const editMode = useSelector(state => state.root.editMode);
@@ -82,6 +83,7 @@ const RcrCalendarApp = (events: GroupingEvent[], setDateChange: (date: Date) => 
         });
     }
 
+    const initCategories: Category[] = [];
     return (
         editMode && editMode === 1 ?
             <EditFormCard></EditFormCard>
@@ -93,7 +95,7 @@ const RcrCalendarApp = (events: GroupingEvent[], setDateChange: (date: Date) => 
                     </Content>
                     <Dashboard>
                         <Calendar ></Calendar>
-                        <Categories />
+                        <Categories categories = {initCategories}/>
                     </Dashboard>
                 </div>
             )

@@ -19,6 +19,8 @@ const initState =
         conStatus: null
     },
     editMode: null,
+    categories: [],
+    isFetchingCategories: false,
 }
 
 const rootReducer = (state = initState, action) => {
@@ -41,10 +43,17 @@ const rootReducer = (state = initState, action) => {
         case types.SET_EDIT_MODE:
             console.log('showing editForm');
             return { ...state, editMode: action.value }
+            
+        case types.GET_CATEGORIES:
+            return { ...state, isFetchingCategories: true }
+        case types.GET_CATEGORIES_SUCCESS:
+            return { ...state, categories: action.payload, isFetchingCategories: false }
+
         default:
             return state
     }
 }
+
 const eventInit = { date: Date, events: [], isFetching: false };
 const eventReducer = (state = eventInit, action) => {
     switch (action.type) {
@@ -61,10 +70,10 @@ const eventReducer = (state = eventInit, action) => {
             let findObjs = state.events.filter(ob => ob.id === action.id);
             return findObjs.length > 0 ? findObjs[0] : null;
 
-        case 'CHANGE_DATE':
+        case types.CHANGE_DATE:
             return { ...state, date: action.payload, isFetching: true }
 
-        case 'CHANGE_DATE_SUCCESS':
+        case types.CHANGE_DATE_SUCCESS:
             return { ...state, events: action.payload, isFetching: false }
 
         // case 'CHANGE_DATE':

@@ -1,4 +1,4 @@
-import { EventService } from "../services/Services"
+import { EventService, CategoryService } from "../services/Services"
 import * as moment from "moment";
 import * as types from '../constants';
 
@@ -19,10 +19,11 @@ export const toggleTodo = id => ({
   type: 'TOGGLE_TODO',
   id
 })
+
 export const changeCalendarDate = (dateStart: Date) => {
   return dispatch => {
     dispatch({
-      type: 'CHANGE_DATE',
+      type: types.CHANGE_DATE,
       payload: dateStart
     })
 
@@ -34,48 +35,41 @@ export const changeCalendarDate = (dateStart: Date) => {
       .then(ob => {
         console.log('fetch', ob);
         dispatch({
-          type: 'CHANGE_DATE_SUCCESS',
+          type: types.CHANGE_DATE_SUCCESS,
           payload: ob,
         });
       })
       .catch(err => console.log(err));
   }
-
-  // return {
-  //   type: 'CHANGE_DATE',
-  //   payload: date
-  // };
-  // экшен с типом REQUEST (запрос начался)
-  // диспатчится сразу, как будто-бы перед реальным запросом
-
-  // // а экшен внутри setTimeout
-  // // диспатчится через секунду
-  // // как будто-бы в это время
-  // // наши данные загружались из сети
-  // const day = date.getDate() > 9 ? date.getDate() : '0' + date.getDate();
-  // const month = date.getMonth() > 9 ? date.getMonth() : '0' + date.getMonth();
-  // EventService.searchGet(`/?startDate=${day}.${month}.${date.getFullYear()}`)
-  //   .then(ob =>{
-  //     console.log('fetch', ob);
-  //     dispatch({
-  //       type: 'CHANGE_DATE_SUCCESS',
-  //       payload: ob,
-  //     });
-  //   })
-  //   .catch(err => console.log(err));
-
-  // setTimeout(() => {
-  //   dispatch({
-  //     type: 'CHANGE_DATE_SUCCESS',
-  //     payload: [1, 2, 3, 4, 5],
-  //   })
-  // }, 1000)
 }
 
 export const changeCalendarDateSuccess = events => ({
-  type: 'CHANGE_DATE_SUCCESS',
+  type: types.CHANGE_DATE_SUCCESS,
   events
 })
+
+export const getCategories = ():any => {
+  return async dispatch => {
+    dispatch({
+      type: types.GET_CATEGORIES,
+    })
+    CategoryService.findAll()
+      .then(ob => {
+        console.log('fetch categories', ob);
+        dispatch({
+          type: types.GET_CATEGORIES_SUCCESS,
+          payload: ob,
+        });
+      })
+      .catch(err => console.log(err));
+  }
+}
+
+export const getCategoriesSuccess = categories => ({
+  type: types.GET_CATEGORIES_SUCCESS,
+  payload: categories
+})
+
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
   SHOW_COMPLETED: 'SHOW_COMPLETED',
