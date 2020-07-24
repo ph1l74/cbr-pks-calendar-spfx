@@ -6,11 +6,12 @@ import { IRcrCalendarProps } from './IRcrCalendarProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from 'redux';
-import reducers from '../Reducers';
+import reducers, { filterEventInit } from '../Reducers';
 import RcrCalendarApp from "./RcrCalendarApp";
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { getCategories } from "../Actions";
+import { initEvents } from "../Actions";
 
 const initState =
 {
@@ -36,6 +37,7 @@ export const store = createStore(reducers, applyMiddleware(...middleware));
 // )
 
 store.dispatch(getCategories());
+store.dispatch(initEvents());
 
 export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> {
   public render(): React.ReactElement<IRcrCalendarProps> {

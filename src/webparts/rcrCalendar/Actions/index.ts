@@ -1,6 +1,8 @@
 import { EventService, CategoryService } from "../services/Services"
 import * as moment from "moment";
 import * as types from '../constants';
+import FilterEvent from "../utils/IFilterEvent";
+import { filterEventInit } from "../Reducers";
 
 
 let nextTodoId = 0
@@ -20,26 +22,15 @@ export const toggleTodo = id => ({
   id
 })
 
-export const changeCalendarDate = (dateStart: Date) => {
+export const changeCalendarDate = (dateStart: Date, filterEvent: FilterEvent) => {
   return dispatch => {
     dispatch({
       type: types.CHANGE_DATE,
       payload: dateStart
-    })
+    });
+    filterEvent.selectedDate = dateStart;
 
-    let date = moment(dateStart); 
-    const day = date.date() > 9 ? date.date() : '0' + date.date();
-    const months = date.months() + 1;
-    const month = months > 9 ? months : '0' + months;
-    EventService.searchGet(`/?startDate=${day}.${month}.${date.years()}`)
-      .then(ob => {
-        console.log('fetch', ob);
-        dispatch({
-          type: types.CHANGE_DATE_SUCCESS,
-          payload: ob,
-        });
-      })
-      .catch(err => console.log(err));
+    filterEvents(filterEvent, dispatch);
   }
 }
 
@@ -48,11 +39,37 @@ export const changeCalendarDateSuccess = events => ({
   events
 })
 
-export const getCategories = ():any => {
+export const changeSelectedCategory = (categoryId: number, filterEvent: FilterEvent) => {
+  let categories = filterEvent.selectedCategories;
+  if (categories.indexOf(categoryId) >= 0) {
+    categories = categories.filter(ob => ob !== categoryId);
+  }
+  else {
+    categories.push(categoryId);
+  }
+  filterEvent.selectedCategories = categories;
+  return dispatch => {
+    dispatch({
+      type: types.CHANGE_FILTER_EVENT,
+      payload: filterEvent
+    })
+
+    filterEvents(filterEvent, dispatch);
+  }
+}
+
+export const initEvents = (): any => {
+  return async dispatch => {
+    console.log('init events');
+    filterEvents(filterEventInit, dispatch);   
+  }
+}
+
+export const getCategories = (): any => {
   return async dispatch => {
     dispatch({
       type: types.GET_CATEGORIES,
-    })
+    });
     CategoryService.findAll()
       .then(ob => {
         console.log('fetch categories', ob);
@@ -61,7 +78,7 @@ export const getCategories = ():any => {
           payload: ob,
         });
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err));   
   }
 }
 
@@ -82,7 +99,24 @@ export const EventFilters = {
 
 export const setEditMode = (value) => {
   return {
-      type: types.SET_EDIT_MODE,
-      value
+    type: types.SET_EDIT_MODE,
+    value
   }
+}
+
+function filterEvents(filterEvent: FilterEvent, dispatch: any) {
+  let date = moment(filterEvent.selectedDate);
+  const day = date.date() > 9 ? date.date() : '0' + date.date();
+  const months = date.months() + 1;
+  const month = months > 9 ? months : '0' + months;
+  const filterCategories = filterEvent.selectedCategories.length > 0 ? `&categories=${filterEvent.selectedCategories.join(',')}` : '';
+  EventService.searchGet(`/?startDate=${day}.${month}.${date.years()}${filterCategories}`)
+    .then(ob => {
+      console.log('fetch', ob);
+      dispatch({
+        type: types.CHANGE_FILTER_EVENT_SUCCESS,
+        payload: ob,
+      });
+    })
+    .catch(err => console.log(err));
 }

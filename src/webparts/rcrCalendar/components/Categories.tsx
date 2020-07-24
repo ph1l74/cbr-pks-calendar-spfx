@@ -11,7 +11,7 @@ const Categories = (categories: Category[]) => {
         console.log('categories', categories);
         let i = 1;
         return categories.categories.map(c => (
-            <Categorie info={c} key={i++}></Categorie>
+            <Categorie info={c} key={i++} ></Categorie>
         ));
     }
     // const initCategories: [ICategorieProps] = [

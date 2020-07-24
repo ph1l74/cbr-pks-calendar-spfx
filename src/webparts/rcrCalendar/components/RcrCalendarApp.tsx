@@ -18,8 +18,9 @@ import Categories from './Categories';
 import { useSelector } from 'react-redux';
 import EditFormCard from './EditFormCard';
 import Category from '../Models/Category';
+import FilterEvent from '../utils/IFilterEvent';
 
-const RcrCalendarApp = (events: GroupingEvent[], setDateChange: (date: Date) => void) => {
+const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDateChange: (date: Date) => void) => {
     const editMode = useSelector(state => state.root.editMode);
     //const [events, setEvents] = React.useState([]);
 
@@ -57,29 +58,14 @@ const RcrCalendarApp = (events: GroupingEvent[], setDateChange: (date: Date) => 
     //     catch (ex) {
     //         console.log(ex);
     //     }
-    //     // // pnp.sp.profiles.myProperties.get()
-    //     // //     .then(userprops => {
-    //     // //         console.log(userprops);
-    //     // //     });
-    //     // //     let curruser = pnp.sp.utility.getCurrentUserEmailAddresses();
-    //     // //     curruser.then(function(res){ 
-    //     // //         console.log(res); });
-    //     // EventService.searchGet(`/?startDate=${selectedDay.getDate()}.0${selectedDay.getMonth()}.${selectedDay.getFullYear()}`)
-    //     //     .then(evts => setEvents(evts))
-    //     //     .catch(err => console.log(err));
-    //     // /*console.log(events);
-    //     // events.map((ob) => (
-    //     //     console.log(ob.key)
-    //     //   )
-    //     // );*/
     // }
 
     const renderEvents = (events: any) => {
-        console.log('render events', events);
+        console.log('New render events', events);
         return events.events.map(evg => {
             const evGr = evg as GroupingEvent;
             // console.log(evGr.Value);
-            return (evGr.Value).map(ev => <EventCard eventCard={ev}></EventCard>);
+            return (evGr.Value).map(ev => <EventCard eventCard={ev} key={`eventCard_${ev.id}`}></EventCard>);
         });
     }
 
@@ -106,7 +92,8 @@ const RcrCalendarApp = (events: GroupingEvent[], setDateChange: (date: Date) => 
 const mapStateToProps = (store: any) => {
     console.log(store.event);
     return {
-        events: store.event.events
+        events: store.event.events,
+        filterEvent: store.event.filterEvent
     };
 }
 

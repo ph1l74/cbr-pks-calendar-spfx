@@ -3,6 +3,7 @@ import Event from '../Models/Event';
 import { combineReducers } from 'redux'
 import { EventService } from '../services/Services';
 import GroupingEvent from '../../../../lib/webparts/rcrCalendar/Models/GroupingEvent';
+import FilterEvent from '../utils/IFilterEvent'
 
 const initState =
 {
@@ -43,7 +44,7 @@ const rootReducer = (state = initState, action) => {
         case types.SET_EDIT_MODE:
             console.log('showing editForm');
             return { ...state, editMode: action.value }
-            
+
         case types.GET_CATEGORIES:
             return { ...state, isFetchingCategories: true }
         case types.GET_CATEGORIES_SUCCESS:
@@ -54,7 +55,19 @@ const rootReducer = (state = initState, action) => {
     }
 }
 
-const eventInit = { date: Date, events: [], isFetching: false };
+interface IEventStore {
+    events: GroupingEvent[];
+    isFetching: false;
+    filterEvent: FilterEvent
+}
+
+export const filterEventInit: FilterEvent = { selectedCategories: [], selectedDate: new Date() }
+const eventInit: IEventStore = {
+    events: [],
+    isFetching: false,
+    filterEvent: filterEventInit
+}
+
 const eventReducer = (state = eventInit, action) => {
     switch (action.type) {
         case 'ADD_EVENT':
@@ -71,10 +84,28 @@ const eventReducer = (state = eventInit, action) => {
             return findObjs.length > 0 ? findObjs[0] : null;
 
         case types.CHANGE_DATE:
+            state.filterEvent.selectedDate = action.payload;
             return { ...state, date: action.payload, isFetching: true }
 
         case types.CHANGE_DATE_SUCCESS:
             return { ...state, events: action.payload, isFetching: false }
+
+        case types.CHANGE_FILTER_EVENT:
+            return { ...state, filterEvent: action.payload, isFetching: true }
+            
+        case types.CHANGE_FILTER_EVENT_SUCCESS:
+            return { ...state, events: action.payload, isFetching: false }
+
+        case types.CHANGE_CATEGORY:
+            let selectCategories = state.filterEvent.selectedCategories;
+            if (selectCategories.indexOf(action.payload) >= 0) {
+                selectCategories = selectCategories.filter(ob => ob !== action.payload);
+            }
+            else {
+                selectCategories.push(action.payload);
+            }
+            state.filterEvent.selectedCategories = selectCategories;
+            return { ...state, date: action.payload, isFetching: true }
 
         // case 'CHANGE_DATE':
         //     console.log('CHANGE_DATE');
