@@ -3,7 +3,11 @@ import styles from './EventCard.module.scss';
 import Modal from './Modal';
 import Participants from './Participants';
 import Materials from './Materials';
+import { default as IEventProps } from '../Models/Event';
+import { useReducer, useDispatch } from 'react-redux';
+import { setEditMode } from '../Actions';
 
+const editIcon = require("../Icons/Edit.svg") as string;
 const EventCard = (eventCard: any) => {
 
 
@@ -36,7 +40,7 @@ const EventCard = (eventCard: any) => {
     "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
   ];
 
-
+  // modal types
   const modalTypes = ["Участники", "Материалы", "Отзывы"]
 
   // react hooks instead of props
@@ -46,6 +50,26 @@ const EventCard = (eventCard: any) => {
 
   const [stateModal, setModal] = React.useState(false);
   const [modalType, setModalType] = React.useState(null);
+
+  const dispatch = useDispatch()
+
+  // event card styled by categorie color
+  const categorieColor = cardInfo.eventCard.category.color ? cardInfo.eventCard.category.color : '#000000';
+  const categorieStyle: React.CSSProperties = {
+    color: categorieColor,
+    borderColor: categorieColor,
+  }
+
+  const categorieBorderStyle: React.CSSProperties = {
+    borderColor: categorieColor
+  }
+
+
+  // 
+  const openEditForm = () => {
+    console.log('send open editform');
+    dispatch(setEditMode(1))
+  }
 
   function openModal(type: number): void {
     setModalType(type);
@@ -57,7 +81,6 @@ const EventCard = (eventCard: any) => {
     console.log("closed modal");
     setModal(false);
   }
-
 
   return (
     <div className={styles.card}>
@@ -75,7 +98,10 @@ const EventCard = (eventCard: any) => {
           <span className={styles.dateYear}>{new Date(cardInfo.eventCard.endDate).getUTCFullYear()}</span>
         </div>
       </div>
-      <div className={styles.info}>
+      <div className={styles.info} style={categorieBorderStyle}>
+        <a className={styles.editLink} onClick={openEditForm}>
+          <img src={editIcon} className={styles.editIcon} />
+        </a>
         <div className={styles.header}>
           {
             cardInfo.eventCard.allDay ?
@@ -95,7 +121,7 @@ const EventCard = (eventCard: any) => {
         <div className={styles.description} dangerouslySetInnerHTML={{ __html: cardInfo.eventCard.description }}></div>
         <div className={styles.tags}>
           <ul>
-            <li>{cardInfo.eventCard.category.name}</li>
+            <li style={categorieStyle}>{cardInfo.eventCard.category.name}</li>
           </ul>
         </div>
         <div className={styles.footer}>
