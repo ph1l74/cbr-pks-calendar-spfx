@@ -26,7 +26,8 @@ const initState =
   {
     room: null,
     conStatus: null
-  }
+  },
+  editMode: null
 }
 
 const middleware = [thunk, createLogger({ collapsed: true })];
