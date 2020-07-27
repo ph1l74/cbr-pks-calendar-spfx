@@ -13,15 +13,46 @@ import { WebPartContext } from "@microsoft/sp-webpart-base";
 import "@pnp/sp/sites";
 import { IContextInfo } from "@pnp/sp/sites";
 import { connect } from 'react-redux'
-import { changeCalendarDate } from '../Actions';
+import { changeCalendarDate, infinityLoadEvents } from '../Actions';
 import Categories from './Categories';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { debounce } from "lodash";
+import * as $ from "jquery";
 import EditFormCard from './EditFormCard';
 import Category from '../Models/Category';
 import FilterEvent from '../utils/IFilterEvent';
+import { Spin } from 'antd';
+import * as moment from 'moment';
 
 const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDateChange: (date: Date) => void) => {
     const editMode = useSelector(state => state.root.editMode);
+    const eventsCount = useSelector(state => state.event.events.length === 0 ? 0 : (state.event.events as GroupingEvent[])
+        .map(evg => evg.Value).reduce((a, b) => a ? a.concat(b) : []).length);
+    const currentFilter = useSelector(state => state.event.filterEvent);
+    const isFetching = useSelector(state => state.event.isFetching);
+
+    const dispatch = useDispatch();
+
+    const contentElement = $('div[class*=content_]');
+    contentElement.scroll(debounce(() => {
+        const {
+            // loadUsers
+        } = this;
+
+        // Bails early if:
+        // * there's an error
+        // * it's already loading
+        // * there's nothing left to load
+        // if (error || isLoading || !hasMore) return;
+
+        // Checks that the page has scrolled to the bottom
+        if ( // contentElement.clientHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
+            eventsCount > 0 && contentElement.innerHeight() + contentElement.scrollTop() + 50 > contentElement[0].scrollHeight) {
+            console.log('Infinity load', currentFilter, eventsCount);
+            dispatch(infinityLoadEvents(eventsCount, currentFilter));
+        }
+    }));
+
     //const [events, setEvents] = React.useState([]);
 
     // const filterSelectedDay = async (selectedDay: Date) => {
@@ -62,10 +93,19 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
 
     const renderEvents = (events: any) => {
         console.log('New render events', events);
+        moment.locale('ru');
+        if (!events.events || events.events.length === 0){
+            return <div>Нет данных</div>
+        }
         return events.events.map(evg => {
             const evGr = evg as GroupingEvent;
+            let gr = moment(evg.Key, 'YYYY-MM-DD');
             // console.log(evGr.Value);
-            return (evGr.Value).map(ev => <EventCard eventCard={ev} key={`eventCard_${ev.id}`}></EventCard>);
+
+            return <div className={styles['month-header']}>{gr.format('MMMM')}
+                {(evGr.Value).map(ev => <EventCard eventCard={ev} key={`eventCard_${ev.id}_${evg.Key}`}></EventCard>)}
+            </div>
+            // return (evGr.Value).map(ev => <EventCard eventCard={ev} key={`eventCard_${ev.id}_${evGr.Key}`}></EventCard>);
         });
     }
 
@@ -76,13 +116,15 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
             :
             (
                 <div className={styles.app}>
-                    <Content>
-                        {renderEvents(events)}
-                    </Content>
-                    <Dashboard>
-                        <Calendar ></Calendar>
-                        <Categories categories = {initCategories}/>
-                    </Dashboard>
+                    <Spin tip='Загрузка данных...' spinning={isFetching} delay={500}>
+                        <Content filterEvent={filterEvent} >
+                            {renderEvents(events)}
+                        </Content>
+                        <Dashboard>
+                            <Calendar ></Calendar>
+                            <Categories categories={initCategories} />
+                        </Dashboard>
+                    </Spin>
                 </div>
             )
     );

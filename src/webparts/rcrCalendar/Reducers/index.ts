@@ -92,7 +92,7 @@ const eventReducer = (state = eventInit, action) => {
 
         case types.CHANGE_FILTER_EVENT:
             return { ...state, filterEvent: action.payload, isFetching: true }
-            
+
         case types.CHANGE_FILTER_EVENT_SUCCESS:
             return { ...state, events: action.payload, isFetching: false }
 
@@ -106,6 +106,10 @@ const eventReducer = (state = eventInit, action) => {
             }
             state.filterEvent.selectedCategories = selectCategories;
             return { ...state, date: action.payload, isFetching: true }
+        case types.INFINITY_LOAD_EVENT_SUCCESS:
+            const newEvents = infinityLoadEvents(action.payload as GroupingEvent[], state.events);
+            console.log('newEvents', newEvents, action.payload as GroupingEvent[]);
+            return { ...state, events: newEvents, isFetching: false }
 
         // case 'CHANGE_DATE':
         //     console.log('CHANGE_DATE');
@@ -123,6 +127,24 @@ const eventReducer = (state = eventInit, action) => {
         default:
             return state
     }
+}
+
+const infinityLoadEvents = (events: GroupingEvent[], currentEvents: GroupingEvent[]): GroupingEvent[] => {
+    if (events && currentEvents) {
+        events.forEach(ob => {
+            const findKey = currentEvents.filter(cur => cur.Key === ob.Key); // Todo: можно переделать на reduce
+            if (findKey.length > 0) { // Если запись была найдена ранее, мы включаем в нее новые
+                findKey[0].Value.push(...ob.Value.filter(el => findKey[0].Value.filter(fel => fel.id === el.id).length === 0));
+                let evs = findKey[0].Value;
+                // evs.reduce((a, b) => { a.id === b. id ? a : b});
+            }
+            else{ // Иначе добавляем сгруппированную запись
+                currentEvents.push(ob);
+            }
+        });
+        return currentEvents;
+    }
+    return [];
 }
 
 // export default rootReducer;
