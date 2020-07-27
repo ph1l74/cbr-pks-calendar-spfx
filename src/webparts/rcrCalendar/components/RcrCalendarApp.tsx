@@ -5,7 +5,10 @@ import Content from './Content';
 import Calendar from './Calendar';
 import EventCard from './EventCard';
 import { EventService } from '../services/Services';
+import Categories from '../components/Categories';
+import { useSelector } from 'react-redux';
 import GroupingEvent from '../Models/GroupingEvent';
+import EditFormCard from '../../../../lib/webparts/rcrCalendar/components/EditFormCard';
 import Event from '../Models/Event';
 import { sp } from '@pnp/sp/presets/all';
 import pnp from 'sp-pnp-js';
@@ -14,9 +17,6 @@ import "@pnp/sp/sites";
 import { IContextInfo } from "@pnp/sp/sites";
 import { connect } from 'react-redux'
 import { changeCalendarDate } from '../Actions';
-import Categories from './Categories';
-import { useSelector } from 'react-redux';
-import EditFormCard from './EditFormCard';
 import Category from '../Models/Category';
 import FilterEvent from '../utils/IFilterEvent';
 
