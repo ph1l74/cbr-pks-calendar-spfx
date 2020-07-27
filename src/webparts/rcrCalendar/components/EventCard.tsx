@@ -4,13 +4,11 @@ import Modal from './Modal';
 import Participants from './Participants';
 import Materials from './Materials';
 import { default as IEventProps } from '../Models/Event';
-import { useReducer, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setEditMode } from '../Actions';
 
 const editIcon = require("../Icons/Edit.svg") as string;
-
-// eventCardNew: IEventProps
-const EventCard = () => {
+const EventCard = (eventCard: any) => {
 
   // hardcode test data
   const cardInfoInit =
@@ -41,13 +39,12 @@ const EventCard = () => {
     "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
   ];
 
-
   // modal types
   const modalTypes = ["Участники", "Материалы", "Отзывы"]
 
 
   // react hooks instead of props
-  const [eventCard] = React.useState(cardInfoInit);
+  const [eventCardNew] = React.useState(cardInfoInit);
 
 
   // open modal state
@@ -83,7 +80,6 @@ const EventCard = () => {
   function closeModal(): void {
     setModal(false);
   }
-
 
   return (
     <div className={styles.card}>
@@ -128,14 +124,14 @@ const EventCard = () => {
           </ul>
         </div>
         <div className={styles.footer}>
-          {/* <div className="participants" onClick={() => { openModal(0) }}>Список участников ({cardInfo.participantsCount})</div>
+          <div className="participants" onClick={() => { openModal(0) }}>Список участников ({eventCard.participantsCount})</div>
           {
-            cardInfo.attachmentsCount > 0 ?
-              <div className="materials" onClick={() => { openModal(1) }}>Материалы ({cardInfo.attachmentsCount})</div>
+            eventCard.attachmentsCount > 0 ?
+              <div className="materials" onClick={() => { openModal(1) }}>Материалы ({eventCard.attachmentsCount})</div>
               :
               null
           }
-          <div className={styles.feedback} onClick={() => { openModal(2) }}>Отзывы {cardInfo.feedbacksCount > 0 ? `(${cardInfo.feedbacksCount})` : null}</div> */}
+          <div className={styles.feedback} onClick={() => { openModal(2) }}>Отзывы {eventCard.feedbacksCount > 0 ? `(${eventCard.feedbacksCount})` : null}</div>
         </div>
       </div>
       {

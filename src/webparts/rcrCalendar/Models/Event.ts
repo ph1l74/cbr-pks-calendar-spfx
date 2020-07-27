@@ -14,7 +14,10 @@ export default class Event implements Model {
     public startDate: string;
     public endDate: string;
     public freeVisiting: boolean;
-    public comments?: Comment[];
+    public comments: Comment[];
+    public participantsCount: number;
+    public attachmentsCount: number;
+    public feedbacksCount: number;
     // tslint:disable-next-line:variable-name
     public _links: BaseLink;
     [key: string]: string | number | BaseLink | Category | boolean | Comment[];
