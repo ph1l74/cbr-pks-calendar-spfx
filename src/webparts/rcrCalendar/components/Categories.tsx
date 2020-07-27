@@ -26,10 +26,7 @@ const Categories = (categories: Category[]) => {
     return (
         <div className={styles.categories}>
             <div className={styles.header}>События</div>
-            <div className={styles.categoriesList}>
-                {renderCategories(categories)}
-            </div>
-            
+            {renderCategories(categories)}
         </div>
     );
 }

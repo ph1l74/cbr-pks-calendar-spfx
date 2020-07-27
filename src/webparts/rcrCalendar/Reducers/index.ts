@@ -135,7 +135,7 @@ const infinityLoadEvents = (events: GroupingEvent[], currentEvents: GroupingEven
             const findKey = currentEvents.filter(cur => cur.Key === ob.Key); // Todo: можно переделать на reduce
             if (findKey.length > 0) { // Если запись была найдена ранее, мы включаем в нее новые
                 findKey[0].Value.push(...ob.Value.filter(el => findKey[0].Value.filter(fel => fel.id === el.id).length === 0));
-                let evs = findKey[0].Value;
+                // let evs = findKey[0].Value;
                 // evs.reduce((a, b) => { a.id === b. id ? a : b});
             }
             else{ // Иначе добавляем сгруппированную запись
