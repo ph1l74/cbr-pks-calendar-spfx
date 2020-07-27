@@ -121,6 +121,11 @@ export default class Service<T> {
         const apiURL = this.apiPath;
         const response = await axios.get(config.API_URL + apiURL.replace('/', '') + request,
             {
+                withCredentials: false,
+                // headers: {
+                //   'Access-Control-Allow-Origin': '*',
+                //   'Content-Type': 'application/json',
+                // },
                 xsrfCookieName: Date.now().toString(),
             });
         const newLocal: string = await response.data;

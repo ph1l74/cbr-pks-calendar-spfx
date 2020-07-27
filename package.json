@@ -18,6 +18,9 @@
     "@microsoft/sp-lodash-subset": "~1.4.0",
     "@microsoft/sp-office-ui-fabric-core": "~1.4.0",
     "@microsoft/sp-webpart-base": "~1.4.0",
+    "@pnp/common": "^2.0.6",
+    "@pnp/logging": "^2.0.6",
+    "@pnp/odata": "^2.0.6",
     "@pnp/polyfill-ie11": "^2.0.2",
     "@pnp/sp": "^2.0.6",
     "@types/es6-promise": "0.0.33",
@@ -30,7 +33,10 @@
     "react-dom": "^16.13.1",
     "react-hooks": "^1.0.1",
     "react-redux": "^7.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "sp-pnp-js": "^3.0.10"
   },
   "resolutions": {
     "@types/react": "16.8.8"
