@@ -9,15 +9,15 @@ import GroupingEvent from '../Models/GroupingEvent';
 import Event from '../Models/Event';
 import { sp } from '@pnp/sp/presets/all';
 import pnp from 'sp-pnp-js';
-import { WebPartContext } from "@microsoft/sp-webpart-base";
-import "@pnp/sp/sites";
-import { IContextInfo } from "@pnp/sp/sites";
+import { WebPartContext } from '@microsoft/sp-webpart-base';
+import '@pnp/sp/sites';
+import { IContextInfo } from '@pnp/sp/sites';
 import { connect } from 'react-redux'
 import { changeCalendarDate, infinityLoadEvents } from '../Actions';
 import Categories from './Categories';
 import { useSelector, useDispatch } from 'react-redux';
-import { debounce } from "lodash";
-import * as $ from "jquery";
+import { debounce } from 'lodash';
+import * as $ from 'jquery';
 import EditFormCard from './EditFormCard';
 import Category from '../Models/Category';
 import FilterEvent from '../utils/IFilterEvent';
@@ -26,6 +26,7 @@ import * as moment from 'moment';
 
 const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDateChange: (date: Date) => void) => {
     const editMode = useSelector(state => state.root.editMode);
+    const editingEvent: Event = useSelector(state => state.event.editingEvent as Event);
     const eventsCount = useSelector(state => state.event.events.length === 0 ? 0 : (state.event.events as GroupingEvent[])
         .map(evg => evg.Value).reduce((a, b) => a ? a.concat(b) : []).length);
     const currentFilter = useSelector(state => state.event.filterEvent);
@@ -58,9 +59,9 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
     // const filterSelectedDay = async (selectedDay: Date) => {
     //     // sp.setup({
     //     //     sp: {
-    //     //         baseUrl: "http://sp2019/",
+    //     //         baseUrl: 'http://sp2019/',
     //     //         headers: {
-    //     //             Accept: "application/json;odata=verbose"
+    //     //             Accept: 'application/json;odata=verbose'
     //     //         }
     //     //     }
     //     // });
@@ -102,8 +103,8 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
             let gr = moment(evg.Key, 'YYYY-MM-DD');
             // console.log(evGr.Value);
 
-            return <div className={styles['month-header']}>{gr.format('MMMM')}
-                {(evGr.Value).map(ev => <EventCard eventCard={ev} key={`eventCard_${ev.id}_${evg.Key}`}></EventCard>)}
+            return <div key={`groupingEvent_${evGr.Key}`} className={styles['month-header']}>{gr.format('MMMM')}
+                {(evGr.Value).map(ev => <EventCard eventCard={ev as Event} key={`eventCard_${ev.id}_${evg.Key}`}></EventCard>)}
             </div>
             // return (evGr.Value).map(ev => <EventCard eventCard={ev} key={`eventCard_${ev.id}_${evGr.Key}`}></EventCard>);
         });
@@ -111,8 +112,9 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
 
     const initCategories: Category[] = [];
     return (
-        editMode && editMode === 1 ?
-            <EditFormCard></EditFormCard>
+        // editMode && editMode === 1 ?
+        editingEvent ?
+            <EditFormCard ></EditFormCard>
             :
             (
                 <div className={styles.app}>

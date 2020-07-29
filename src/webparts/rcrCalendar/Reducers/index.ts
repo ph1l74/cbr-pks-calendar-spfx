@@ -21,6 +21,7 @@ const initState =
     },
     editMode: null,
     categories: [],
+    users: [],
     isFetchingCategories: false,
 }
 
@@ -50,6 +51,11 @@ const rootReducer = (state = initState, action) => {
         case types.GET_CATEGORIES_SUCCESS:
             return { ...state, categories: action.payload, isFetchingCategories: false }
 
+        case types.GET_USERS:
+            return { ...state, isFetchingCategories: true }
+        case types.GET_USERS_SUCCESS:
+            return { ...state, users: action.payload, isFetchingCategories: false }
+
         default:
             return state
     }
@@ -58,14 +64,16 @@ const rootReducer = (state = initState, action) => {
 interface IEventStore {
     events: GroupingEvent[];
     isFetching: false;
-    filterEvent: FilterEvent
+    filterEvent: FilterEvent,
+    editingEvent: Event,
 }
 
 export const filterEventInit: FilterEvent = { selectedCategories: [], selectedDate: new Date() }
 const eventInit: IEventStore = {
     events: [],
     isFetching: false,
-    filterEvent: filterEventInit
+    filterEvent: filterEventInit,
+    editingEvent: undefined,
 }
 
 const eventReducer = (state = eventInit, action) => {
@@ -111,19 +119,22 @@ const eventReducer = (state = eventInit, action) => {
             console.log('newEvents', newEvents, action.payload as GroupingEvent[]);
             return { ...state, events: newEvents, isFetching: false }
 
-        // case 'CHANGE_DATE':
-        //     console.log('CHANGE_DATE');
-        //     const selectedDay = action.date;
-        //     const day = selectedDay.days() > 9 ? selectedDay.days() : '0' + selectedDay.days();
-        //     const month = selectedDay.months() > 9 ? selectedDay.months() : '0' + selectedDay.months();
-        //     return EventService.searchGet(`/?startDate=${day}.${month}.${selectedDay.years()}`)
-        //         .then(ob => {
-        //             state.events = ob;
-        //             return ob;
-        //         })
-        //         .catch(err => {
-        //             throw err;
-        //         });
+        case types.RUN_EDIT_EVENT:
+            return { ...state, isFetching: true }
+        case types.EDIT_EVENT:
+            const editEvent = (action.editEvent as Event);
+            editEvent.startDate = new Date(editEvent.startDate.toString());
+            editEvent.endDate = new Date(editEvent.endDate.toString());
+            return { ...state, editingEvent: editEvent, isFetching: false }
+
+        case types.SAVE_EDIT_EVENT:
+            return { ...state, editingEvent: undefined, isFetching: true }
+        case types.SAVE_EDIT_EVENT_SUCCESS:
+            return { ...state, editingEvent: undefined, isFetching: false }
+
+        case types.CLOSE_EDIT_EVENT:
+            return { ...state, editingEvent: undefined }
+
         default:
             return state
     }
@@ -138,7 +149,7 @@ const infinityLoadEvents = (events: GroupingEvent[], currentEvents: GroupingEven
                 // let evs = findKey[0].Value;
                 // evs.reduce((a, b) => { a.id === b. id ? a : b});
             }
-            else{ // Иначе добавляем сгруппированную запись
+            else { // Иначе добавляем сгруппированную запись
                 currentEvents.push(ob);
             }
         });

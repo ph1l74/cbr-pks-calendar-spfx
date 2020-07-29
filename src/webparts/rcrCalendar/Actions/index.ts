@@ -1,8 +1,9 @@
-import { EventService, CategoryService } from "../services/Services"
+import { GroupingEventService, CategoryService, EventService, UserService } from "../services/Services"
 import * as moment from "moment";
 import * as types from '../constants';
 import FilterEvent from "../utils/IFilterEvent";
 import { filterEventInit } from "../Reducers";
+import Event from '../Models/Event';
 
 
 let nextTodoId = 0
@@ -77,6 +78,48 @@ export const infinityLoadEvents = (skip: number, filterEvent: any) => {
   }
 }
 
+export const editEvent = (editingEvent: Event) => {
+  return dispatch => { //TODO: change to fetching, Event to number
+    dispatch({
+      type: types.RUN_EDIT_EVENT
+    });
+    EventService.getRecordById(editingEvent.id)
+      .then(ob => {
+        console.log('fetch', ob);
+        dispatch({
+          type: types.EDIT_EVENT,
+          editEvent: ob,
+        });
+      })
+      .catch(err => console.log(err));
+  }
+}
+
+export const closeEditEvent = () => ({
+  type: types.CLOSE_EDIT_EVENT
+})
+
+export const saveEditEvent = (event: Event) => {
+  return dispatch => { //TODO: change to fetching, Event to number
+    dispatch({
+      type: types.SAVE_EDIT_EVENT
+    });
+    EventService.update(event, event.id)
+      .then(ob => {
+        console.log('save ', ob);
+        dispatch({
+          type: types.SAVE_EDIT_EVENT_SUCCESS,
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch({
+          type: types.SAVE_EDIT_EVENT_SUCCESS,
+        });
+      });
+  }
+}
+
 function filterEvents(typeAction: string, filterEvent: FilterEvent, dispatch: any, skip?: number) {
   let date = moment(filterEvent.selectedDate);
   const day = date.date() > 9 ? date.date() : '0' + date.date();
@@ -84,7 +127,7 @@ function filterEvents(typeAction: string, filterEvent: FilterEvent, dispatch: an
   const month = months > 9 ? months : '0' + months;
   const filterCategories = filterEvent.selectedCategories.length > 0 ? `&categories=${filterEvent.selectedCategories.join(',')}` : '';
   const skipRequest = skip ? `&skip=${skip}` : '';
-  EventService.searchGet(`/?startDate=${day}.${month}.${date.years()}${filterCategories}${skipRequest}`)
+  GroupingEventService.searchGet(`/?startDate=${day}.${month}.${date.years()}${filterCategories}${skipRequest}`)
     .then(ob => {
       console.log('fetch', ob);
       dispatch({
@@ -105,6 +148,23 @@ export const getCategories = (): any => {
         console.log('fetch categories', ob);
         dispatch({
           type: types.GET_CATEGORIES_SUCCESS,
+          payload: ob,
+        });
+      })
+      .catch(err => console.log(err));
+  }
+}
+
+export const getUsers = (): any => {
+  return async dispatch => {
+    dispatch({
+      type: types.GET_USERS,
+    });
+    UserService.findAll()
+      .then(ob => {
+        console.log('fetch users', ob);
+        dispatch({
+          type: types.GET_USERS_SUCCESS,
           payload: ob,
         });
       })

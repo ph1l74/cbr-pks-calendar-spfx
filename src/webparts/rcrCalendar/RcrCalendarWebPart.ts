@@ -20,6 +20,7 @@ export interface IRcrCalendarWebPartProps {
   description: string;
 }
 
+
 export default class RcrCalendarWebPart extends BaseClientSideWebPart<IRcrCalendarWebPartProps> {
 
   public render(): void {

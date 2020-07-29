@@ -34,10 +34,11 @@ class DatePickerTSX extends React.Component<ICalendarProps, ICalendarState> {
             className={styles["rcr-modern-calendar"]}
             disableOnClickOutside="true"
             onChange={onDateChange}
-            open="true"
+            open={true}
             input={false}
             locale="ru"
             defaultValue={this.props.filterEvent.selectedDate}
+            se
         />
     }
 

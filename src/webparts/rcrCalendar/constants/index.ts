@@ -16,8 +16,17 @@ export const CHANGE_FILTER_EVENT = 'CHANGE_FILTER_EVENT';
 export const CHANGE_FILTER_EVENT_SUCCESS = 'CHANGE_FILTER_EVENT_SUCCESS';
 export const INFINITY_LOAD_EVENT_SUCCESS = 'INFINITY_LOAD_EVENT_SUCCESS';
 
+export const EDIT_EVENT = 'EDIT_EVENT';
+export const CLOSE_EDIT_EVENT = 'CLOSE_EDIT_EVENT';
+export const RUN_EDIT_EVENT = 'RUN_EDIT_EVENT';
+export const SAVE_EDIT_EVENT = 'SAVE_EDIT_EVENT';
+export const SAVE_EDIT_EVENT_SUCCESS = 'SAVE_EDIT_EVENT_SUCCESS';
+
 export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS';
+
+export const GET_USERS = 'GET_USERS';
+export const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS';
 
 export const HOST = window.location.origin;
 export const WS_HOST = window.location.origin.replace(/^http/, 'ws');

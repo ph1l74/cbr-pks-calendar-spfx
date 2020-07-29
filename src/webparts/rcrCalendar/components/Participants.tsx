@@ -32,7 +32,7 @@ const Participants = () => {
     }).catch(ex => console.log(ex) );
     
     return (
-        <div className="participants">
+        <div className='participants'>
             {participants.map((p) => (
                 <Participant userInfo={p}></Participant>
             ))}

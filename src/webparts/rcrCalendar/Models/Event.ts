@@ -2,6 +2,9 @@ import Model from './Model';
 import BaseLink from './BaseLink';
 import Category from './Category';
 import Comment from './Comment';
+import Actor from './Actor';
+import Material from './Material';
+import Link from './Link';
 
 export default class Event implements Model {
     public id: number;
@@ -11,15 +14,18 @@ export default class Event implements Model {
     public description: string;
     public authorLogin: string;
     public fullDay: boolean;
-    public startDate: string;
-    public endDate: string;
+    public startDate: Date;
+    public endDate: Date;
     public freeVisiting: boolean;
     public comments: Comment[];
     public participantsCount: number;
     public attachmentsCount: number;
     public feedbacksCount: number;
+    public actors: Actor[];
+    public materials: Material[];
+    public links: Link[];
     // tslint:disable-next-line:variable-name
     public _links: BaseLink;
-    [key: string]: string | number | BaseLink | Category | boolean | Comment[];
+    // [key: string]: number | string | BaseLink | Category | boolean;
 
 }

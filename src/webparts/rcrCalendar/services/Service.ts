@@ -95,6 +95,12 @@ export default class Service<T> {
     public async update(record: T, id: number): Promise<any> {
         const apiURL = this.apiPath;
         const response = await axios.put(config.API_URL + apiURL + id, record, {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Methods': 'DELETE, POST, PUT, GET, OPTIONS',
+              'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
+            },
         });
         const json = await response.data;
         return json;
