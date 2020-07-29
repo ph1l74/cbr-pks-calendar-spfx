@@ -37,8 +37,7 @@ class DatePickerTSX extends React.Component<ICalendarProps, ICalendarState> {
             open={true}
             input={false}
             locale="ru"
-            defaultValue={this.props.filterEvent.selectedDate}
-            se
+            defaultValue={this.props.filterEvent.selectedDate}            
         />
     }
 
