@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './RcrCalendar.module.scss';
 import Dashboard from './Dashboard';
 import Content from './Content';
-import Calendar from './Calendar';
+import { Calendar } from './Calendar';
 import EventCard from './EventCard';
 import { EventService } from '../services/Services';
 import GroupingEvent from '../Models/GroupingEvent';
@@ -23,6 +23,10 @@ import Category from '../Models/Category';
 import FilterEvent from '../utils/IFilterEvent';
 import { Spin } from 'antd';
 import * as moment from 'moment';
+import { registerLocale, setDefaultLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import ru from 'date-fns/locale/ru';
+registerLocale('ru', ru);
 
 const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDateChange: (date: Date) => void) => {
     const editMode = useSelector(state => state.root.editMode);
@@ -95,7 +99,7 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
     const renderEvents = (events: any) => {
         console.log('New render events', events);
         moment.locale('ru');
-        if (!events.events || events.events.length === 0){
+        if (!events.events || events.events.length === 0) {
             return <div>Нет данных</div>
         }
         return events.events.map(evg => {
