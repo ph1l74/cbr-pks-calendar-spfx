@@ -2,8 +2,9 @@ import * as types from '../constants';
 import Event from '../Models/Event';
 import { combineReducers } from 'redux'
 import { EventService } from '../services/Services';
-import GroupingEvent from '../../../../lib/webparts/rcrCalendar/Models/GroupingEvent';
+import GroupingEvent from '../Models/GroupingEvent';
 import FilterEvent from '../utils/IFilterEvent'
+import Comment from '../Models/Comment';
 
 const initState =
 {
@@ -158,9 +159,51 @@ const infinityLoadEvents = (events: GroupingEvent[], currentEvents: GroupingEven
     return [];
 }
 
-// export default rootReducer;
+interface ICommentStore {
+    comments: Comment[],
+    selectedEvent: Event,
+    isFetching: boolean,
+    editingComment: Comment,
+}
+const commentInit: ICommentStore = {
+    comments: [],
+    selectedEvent: undefined,
+    isFetching: false,
+    editingComment: undefined,
+}
+const commentReducer = (state = commentInit, action) => {
+    switch (action.type) {
+        case types.GET_EVENT_COMMENTS:
+            return { ...state, selectedEvent: action.payload, isFetching: true }
+        case types.GET_EVENT_COMMENTS_SUCCESS:
+            return { ...state, comments: action.payload, isFetching: false }
+        case types.CLOSE_EVENT_COMMENTS:
+            return { ...state, comments: [], selectedEvent: undefined, isFetching: false }
+        case types.INFINITY_LOAD_EVENT_COMMENTS_SUCCESS:
+            console.log('newComments', state.comments, action.payload as Comment[]);
+            return { ...state, comments: state.comments.concat(action.payload as Comment[]), isFetching: false }
+        case types.RUN_EDIT_COMMENT:
+            return { ...state, isFetching: true }
+        case types.EDIT_COMMENT:
+            return { ...state, editingComment: action.editRecord, isFetching: false }
+        case types.SAVE_EDIT_COMMENT:
+            return { ...state, isFetching: true }
+        case types.CLOSE_EDIT_COMMENT:
+            return { ...state, editingComment: undefined, isFetching: false }
+        case types.SAVE_EDIT_COMMENT_SUCCESS:
+            return { ...state, editingComment: undefined, isFetching: false }
+        case types.DELETE_COMMENT:
+            return { ...state, comments: state.comments.filter(ob => ob.id !== action.editRecord.id), isFetching: true }
+        case types.DELETE_COMMENT_SUCCESS:
+            return { ...state, isFetching: false }
+
+        default:
+            return state;
+    }
+}
 
 export default combineReducers({
     root: rootReducer,
-    event: eventReducer
+    event: eventReducer,
+    comment: commentReducer,
 })

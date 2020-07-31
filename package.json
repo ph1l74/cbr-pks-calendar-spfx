@@ -13,6 +13,7 @@
     "fixbuild": "rimraf .\\node_modules\\@microsoft\\gulp-core-build-typescript\\node_modules\\typescript"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.2.1",
     "@babel/polyfill": "^7.10.4",
     "@microsoft/sp-core-library": "~1.4.0",
     "@microsoft/sp-lodash-subset": "~1.4.0",

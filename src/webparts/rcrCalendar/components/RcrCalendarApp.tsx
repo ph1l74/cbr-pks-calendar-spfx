@@ -4,7 +4,6 @@ import Dashboard from './Dashboard';
 import Content from './Content';
 import { Calendar } from './Calendar';
 import EventCard from './EventCard';
-import { EventService } from '../services/Services';
 import GroupingEvent from '../Models/GroupingEvent';
 import Event from '../Models/Event';
 import { sp } from '@pnp/sp/presets/all';
@@ -21,20 +20,24 @@ import * as $ from 'jquery';
 import EditFormCard from './EditFormCard';
 import Category from '../Models/Category';
 import FilterEvent from '../utils/IFilterEvent';
-import { Spin } from 'antd';
+import { Spin, Modal } from 'antd';
 import * as moment from 'moment';
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
+import { closeEventComments } from '../Actions/comment';
+import Feedback from './Feedback';
 registerLocale('ru', ru);
 
 const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDateChange: (date: Date) => void) => {
     const editMode = useSelector(state => state.root.editMode);
     const editingEvent: Event = useSelector(state => state.event.editingEvent as Event);
+    const selectedEventForComments: Event = useSelector(state => state.comment.selectedEvent as Event);
     const eventsCount = useSelector(state => state.event.events.length === 0 ? 0 : (state.event.events as GroupingEvent[])
         .map(evg => evg.Value).reduce((a, b) => a ? a.concat(b) : []).length);
     const currentFilter = useSelector(state => state.event.filterEvent);
     const isFetching = useSelector(state => state.event.isFetching);
+    const isCommentFetching = useSelector(state => state.comment.isFetching as boolean);
 
     const dispatch = useDispatch();
 
@@ -119,6 +122,8 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
         // editMode && editMode === 1 ?
         editingEvent ?
             <EditFormCard ></EditFormCard>
+            : (selectedEventForComments) ?
+            <Feedback/>
             :
             (
                 <div className={styles.app}>

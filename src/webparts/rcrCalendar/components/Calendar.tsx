@@ -40,7 +40,7 @@ export const Calendar = () => {
         const curDateM = moment(curDate).add(1, 'd');
         const curDate2 = new Date(curDateM.year(), curDateM.month(),curDateM.date());
         const selDate = new Date(selectedDate.year(), selectedDate.month(), selectedDate.date());
-        console.log('render day', dayProps, currentDate.date(), currentDate.month(), currentDate.year(), curDate, selDate);
+        // console.log('render day', dayProps, currentDate.date(), currentDate.month(), currentDate.year(), curDate, selDate);
         const curDay = currentDate.date();
         if ((curDate > selDate || curDate < selDate)
             && datesOfEvents.filter(ob => ob.start <= curDate2 && ob.end >= curDate).length > 0

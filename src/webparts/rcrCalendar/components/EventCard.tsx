@@ -7,6 +7,7 @@ import Event from '../Models/Event';
 import { useReducer, useDispatch } from 'react-redux';
 import { setEditMode, editEvent } from '../Actions';
 import * as moment from 'moment';
+import { getCommentsByEvent } from '../Actions/comment';
 
 const editIcon = require("../Icons/Edit.svg") as string;
 const EventCard = (props: {eventCard: Event}) => {
@@ -107,7 +108,7 @@ const EventCard = (props: {eventCard: Event}) => {
               :
               null
           }
-          <div className={styles.feedback} onClick={() => { openModal(2) }}>Отзывы {cardInfo.feedbacksCount > 0 ? `(${cardInfo.feedbacksCount})` : null}</div>
+          <div className='comment' onClick={() => { dispatch(getCommentsByEvent(props.eventCard)) }}>Отзывы {cardInfo.feedbacksCount > 0 ? `(${cardInfo.feedbacksCount})` : null}</div>
         </div>
       </div>
       {

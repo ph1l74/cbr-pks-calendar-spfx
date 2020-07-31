@@ -22,6 +22,7 @@ import { UploadFile } from 'antd/lib/upload/interface';
 import Actor from '../Models/Actor';
 import Material from '../Models/Material';
 import Link from '../Models/Link';
+import config from '../constants/config';
 registerLocale('ru', ru)
 
 const { TextArea } = Input
@@ -303,8 +304,9 @@ const EditFormCard = () => {
 
 
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
-                    <Upload multiple={true} defaultFileList={fileList as UploadFile<any>[]} onChange={(info) => {
-                        console.log(info);
+                    <Upload multiple={true} defaultFileList={fileList as UploadFile<any>[]} beforeUpload={() => false}
+                    action = {file => {console.log('upload file', file); return '';}} onChange={(info) => {
+                        console.log('onchange upload', info);
                         if (info.file.status === 'removed') {
                             setFileList(fileList.filter(ob => ob.uid.toString() !== info.file.uid));
                         }
