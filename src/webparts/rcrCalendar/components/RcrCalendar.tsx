@@ -10,7 +10,7 @@ import reducers from '../Reducers';
 import RcrCalendarApp from './RcrCalendarApp';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import { getCategories, getUsers } from '../Actions';
+import { getCategories, getUsers, setAuth } from '../Actions';
 import { initEvents } from '../Actions';
 
 const middleware = [thunk, createLogger({ collapsed: true })];
@@ -23,6 +23,7 @@ export const store = createStore(reducers, applyMiddleware(...middleware));
 store.dispatch(getCategories());
 store.dispatch(getUsers());
 store.dispatch(initEvents());
+store.dispatch(setAuth());
 
 export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> {
   public render(): React.ReactElement<IRcrCalendarProps> {

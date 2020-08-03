@@ -4,6 +4,9 @@ import * as types from '../constants';
 import FilterEvent from "../utils/IFilterEvent";
 import { filterEventInit } from "../Reducers";
 import Event from '../Models/Event';
+import { sp } from '@pnp/sp/presets/all';
+import pnp from 'sp-pnp-js';
+import { IContextInfo } from '@pnp/sp/sites';
 
 
 let nextTodoId = 0
@@ -22,6 +25,54 @@ export const toggleTodo = id => ({
   type: 'TOGGLE_TODO',
   id
 })
+
+
+export const setAuth  = (): any => {
+  return async dispatch => {
+    // sp.setup({
+    //     sp: {
+    //         baseUrl: 'http://sp2019/',
+    //         headers: {
+    //             Accept: 'application/json;odata=verbose'
+    //         }
+    //     }
+    // });
+    // sp.setup({
+    //     spfxContext: this.context
+    // });
+
+    // console.log('payload', sp);
+    // console.log('fetch', pnp.sp.web.currentUser);
+    let web = pnp.sp.site.rootWeb;
+    console.log('webSPUrl', web.toUrlAndQuery());
+    try {
+      sp.site.getContextInfo().then(ob => {
+        const oContext: IContextInfo = ob;
+        const siteUrl = oContext.SiteFullUrl;
+        console.log(siteUrl);
+        pnp.setup({ sp: { baseUrl: siteUrl } });
+        pnp.sp.utility.getCurrentUserEmailAddresses().then(ob => {
+          let curruser = ob;
+          console.log(curruser);
+          // let curProp = await pnp.sp.profiles.myProperties.get();
+          // console.log(curProp);
+          //let curruser = await sp.web.currentUser.get();
+          //console.log(curruser.Email, curruser.Id, curruser.LoginName, curruser.Title, curruser.UserId, curruser.UserPrincipalName);
+
+          web.currentUser.get().then(res => console.log(res)).catch(err => console.log(err));
+        })
+          .catch(err => console.log(err));
+      })
+        .catch(err => console.log(err));
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    dispatch({
+      type: 'SET_AUTH',
+    });
+  }
+}
 
 export const changeCalendarDate = (dateStart: Date, filterEvent: FilterEvent) => {
   return dispatch => {

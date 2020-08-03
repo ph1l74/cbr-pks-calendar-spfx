@@ -83,19 +83,36 @@ export const saveEditComment = (record: Comment) => {
         dispatch({
             type: types.SAVE_EDIT_COMMENT
         });
-        CommentService.update(record, record.id)
-            .then(ob => {
-                console.log('save ', ob);
-                dispatch({
-                    type: types.SAVE_EDIT_COMMENT_SUCCESS,
+        if (!record.id || record.id <= 0) {
+            CommentService.add(record)
+                .then(ob => {
+                    console.log('save ', ob);
+                    dispatch({
+                        type: types.SAVE_EDIT_COMMENT_SUCCESS,
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    dispatch({
+                        type: types.SAVE_EDIT_COMMENT_SUCCESS,
+                    });
                 });
-            })
-            .catch(err => {
-                console.log(err);
-                dispatch({
-                    type: types.SAVE_EDIT_COMMENT_SUCCESS,
+        }
+        else {
+            CommentService.update(record, record.id)
+                .then(ob => {
+                    console.log('save ', ob);
+                    dispatch({
+                        type: types.SAVE_EDIT_COMMENT_SUCCESS,
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    dispatch({
+                        type: types.SAVE_EDIT_COMMENT_SUCCESS,
+                    });
                 });
-            });
+        }
     }
 }
 
