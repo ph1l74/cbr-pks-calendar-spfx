@@ -27,7 +27,7 @@ export const toggleTodo = id => ({
 })
 
 
-export const setAuth  = (): any => {
+export const setAuth = (): any => {
   return async dispatch => {
     // sp.setup({
     //     sp: {
@@ -134,6 +134,7 @@ export const editEvent = (editingEvent: Event) => {
     dispatch({
       type: types.RUN_EDIT_EVENT
     });
+    if (editingEvent.id > 0){
     EventService.getRecordById(editingEvent.id)
       .then(ob => {
         console.log('fetch', ob);
@@ -143,6 +144,13 @@ export const editEvent = (editingEvent: Event) => {
         });
       })
       .catch(err => console.log(err));
+    }
+    else {
+      dispatch({
+        type: types.EDIT_EVENT,
+        editEvent: editingEvent,
+      });
+    }
   }
 }
 

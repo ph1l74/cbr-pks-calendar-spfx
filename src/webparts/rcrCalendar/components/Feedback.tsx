@@ -88,7 +88,7 @@ const Feedback = () => {
                     <div className={'headers'} >
                         <Button type='primary' shape='round' size='large' name='NewCommentBtn' onClick={newEditForm}>
                             Новая запись
-                    </Button>
+                        </Button>
                     </div>
                     {/* <ul style={styles}> */}
                     {viewComments.map(el =>

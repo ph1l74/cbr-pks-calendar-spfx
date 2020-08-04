@@ -25,7 +25,7 @@ import Link from '../Models/Link';
 import config from '../constants/config';
 import { AttachmentService } from '../services/Services';
 import axios from 'axios';
-import { parseUid } from '../utils/Utils';
+import { parseUid, uploadFile } from '../utils/Utils';
 registerLocale('ru', ru)
 
 const { TextArea } = Input
@@ -147,30 +147,6 @@ const EditFormCard = () => {
     //     return await AttachmentService.upload(formData);
     // }
 
-    const uploadImage = options => {
-
-        const { onSuccess, onError, file, onProgress } = options;
-
-        const fmData = new FormData();
-        const config = {
-            headers: { "content-type": "multipart/form-data" },
-            onUploadProgress: event => {
-                console.log((event.loaded / event.total) * 100);
-                onProgress({ percent: (event.loaded / event.total) * 100 }, file);
-            }
-        };
-        fmData.append("files", file);
-        AttachmentService.upload(fmData, config)
-            .then(res => {
-                onSuccess(file);
-                console.log(res);
-            })
-            .catch(err => {
-                const error = new Error('Some error');
-                onError({ event: error });
-            });
-    }
-
     return (
         <Modal title={'Редактирование события'} onCancel={closeEditForm} visible={editingEvent !== undefined}
             cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}
@@ -213,7 +189,7 @@ const EditFormCard = () => {
                         placeholder=''
                         onChange={onCategoryChange}
                         allowClear
-                        defaultValue={editingEvent.category.id}
+                        defaultValue={editingEvent.category?.id}
                     >
                         {renderCategories()}
                     </Select>
@@ -344,7 +320,7 @@ const EditFormCard = () => {
                         defaultFileList={recordFileList.fileList as UploadFile<any>[]} //beforeUpload={() => false}
                         //action = {file => {console.log('upload file', file); return '';}} 
                         // action={handleUpload}
-                        customRequest={uploadImage}
+                        customRequest={uploadFile}
                         // action={`${config.API_URL}Attachments`}
                         onChange={(info) => {
                             // console.log('onchange upload', info);

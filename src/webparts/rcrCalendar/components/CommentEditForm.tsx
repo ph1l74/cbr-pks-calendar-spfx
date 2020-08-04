@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form, Input, Checkbox, Button, Select, Upload, Modal } from 'antd';
+import { Form, Input, Checkbox, Button, Select, Upload, Modal, message } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeEditComment, saveEditComment } from '../Actions/comment';
 import Comment from '../Models/Comment';
@@ -7,7 +7,8 @@ import Material from '../Models/Material';
 import Link from '../Models/Link';
 import { UploadFile } from 'antd/lib/upload/interface';
 import config from '../constants/config';
-import { parseUid } from '../utils/Utils';
+import { parseUid, uploadFile } from '../utils/Utils';
+import { AttachmentService } from '../services/Services';
 
 const { TextArea } = Input
 
@@ -17,14 +18,6 @@ const CommentEditForm = () => {
 
     const dispatch = useDispatch();
     const editingComment = useSelector(state => state.comment.editingComment as Comment);
-
-    const [fileList, setFileList] = React.useState(editingComment.materials.map(ob => {
-            return {
-                uid: ob.id.toString(),
-                name: ob.fileName,
-                status: 'done',
-            }
-        }));
 
     const layout = {
         labelCol: { span: 6 },
@@ -44,7 +37,7 @@ const CommentEditForm = () => {
         let editComment = editingComment;
         editComment.description = editValues.description;
         if (editValues.materials) {
-            editComment.materials = editValues.materials.map(ob => new Material(parseUid(ob.uid), ob.fileName));
+            editComment.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
         }
         if (editValues.links) {
             editComment.links = editValues.links.map(ob => new Link(0, ob));
@@ -67,7 +60,15 @@ const CommentEditForm = () => {
         multiple: true,
     };
 
-
+    const [recordFileList, setRecordFileList] = React.useState({
+        fileList: editingComment.materials.map(ob => {
+            return {
+                uid: ob.id.toString(),
+                name: ob.fileName,
+                status: 'done',
+            }
+        })
+    });
 
     return (
         <Modal title={'Редактирование отзыва'}
@@ -81,7 +82,7 @@ const CommentEditForm = () => {
                 name="basic"
                 initialValues={{
                     description: editingComment.description,
-                    materials: fileList,
+                    materials: recordFileList,
                     links: editingComment.links.map(ob => ob.linkName),
                 }}
                 onFinish={onFinish}
@@ -98,13 +99,28 @@ const CommentEditForm = () => {
                 </Form.Item>
 
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
-                    <Upload multiple={true} defaultFileList={fileList as UploadFile<any>[]}
+                    <Upload multiple={true} defaultFileList={recordFileList.fileList as UploadFile<any>[]}
                         //beforeUpload={() => false}
-                        action={`${config.API_URL}Attachments`}
-                        onChange={(info) => {
+                        // action={`${config.API_URL}Attachments`}                        
+                        customRequest={uploadFile}
+                        onChange={(info) => { // Todo Сделать общую функцию с событиями
                             console.log('onchange upload', info);
+                            if (info.file.status !== 'uploading') {
+                                // console.log(info.file, info.fileList);
+                            }
+                            if (info.file.status === 'done') {
+                                message.success(`${info.file.name} был загружен`);
+                                let newFileList = recordFileList.fileList;
+                                newFileList.push({uid: info.file.uid, name: info.file.name, status: info.file.status});
+                                form.setFieldsValue({ materials: {fileList: newFileList } });
+                                setRecordFileList({ fileList: newFileList })
+                            } else if (info.file.status === 'error') {
+                                message.error(`${info.file.name} не был загружен.`);
+                            }
                             if (info.file.status === 'removed') {
-                                setFileList(fileList.filter(ob => ob.uid.toString() !== info.file.uid));
+                                const actualMaterials = recordFileList.fileList.filter(ob => ob.uid.toString() !== info.file.uid);
+                                form.setFieldsValue({ materials: {fileList: actualMaterials } });
+                                setRecordFileList({ fileList: actualMaterials });
                             }
                         }}>
                         <Button>
@@ -116,7 +132,9 @@ const CommentEditForm = () => {
 
                 <Form.Item {...tailLayout} label='Ссылки' name='links'>
                     <Select mode='tags' style={{ width: '100%' }} placeholder='Введите ссылку и нажмите Etner'
-                        defaultValue={editingComment.links.map(ob => ob.linkName)}>
+                        defaultValue={editingComment.links.map(ob => ob.linkName)} onChange={value => {
+                            form.setFieldsValue({ links: value });
+                        }}>
 
                     </Select>
                 </Form.Item>

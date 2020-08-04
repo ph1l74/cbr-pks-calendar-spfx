@@ -20,13 +20,14 @@ import * as $ from 'jquery';
 import EditFormCard from './EditFormCard';
 import Category from '../Models/Category';
 import FilterEvent from '../utils/IFilterEvent';
-import { Spin, Modal } from 'antd';
+import { Spin, Modal, Button } from 'antd';
 import * as moment from 'moment';
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
 import { closeEventComments } from '../Actions/comment';
 import Feedback from './Feedback';
+import { editEvent } from '../Actions';
 registerLocale('ru', ru);
 
 const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDateChange: (date: Date) => void) => {
@@ -117,6 +118,20 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
         });
     }
 
+    function newEditForm(): void {
+        const newRecord = new Event();
+        newRecord.id = 0;
+        newRecord.startDate = (moment(new Date()).hour(0).minute(0).second(0).millisecond(0)).toDate();
+        newRecord.endDate = (moment(new Date()).add(1, 'd').hour(0).minute(0).second(0).millisecond(0)).toDate();
+        newRecord.links = [];
+        newRecord.materials = [];
+        newRecord.actors = [];
+        if (window.location.port === '4321') {
+            // newRecord.author = selectedEventForComments.author;
+        }
+        dispatch(editEvent(newRecord));
+    }
+
     const initCategories: Category[] = [];
     return (
         // editMode && editMode === 1 ?
@@ -134,6 +149,11 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
                         <Dashboard>
                             <Calendar ></Calendar>
                             <Categories categories={initCategories} />
+                            <div className={styles.title} >
+                                <Button type='primary' shape='round' size='large' name='NewEventBtn' onClick={newEditForm}>
+                                    Новое событие
+                                </Button>
+                            </div>
                         </Dashboard>
                     </Spin>
                 </div>

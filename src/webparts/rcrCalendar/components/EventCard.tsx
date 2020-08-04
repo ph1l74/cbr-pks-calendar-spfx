@@ -63,15 +63,15 @@ const EventCard = (props: {eventCard: Event}) => {
       <div className={styles.dates}>
         <div className={styles.dateFrom}>
           <span className={styles.dateDest}>с</span>
-          <span className={styles.dateDay}>{startDate.dates()}</span>
+          <span className={styles.dateDay}>{startDate.date()}</span>
           <span className={styles.dateMonth}>{startDate.format('MMMM')}</span>
-          <span className={styles.dateYear}>{startDate.years()}</span>
+          <span className={styles.dateYear}>{startDate.year()}</span>
         </div>
         <div className={styles.dateTo}>
           <span className={styles.dateDest}>по</span>
-          <span className={styles.dateDay}>{endDate.dates()}</span>
+          <span className={styles.dateDay}>{endDate.date()}</span>
           <span className={styles.dateMonth}>{endDate.format('MMMM')}</span>
-          <span className={styles.dateYear}>{endDate.years()}</span>
+          <span className={styles.dateYear}>{endDate.year()}</span>
         </div>
       </div>
       <div className={styles.info} style={categorieBorderStyle}>
