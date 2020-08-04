@@ -18,11 +18,14 @@ import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
 import User from '../Models/User';
-import { UploadFile } from 'antd/lib/upload/interface';
+import { UploadFile, RcFile } from 'antd/lib/upload/interface';
 import Actor from '../Models/Actor';
 import Material from '../Models/Material';
 import Link from '../Models/Link';
 import config from '../constants/config';
+import { AttachmentService } from '../services/Services';
+import axios from 'axios';
+import { parseUid } from '../utils/Utils';
 registerLocale('ru', ru)
 
 const { TextArea } = Input
@@ -86,7 +89,7 @@ const EditFormCard = () => {
             editEvent.freeVisiting = editValues.freeVisiting;
         }
         if (editValues.materials) {
-            editEvent.materials = editValues.materials.map(ob => new Material(ob.fileName));
+            editEvent.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
         }
         if (editValues.links) {
             editEvent.links = editValues.links.map(ob => new Link(0, ob));
@@ -111,13 +114,15 @@ const EditFormCard = () => {
     const DatePickerJS: any = DatePicker;
     const [startDate, setStartDate] = React.useState(editingEvent.startDate);
     const [endDate, setEndDate] = React.useState(editingEvent.endDate);
-    const [fileList, setFileList] = React.useState(editingEvent.materials.map(ob => {
-        return {
-            uid: ob.id.toString(),
-            name: ob.fileName,
-            status: 'done',
-        }
-    }));
+    const [recordFileList, setRecordFileList] = React.useState({
+        fileList: editingEvent.materials.map(ob => {
+            return {
+                uid: ob.id.toString(),
+                name: ob.fileName,
+                status: 'done',
+            }
+        })
+    });
 
     const setDate = (date: Date, prevValue: Date) => {
         let val = prevValue;
@@ -134,6 +139,37 @@ const EditFormCard = () => {
         prevValue.setMinutes(minutesDate.minutes());
         return prevValue;
     }
+    // const handleUpload = async (file: RcFile)=> {
+    //     console.log('upload file', file);
+    //     const formData = new FormData();
+    //     formData.append('files', file);
+    //     // formData.append('files[]', file);
+    //     return await AttachmentService.upload(formData);
+    // }
+
+    const uploadImage = options => {
+
+        const { onSuccess, onError, file, onProgress } = options;
+
+        const fmData = new FormData();
+        const config = {
+            headers: { "content-type": "multipart/form-data" },
+            onUploadProgress: event => {
+                console.log((event.loaded / event.total) * 100);
+                onProgress({ percent: (event.loaded / event.total) * 100 }, file);
+            }
+        };
+        fmData.append("files", file);
+        AttachmentService.upload(fmData, config)
+            .then(res => {
+                onSuccess(file);
+                console.log(res);
+            })
+            .catch(err => {
+                const error = new Error('Some error');
+                onError({ event: error });
+            });
+    }
 
     return (
         <Modal title={'Редактирование события'} onCancel={closeEditForm} visible={editingEvent !== undefined}
@@ -147,7 +183,7 @@ const EditFormCard = () => {
                     fullDay: editingEvent.fullDay,
                     description: editingEvent.description,
                     freeVisiting: editingEvent.freeVisiting,
-                    materials: fileList,
+                    materials: recordFileList,
                     eventName: editingEvent.name,
                     category: editingEvent.category?.id,
                     location: editingEvent.location,
@@ -304,13 +340,32 @@ const EditFormCard = () => {
 
 
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
-                    <Upload multiple={true} defaultFileList={fileList as UploadFile<any>[]} beforeUpload={() => false}
-                    action = {file => {console.log('upload file', file); return '';}} onChange={(info) => {
-                        console.log('onchange upload', info);
-                        if (info.file.status === 'removed') {
-                            setFileList(fileList.filter(ob => ob.uid.toString() !== info.file.uid));
-                        }
-                    }}>
+                    <Upload multiple={true} 
+                        defaultFileList={recordFileList.fileList as UploadFile<any>[]} //beforeUpload={() => false}
+                        //action = {file => {console.log('upload file', file); return '';}} 
+                        // action={handleUpload}
+                        customRequest={uploadImage}
+                        // action={`${config.API_URL}Attachments`}
+                        onChange={(info) => {
+                            // console.log('onchange upload', info);
+                            if (info.file.status !== 'uploading') {
+                                // console.log(info.file, info.fileList);
+                            }
+                            if (info.file.status === 'done') {
+                                message.success(`${info.file.name} был загружен`);
+                                let newFileList = recordFileList.fileList;
+                                newFileList.push({uid: info.file.uid, name: info.file.name, status: info.file.status});
+                                form.setFieldsValue({ materials: {fileList: newFileList } });
+                                setRecordFileList({ fileList: newFileList })
+                            } else if (info.file.status === 'error') {
+                                message.error(`${info.file.name} не был загружен.`);
+                            }
+                            if (info.file.status === 'removed') {
+                                const actualMaterials = recordFileList.fileList.filter(ob => ob.uid.toString() !== info.file.uid);
+                                form.setFieldsValue({ materials: {fileList: actualMaterials } });
+                                setRecordFileList({ fileList: actualMaterials });
+                            }
+                        }}>
                         <Button>
                             Загрузить
                     </Button>
@@ -320,7 +375,9 @@ const EditFormCard = () => {
 
                 <Form.Item {...tailLayout} label='Ссылки' name='links'>
                     <Select mode='tags' style={{ width: '100%' }} placeholder='Введите ссылку и нажмите Etner'
-                        defaultValue={editingEvent.links.map(ob => ob.linkName)}>
+                        defaultValue={editingEvent.links.map(ob => ob.linkName)} onChange={value => {
+                            form.setFieldsValue({ links: value });
+                        }}>
 
                     </Select>
                 </Form.Item>

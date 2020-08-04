@@ -4,8 +4,9 @@ import Comment from './Comment';
 import Event from './Event';
 
 export default class Material implements Model {
-    constructor(fileName: string){
+    constructor(id: number, fileName: string){
         this.fileName = fileName;
+        this.id = id;
     }
     public id: number;
     public fileName: string;

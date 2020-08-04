@@ -6,6 +6,8 @@ import Comment from '../Models/Comment';
 import Material from '../Models/Material';
 import Link from '../Models/Link';
 import { UploadFile } from 'antd/lib/upload/interface';
+import config from '../constants/config';
+import { parseUid } from '../utils/Utils';
 
 const { TextArea } = Input
 
@@ -17,12 +19,12 @@ const CommentEditForm = () => {
     const editingComment = useSelector(state => state.comment.editingComment as Comment);
 
     const [fileList, setFileList] = React.useState(editingComment.materials.map(ob => {
-        return {
-            uid: ob.id.toString(),
-            name: ob.fileName,
-            status: 'done',
-        }
-    }));
+            return {
+                uid: ob.id.toString(),
+                name: ob.fileName,
+                status: 'done',
+            }
+        }));
 
     const layout = {
         labelCol: { span: 6 },
@@ -42,7 +44,7 @@ const CommentEditForm = () => {
         let editComment = editingComment;
         editComment.description = editValues.description;
         if (editValues.materials) {
-            editComment.materials = editValues.materials.map(ob => new Material(ob.fileName));
+            editComment.materials = editValues.materials.map(ob => new Material(parseUid(ob.uid), ob.fileName));
         }
         if (editValues.links) {
             editComment.links = editValues.links.map(ob => new Link(0, ob));
@@ -68,19 +70,19 @@ const CommentEditForm = () => {
 
 
     return (
-        <Modal title={'Редактирование отзыва'} 
-        onCancel={closeEditForm} 
-        visible={true}
+        <Modal title={'Редактирование отзыва'}
+            onCancel={closeEditForm}
+            visible={true}
             cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}
             width={900} footer={false} key='editCommentModal'>
             <Form
                 {...layout}
                 form={form}
                 name="basic"
-                initialValues={{ 
+                initialValues={{
                     description: editingComment.description,
                     materials: fileList,
-                    links: editingComment.links.map(ob => ob.linkName), 
+                    links: editingComment.links.map(ob => ob.linkName),
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
@@ -96,13 +98,15 @@ const CommentEditForm = () => {
                 </Form.Item>
 
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
-                    <Upload multiple={true} defaultFileList={fileList as UploadFile<any>[]} beforeUpload={() => false}
-                    action = {file => {console.log('upload file', file); return '';}} onChange={(info) => {
-                        console.log('onchange upload', info);
-                        if (info.file.status === 'removed') {
-                            setFileList(fileList.filter(ob => ob.uid.toString() !== info.file.uid));
-                        }
-                    }}>
+                    <Upload multiple={true} defaultFileList={fileList as UploadFile<any>[]}
+                        //beforeUpload={() => false}
+                        action={`${config.API_URL}Attachments`}
+                        onChange={(info) => {
+                            console.log('onchange upload', info);
+                            if (info.file.status === 'removed') {
+                                setFileList(fileList.filter(ob => ob.uid.toString() !== info.file.uid));
+                            }
+                        }}>
                         <Button>
                             Загрузить
                     </Button>

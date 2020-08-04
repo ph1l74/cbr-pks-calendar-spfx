@@ -16,9 +16,9 @@ export default class Service<T> {
             return new Array<T>();
         }
         let sliceDateParam = '';
-        if(sliceDate){
+        if (sliceDate) {
             apiURL = apiURL.replace('/', '')
-            sliceDateParam = `${(apiURL.indexOf('?') > -1 ? '&' : '?')+'slicedate=' + sliceDate}`
+            sliceDateParam = `${(apiURL.indexOf('?') > -1 ? '&' : '?') + 'slicedate=' + sliceDate}`
         }
         if (navigator.vendor === '' && navigator.userAgent.indexOf('Firefox') < 0) {
             console.log(navigator);
@@ -92,14 +92,33 @@ export default class Service<T> {
         return json;
     }
 
+    public upload(files, options): Promise<any> {
+        const apiURL = this.apiPath;
+        console.log('Upload record', files);
+        return axios.post(config.API_URL + apiURL, files, options);
+    }
+
+    public async uploadFiles(files): Promise<string> {
+        const apiURL = this.apiPath;
+        console.log('Upload record', files);
+        const response = await axios.post(config.API_URL + apiURL, files, {
+            // headers: {
+            //     'Content-Type': 'multipart/form-data'
+            // }
+        });
+        const json = response.data;
+        console.log('Upload response', response, json);
+        return json.url;
+    }
+
     public async update(record: T, id: number): Promise<any> {
         const apiURL = this.apiPath;
         const response = await axios.put(config.API_URL + apiURL + id, record, {
             headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Methods': 'DELETE, POST, PUT, GET, OPTIONS',
-              'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Methods': 'DELETE, POST, PUT, GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
             },
         });
         const json = await response.data;
@@ -224,7 +243,7 @@ export class PagedService<T> {
     public async findByCriteria(
         page: number = 1,
         size: number = 10,
-        criteria: { [key: string]: string | string[]},
+        criteria: { [key: string]: string | string[] },
     ): Promise<[T[], number]> {
         const apiURL = this.apiPath;
         console.log(
@@ -290,11 +309,11 @@ export class PagedService<T> {
         const apiURL = this.apiPath;
         const response = await axios
             .post(
-            config.API_URL + apiURL.replace('/', '') + `?page=${page}&size=${size}&` + search,
-            {
-                xsrfCookieName: Date.now().toString(),
-                headers: { Pragma: 'no-cache' },
-            });
+                config.API_URL + apiURL.replace('/', '') + `?page=${page}&size=${size}&` + search,
+                {
+                    xsrfCookieName: Date.now().toString(),
+                    headers: { Pragma: 'no-cache' },
+                });
         const newLocal: string = await response.data;
         const json: T[] = JSON.parse(JSON.stringify(newLocal), this.ReviveDateTime) as T[];
         // this.dataHandlers.forEach(handler => {
