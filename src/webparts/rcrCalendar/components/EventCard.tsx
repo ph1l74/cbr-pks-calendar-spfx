@@ -4,13 +4,14 @@ import Modal from './Modal';
 import Participants from './Participants';
 import Materials from './Materials';
 import Event from '../Models/Event';
-import { useReducer, useDispatch } from 'react-redux';
-import { setEditMode, editEvent } from '../Actions';
+import { useReducer, useDispatch, useSelector } from 'react-redux';
+import { setEditMode, editEvent, getParticipantsByEvent, getMaterialsByEvent, infinityLoadEventMaterials, infinityLoadEventParticipants } from '../Actions';
 import * as moment from 'moment';
 import { getCommentsByEvent } from '../Actions/comment';
+import * as $ from 'jquery';
 
 const editIcon = require("../Icons/Edit.svg") as string;
-const EventCard = (props: {eventCard: Event}) => {
+const EventCard = (props: { eventCard: Event }) => {
 
   // modal types
   const modalTypes = ["Участники", "Материалы", "Отзывы"]
@@ -23,7 +24,12 @@ const EventCard = (props: {eventCard: Event}) => {
   const [stateModal, setModal] = React.useState(false);
   const [modalType, setModalType] = React.useState(null);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const selectedEventForView: Event = useSelector(state => state.viewEvent.selectedEvent as Event);
+  const materialsCount: number = useSelector(state => state.viewEvent.materials.length);
+  const actorsCount: number = useSelector(state => state.viewEvent.actors.length);
+  const isFetching: boolean = useSelector(state => state.viewEvent.isFetching as boolean);
+  const isFetchingFull: boolean = useSelector(state => state.viewEvent.isFetchingFull as boolean);
 
   // event card styled by categorie color
   const categorieColor = cardInfo.category.color ? cardInfo.category.color : '#000000';
@@ -47,6 +53,30 @@ const EventCard = (props: {eventCard: Event}) => {
   function openModal(type: number): void {
     setModalType(type);
     setModal(true);
+  }
+
+  const onScroll = () => {
+    const contentElement = $(`div[class*=${modalType === 0 ? 'participants' : 'materials'}]`).closest('div[class*=window]');
+    if (!isFetchingFull && contentElement && contentElement.length > 0) {
+      console.log('onScroll');
+      if (!isFetching &&
+        contentElement.innerHeight() + contentElement.scrollTop() + 50 > contentElement[0].scrollHeight) {
+        if (modalType === 0) {
+          if (actorsCount > 0) {
+            // Checks that the page has scrolled to the bottom
+            console.log('Infinity load', actorsCount);
+            dispatch(infinityLoadEventParticipants(actorsCount, selectedEventForView));
+          }
+        }
+        else if (modalType === 1) {
+          if (materialsCount > 0) {
+            // Checks that the page has scrolled to the bottom
+            console.log('Infinity load', materialsCount);
+            dispatch(infinityLoadEventMaterials(materialsCount, selectedEventForView));
+          }
+        }
+      }
+    }
   }
 
 
@@ -89,7 +119,7 @@ const EventCard = (props: {eventCard: Event}) => {
             // cardInfo.isParticipant ?
             //   <div className={styles.status}>Вы участник</div>
             //   :
-              null
+            null
           }
           <div className={styles.location}>{cardInfo.location}</div>
         </div>
@@ -101,10 +131,10 @@ const EventCard = (props: {eventCard: Event}) => {
           </ul>
         </div>
         <div className={styles.footer}>
-          <div className="participants" onClick={() => { openModal(0) }}>Список участников ({cardInfo.participantsCount})</div>
+          <div className="participants" onClick={() => { dispatch(getParticipantsByEvent(props.eventCard)); openModal(0); }}>Список участников ({cardInfo.participantsCount})</div>
           {
             cardInfo.attachmentsCount > 0 ?
-              <div className="materials" onClick={() => { openModal(1) }}>Материалы ({cardInfo.attachmentsCount})</div>
+              <div className="materials" onClick={() => { dispatch(getMaterialsByEvent(props.eventCard)); openModal(1); }}>Материалы ({cardInfo.attachmentsCount})</div>
               :
               null
           }
@@ -113,7 +143,7 @@ const EventCard = (props: {eventCard: Event}) => {
       </div>
       {
         stateModal ?
-          <Modal title={modalTypes[modalType]} closeModalFn={closeModal}>
+          <Modal title={modalTypes[modalType]} closeModalFn={closeModal} onScroll={onScroll} >
             {
               modalType === 0 ?
                 <Participants />

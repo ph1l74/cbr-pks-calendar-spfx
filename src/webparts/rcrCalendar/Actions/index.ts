@@ -1,4 +1,4 @@
-import { GroupingEventService, CategoryService, EventService, UserService } from "../services/Services"
+import { GroupingEventService, CategoryService, EventService, UserService, MaterialService, ActorService } from "../services/Services"
 import * as moment from "moment";
 import * as types from '../constants';
 import FilterEvent from "../utils/IFilterEvent";
@@ -235,6 +235,92 @@ export const getCategoriesSuccess = categories => ({
   type: types.GET_CATEGORIES_SUCCESS,
   payload: categories
 })
+
+export const getParticipantsByEvent = (event: Event) => {
+  return dispatch => {
+      dispatch({
+          type: types.GET_EVENT_PARTICIPANTS,
+          payload: event
+      });
+      getEventParticipants(types.GET_EVENT_PARTICIPANTS_SUCCESS, event, dispatch);
+  }
+}
+
+export const infinityLoadEventParticipants = (skip: number, event: Event) => {
+  return dispatch => {
+      console.log('infinity load ', skip, event);
+      dispatch({
+          type: types.GET_EVENT_PARTICIPANTS,
+          payload: event
+      });
+
+      getEventParticipants(types.INFINITY_LOAD_EVENT_PARTICIPANTS_SUCCESS, event, dispatch, skip);
+  }
+}
+
+function getEventParticipants(typeAction: string, event: Event, dispatch: any, skip?: number) {
+  const skipRequest = skip ? `&skip=${skip}` : '';
+  const take = 10;
+  const takeRequest = `&take=${take}`;
+  ActorService.searchGet(`/?eventId=${event.id}${takeRequest}${skipRequest}`)
+      .then(ob => {
+          console.log('fetch', ob);
+          dispatch({
+              type: typeAction,
+              payload: ob,
+              isFetchingFull: ob.length < take
+          });
+      })
+      .catch(err => {
+          console.log(err);
+          dispatch({
+              type: types.CLOSE_EVENT_PARTICIPANTS
+          })
+      });
+}
+
+export const getMaterialsByEvent = (event: Event) => {
+  return dispatch => {
+      dispatch({
+          type: types.GET_EVENT_MATERIALS,
+          payload: event
+      });
+      getEventMaterials(types.GET_EVENT_MATERIALS_SUCCESS, event, dispatch);
+  }
+}
+
+export const infinityLoadEventMaterials = (skip: number, event: Event) => {
+  return dispatch => {
+      console.log('infinity load ', skip, event);
+      dispatch({
+          type: types.GET_EVENT_MATERIALS,
+          payload: event
+      });
+
+      getEventMaterials(types.INFINITY_LOAD_EVENT_MATERIALS_SUCCESS, event, dispatch, skip);
+  }
+}
+
+function getEventMaterials(typeAction: string, event: Event, dispatch: any, skip?: number) {
+  const skipRequest = skip ? `&skip=${skip}` : '';
+  const take = 30;
+  const takeRequest = `&take=${take}`;
+  MaterialService.searchGet(`/?eventId=${event.id}${takeRequest}${skipRequest}`)
+      .then(ob => {
+          console.log('fetch', ob);
+          dispatch({
+              type: typeAction,
+              payload: ob,
+              isFetchingFull: ob.length < take
+          });
+      })
+      .catch(err => {
+          console.log(err);
+          dispatch({
+              type: types.CLOSE_EVENT_MATERIALS
+          })
+      });
+}
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',

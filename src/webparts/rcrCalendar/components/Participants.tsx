@@ -1,42 +1,25 @@
 import * as React from 'react';
 import Participant from './Participant';
-import {UserService} from '../services/Services';
+import { UserService } from '../services/Services';
 import User from '../Models/User';
+import Actor from '../Models/Actor';
+import { useSelector, useDispatch } from 'react-redux';
+import { Spin } from 'antd';
 
 const Participants = () => {
 
-    const initParticipants = [/*{
-        url: '/users/65afa',
-        img: '',
-        surname: 'Астахов',
-        name: 'Филат Александрович'
-    },
-    {
-        url: '/users/65bin',
-        img: '',
-        surname: 'Баталов',
-        name: 'Илья Николаевич'
-    },
-    {
-        url: '/users/65gsv',
-        img: '',
-        surname: 'Гайдаренко',
-        name: 'Сергей Викторович'
-    }*/
-    ]
+    const actors: Actor[] = useSelector(state => state.viewEvent.actors as Actor[]);
+    const participants: User[] = useSelector(state => (state.viewEvent.actors as Actor[]).map(ob => ob.user));
+    const isFetching: boolean = useSelector(state => state.viewEvent.isFetching as boolean);
 
-    const [participants, setParticipants] = React.useState(initParticipants);
-    UserService.findAll().then(ob=> {
-        console.log('ob', ob);
-        setParticipants(ob);
-    }).catch(ex => console.log(ex) );
-    
     return (
-        <div className='participants'>
-            {participants.map((p) => (
-                <Participant userInfo={p}></Participant>
-            ))}
-        </div >
+        <Spin spinning={isFetching}>
+            <div className='participants'>
+                {participants.map((p) => (
+                    <Participant userInfo={p} key={`eventUser_${p.login}`}></Participant>
+                ))}
+            </div >
+        </Spin>
     );
 }
 

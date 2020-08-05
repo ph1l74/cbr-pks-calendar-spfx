@@ -1,3 +1,5 @@
+import User from "./User";
+
 export default class Actor {
     constructor(eventId: number, userLogin: string) {
         this.eventId = eventId;
@@ -5,4 +7,5 @@ export default class Actor {
     }
     public eventId: number;
     public userLogin: string;
+    public user: User;
 }

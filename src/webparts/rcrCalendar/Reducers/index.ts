@@ -5,6 +5,8 @@ import { EventService } from '../services/Services';
 import GroupingEvent from '../Models/GroupingEvent';
 import FilterEvent from '../utils/IFilterEvent'
 import Comment from '../Models/Comment';
+import Material from '../Models/Material';
+import Actor from '../Models/Actor';
 
 const initState =
 {
@@ -202,8 +204,61 @@ const commentReducer = (state = commentInit, action) => {
     }
 }
 
+interface IViewEventStore {
+    materials: Material[],
+    actors: Actor[],
+    selectedEvent: Event,
+    isFetching: boolean,
+    isFetchingFull: boolean,
+}
+const viewEventInit: IViewEventStore = {
+    materials: [],
+    actors: [],
+    selectedEvent: undefined,
+    isFetching: false,
+    isFetchingFull: false,
+}
+const viewEventReducer = (state = viewEventInit, action) => {
+    switch (action.type) {
+        case types.GET_EVENT_MATERIALS:
+            return { ...state, selectedEvent: action.payload, isFetching: true }
+        case types.GET_EVENT_MATERIALS_SUCCESS:
+            return { ...state, materials: action.payload, isFetching: false, isFetchingFull: false }
+        case types.CLOSE_EVENT_MATERIALS:
+            return { ...state, materials: [], selectedEvent: undefined, isFetching: false, isFetchingFull: false }
+        case types.INFINITY_LOAD_EVENT_MATERIALS_SUCCESS:
+            console.log('newRecords', state.materials, action.payload as Material[]);
+            let materialIds = state.materials.map(ob => ob.id);
+            return {
+                ...state,
+                materials: state.materials.concat((action.payload as Material[]).filter(ob => materialIds.indexOf(ob.id) < 0)),
+                isFetching: false,
+                isFetchingFull: action.isFetchingFull,
+            }
+        case types.GET_EVENT_PARTICIPANTS:
+            return { ...state, selectedEvent: action.payload, isFetching: true }
+        case types.GET_EVENT_PARTICIPANTS_SUCCESS:
+            return { ...state, actors: action.payload, isFetching: false, isFetchingFull: false }
+        case types.CLOSE_EVENT_PARTICIPANTS:
+            return { ...state, actors: [], selectedEvent: undefined, isFetching: false, isFetchingFull: false }
+        case types.INFINITY_LOAD_EVENT_PARTICIPANTS_SUCCESS:
+            console.log('newRecords', state.actors, action.payload as Actor[]);
+            let actorLogins = state.actors.map(ob => ob.userLogin);
+            return {
+                ...state, 
+                actors: state.actors.concat((action.payload as Actor[]).filter(ob => actorLogins.indexOf(ob.userLogin) < 0)),
+                isFetching: false,
+                isFetchingFull: action.isFetchingFull,
+            }
+
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     root: rootReducer,
     event: eventReducer,
     comment: commentReducer,
+    viewEvent: viewEventReducer,
 })

@@ -9,7 +9,7 @@ const Participant = ({ userInfo }) => {
     }
 
     return (
-        <a className={styles.participant} href={userInfo.login}>
+        <a className={styles.participant} href={userInfo.login} target="_blank">
             <div className={styles.avatar} style={avatarStyle}>
                 {userInfo.img && userInfo.img.length > 0 ? <img src={userInfo.img}></img> : null}
             </div>

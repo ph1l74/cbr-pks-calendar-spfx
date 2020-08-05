@@ -12,7 +12,9 @@ const EventService = new Service<Event>('events/');
 const CategoryService = new Service<Category>('categories/');
 const CommentService = new Service<Comment>('comments/');
 const AttachmentService = new Service<any>('attachments/');
+const MaterialService = new Service<any>('materials/');
+const ActorService = new Service<any>('actors/');
 
 export {
-    UserService, GroupingEventService, CategoryService, CommentService, EventService, AttachmentService
+    UserService, GroupingEventService, CategoryService, CommentService, EventService, AttachmentService, MaterialService, ActorService,
 };

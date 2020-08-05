@@ -8,6 +8,7 @@ import Icon from '@ant-design/icons/lib/components/AntdIcon';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { editComment, deleteComment } from '../Actions/comment';
+import config from '../constants/config';
 const { Link } = Anchor;
 
 const FeedbackEl = (props: { comment: Comment }) => {
@@ -51,10 +52,10 @@ const FeedbackEl = (props: { comment: Comment }) => {
             <div className={styles.materials}>
                 <Anchor >
                     {commentInfo.materials.map(el =>
-                        <Link key={`material_${el.id}_${el.eventID}`} href={`#${el.fileName}`} title={el.fileName} className={styles.materialsLink} />
+                        <Link key={`material_${el.id}_${el.eventID}`} href={`${config.API_URL}attachments/${el.id}`} title={el.fileName} className={styles.materialsLink} target="_blank" />
                     )}
                     {commentInfo.links.map(el =>
-                        <Link key={`link_${el.id}_${el.eventID}`} href={`${el.linkName}`} title={el.linkName} className={styles.materialsLink} />
+                        <Link key={`link_${el.id}_${el.eventID}`} href={`${el.linkName}`} title={el.linkName} className={styles.materialsLink} target="_blank"/>
                     )}
                 </Anchor>
             </div>
