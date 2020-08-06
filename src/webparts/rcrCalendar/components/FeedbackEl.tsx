@@ -28,7 +28,8 @@ const FeedbackEl = (props: { comment: Comment }) => {
     }
 
     return (
-        <div className={cardStyles.card}>
+        // <div className={cardStyles.card}>
+        <div className={styles.feedback}>
             <div className={styles.avatar}></div>
             <div className={styles.content}>
                 <div className={styles.name} style={{ display: 'inline-flex' }}>
@@ -48,16 +49,16 @@ const FeedbackEl = (props: { comment: Comment }) => {
                     </Tooltip>
                 </div>
                 <div className={styles.comment}>{commentInfo.description}</div>
-            </div>
-            <div className={styles.materials}>
-                <Anchor >
+                <div className={styles.materials}>
                     {commentInfo.materials.map(el =>
-                        <Link key={`material_${el.id}_${el.eventID}`} href={`${config.API_URL}attachments/${el.id}`} title={el.fileName} className={styles.materialsLink} target="_blank" />
+                        <a key={`material_${el.id}_${el.eventID}`} href={`${config.API_URL}attachments/${el.id}`}
+                            title={el.fileName} className={styles.materialsLink} target="_blank" >{el.fileName}</a>
                     )}
                     {commentInfo.links.map(el =>
-                        <Link key={`link_${el.id}_${el.eventID}`} href={`${el.linkName}`} title={el.linkName} className={styles.materialsLink} target="_blank"/>
+                        <a key={`link_${el.id}_${el.eventID}`} href={`${el.linkName}`} title={el.linkName}
+                            className={styles.materialsLink} target="_blank" >{el.linkName}</a>
                     )}
-                </Anchor>
+                </div>
             </div>
         </div>
     )

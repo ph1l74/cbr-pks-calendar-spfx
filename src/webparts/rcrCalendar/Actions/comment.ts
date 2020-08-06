@@ -83,40 +83,33 @@ export const saveEditComment = (record: Comment) => {
         dispatch({
             type: types.SAVE_EDIT_COMMENT
         });
-        if (!record.id || record.id <= 0) {
-            CommentService.add(record)
-                .then(ob => {
-                    console.log('save ', ob);
-                    dispatch({
-                        type: types.SAVE_EDIT_COMMENT_SUCCESS,
-                    });
-                })
-                .catch(err => {
-                    console.log(err);
-                    dispatch({
-                        type: types.SAVE_EDIT_COMMENT_SUCCESS,
-                    });
+        const editFunc = (!record.id || record.id <= 0) ? CommentService.add(record) : CommentService.update(record, record.id);
+        editFunc
+            .then(ob => {
+                console.log('save ', ob);
+                dispatch({
+                    type: types.SAVE_EDIT_COMMENT_SUCCESS,
                 });
-        }
-        else {
-            CommentService.update(record, record.id)
-                .then(ob => {
-                    console.log('save ', ob);
-                    dispatch({
-                        type: types.SAVE_EDIT_COMMENT_SUCCESS,
-                    });
-                })
-                .catch(err => {
-                    console.log(err);
-                    dispatch({
-                        type: types.SAVE_EDIT_COMMENT_SUCCESS,
-                    });
+                dispatch({
+                    type: types.SET_EVENT_COUNT_COMMENT,
+                    eventId: record.eventID,
+                    addingCount: 1
                 });
-        }
+                let event = new Event();
+                event.id = record.eventID;
+                getEventComments(types.GET_EVENT_COMMENTS_SUCCESS, event, dispatch);
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch({
+                    type: types.SAVE_EDIT_COMMENT_SUCCESS,
+                });
+            });
     }
 }
 
 export const deleteComment = (editingRecord: Comment) => {
+    const eventId = editingRecord.eventID;
     return dispatch => { //TODO: change to fetching, Event to number
         dispatch({
             type: types.DELETE_COMMENT,
@@ -128,6 +121,11 @@ export const deleteComment = (editingRecord: Comment) => {
                 dispatch({
                     type: types.DELETE_COMMENT_SUCCESS,
                     editRecord: ob,
+                });
+                dispatch({
+                    type: types.SET_EVENT_COUNT_COMMENT,
+                    eventId: eventId,
+                    addingCount: -1
                 });
             })
             .catch(err => console.log(err));

@@ -26,6 +26,7 @@ import config from '../constants/config';
 import { AttachmentService } from '../services/Services';
 import axios from 'axios';
 import { parseUid, uploadFile } from '../utils/Utils';
+import FilterEvent from '../utils/IFilterEvent';
 registerLocale('ru', ru)
 
 const { TextArea } = Input
@@ -37,6 +38,7 @@ const EditFormCard = () => {
     const editingEvent: Event = useSelector(state => state.event.editingEvent as Event);
     const categories: Category[] = useSelector(state => state.root.categories as Category[]);
     const users: User[] = useSelector(state => state.root.users as User[]);
+    const filterEvent: FilterEvent = useSelector(state => state.event.filterEvent as FilterEvent);
 
     const layout = {
         labelCol: { span: 6 },
@@ -100,7 +102,7 @@ const EditFormCard = () => {
         editEvent.startDate = startDate;
         editEvent.endDate = endDate;
         console.log(editingEvent, editEvent);
-        dispatch(saveEditEvent(editEvent));
+        dispatch(saveEditEvent(editEvent, filterEvent));
     }
     // const pickerStart = new DatePicker({defaultValue: moment(editingEvent.startDate, 'YYYY-MM-DD'), onChange: (value) => {console.log(value)}})
 
@@ -316,7 +318,7 @@ const EditFormCard = () => {
 
 
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
-                    <Upload multiple={true} 
+                    <Upload multiple={true}
                         defaultFileList={recordFileList.fileList as UploadFile<any>[]} //beforeUpload={() => false}
                         //action = {file => {console.log('upload file', file); return '';}} 
                         // action={handleUpload}
@@ -350,7 +352,7 @@ const EditFormCard = () => {
 
 
                 <Form.Item {...tailLayout} label='Ссылки' name='links'>
-                    <Select mode='tags' style={{ width: '100%' }} placeholder='Введите ссылку и нажмите Etner'
+                    <Select mode='tags' style={{ width: '100%' }} placeholder='Введите ссылку и нажмите Etner' maxTagCount = {30}
                         defaultValue={editingEvent.links.map(ob => ob.linkName)} onChange={value => {
                             form.setFieldsValue({ links: value });
                         }}>

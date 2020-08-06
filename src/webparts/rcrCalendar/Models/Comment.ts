@@ -12,7 +12,7 @@ export default class Comment implements Model {
     public author: User;
     public modifiedDate: Date;
     public event: Event;
-    public eventId: number;
+    public eventID: number;
     public materials: Material[];
     public links: Link[];
     // tslint:disable-next-line:variable-name

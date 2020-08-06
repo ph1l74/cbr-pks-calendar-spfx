@@ -20,7 +20,7 @@ import * as $ from 'jquery';
 import EditFormCard from './EditFormCard';
 import Category from '../Models/Category';
 import FilterEvent from '../utils/IFilterEvent';
-import { Spin, Modal, Button } from 'antd';
+import { Spin, Modal, Button, Tooltip } from 'antd';
 import * as moment from 'moment';
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -28,7 +28,11 @@ import ru from 'date-fns/locale/ru';
 import { closeEventComments } from '../Actions/comment';
 import Feedback from './Feedback';
 import { editEvent } from '../Actions';
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 registerLocale('ru', ru);
+
+const EditIcon = props => <EditOutlined {...props} />
+const AddIcon = props => <PlusCircleOutlined {...props} />
 
 const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDateChange: (date: Date) => void) => {
     const editMode = useSelector(state => state.root.editMode);
@@ -147,13 +151,14 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
                             {renderEvents(events)}
                         </Content>
                         <Dashboard>
+                            <div className={styles["new-button"]} >
+                                <Tooltip title="Новое событие">
+                                    <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }} icon={<AddIcon />}
+                                        onClick={newEditForm} />
+                                </Tooltip>
+                            </div>
                             <Calendar ></Calendar>
                             <Categories categories={initCategories} />
-                            <div className={styles.title} >
-                                <Button type='primary' shape='round' size='large' name='NewEventBtn' onClick={newEditForm}>
-                                    Новое событие
-                                </Button>
-                            </div>
                         </Dashboard>
                     </Spin>
                 </div>

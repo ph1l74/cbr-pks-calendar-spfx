@@ -34,13 +34,19 @@
                 display: block;
                 color: #4689b9;
             }
-            .materialsLink {
-                padding: 0px 0 0px 16px!important;
-            }
             .links {
                 display: block;
                 color: #4689b9;
             }
         }
     }
+}
+
+.materialsLink {
+    display: block;
+    text-decoration: none;
+    // color: #4689b9;
+    font-size: 13px;
+    padding-bottom: 5px;
+    // padding: 0px 0 0px 16px!important;
 }

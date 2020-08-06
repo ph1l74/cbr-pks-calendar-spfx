@@ -4,11 +4,12 @@ import Modal from './Modal';
 import Participants from './Participants';
 import Materials from './Materials';
 import Event from '../Models/Event';
-import { useReducer, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setEditMode, editEvent, getParticipantsByEvent, getMaterialsByEvent, infinityLoadEventMaterials, infinityLoadEventParticipants } from '../Actions';
 import * as moment from 'moment';
 import { getCommentsByEvent } from '../Actions/comment';
 import * as $ from 'jquery';
+import { IAppReducer } from '../Reducers';
 
 const editIcon = require("../Icons/Edit.svg") as string;
 const EventCard = (props: { eventCard: Event }) => {
@@ -30,6 +31,8 @@ const EventCard = (props: { eventCard: Event }) => {
   const actorsCount: number = useSelector(state => state.viewEvent.actors.length);
   const isFetching: boolean = useSelector(state => state.viewEvent.isFetching as boolean);
   const isFetchingFull: boolean = useSelector(state => state.viewEvent.isFetchingFull as boolean);
+  const events: Event[] = useSelector((state: IAppReducer) => state.event.events.map(ob => ob.Value).reduce((a, b) => a.concat(b)));
+  const wasEditComment: boolean = useSelector((state: IAppReducer) => state.event.wasEditComment);
 
   // event card styled by categorie color
   const categorieColor = cardInfo.category.color ? cardInfo.category.color : '#000000';
@@ -88,6 +91,11 @@ const EventCard = (props: { eventCard: Event }) => {
   const startDate = moment(cardInfo.startDate, 'YYYY-MM-DD');
   const endDate = moment(cardInfo.endDate, 'YYYY-MM-DD');
 
+  const actualEvent = wasEditComment ?
+    (events.filter(ob => ob.id === cardInfo.id).length > 0 ?
+      events.filter(ob => ob.id === cardInfo.id)[0] : cardInfo)
+    : cardInfo;
+
   return (
     <div className={styles.card}>
       <div className={styles.dates}>
@@ -138,7 +146,7 @@ const EventCard = (props: { eventCard: Event }) => {
               :
               null
           }
-          <div className='comment' onClick={() => { dispatch(getCommentsByEvent(props.eventCard)) }}>Отзывы {cardInfo.feedbacksCount > 0 ? `(${cardInfo.feedbacksCount})` : null}</div>
+          <div className='comment' onClick={() => { dispatch(getCommentsByEvent(props.eventCard)) }}>Отзывы {actualEvent.feedbacksCount > 0 ? `(${actualEvent.feedbacksCount})` : null}</div>
         </div>
       </div>
       {

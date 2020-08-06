@@ -134,16 +134,16 @@ export const editEvent = (editingEvent: Event) => {
     dispatch({
       type: types.RUN_EDIT_EVENT
     });
-    if (editingEvent.id > 0){
-    EventService.getRecordById(editingEvent.id)
-      .then(ob => {
-        console.log('fetch', ob);
-        dispatch({
-          type: types.EDIT_EVENT,
-          editEvent: ob,
-        });
-      })
-      .catch(err => console.log(err));
+    if (editingEvent.id > 0) {
+      EventService.getRecordById(editingEvent.id)
+        .then(ob => {
+          console.log('fetch', ob);
+          dispatch({
+            type: types.EDIT_EVENT,
+            editEvent: ob,
+          });
+        })
+        .catch(err => console.log(err));
     }
     else {
       dispatch({
@@ -154,21 +154,28 @@ export const editEvent = (editingEvent: Event) => {
   }
 }
 
+export const clearEvents = () => ({
+  type: types.CLEAR_EVENTS
+})
+
 export const closeEditEvent = () => ({
   type: types.CLOSE_EDIT_EVENT
 })
 
-export const saveEditEvent = (event: Event) => {
+export const saveEditEvent = (event: Event, filterEvent: FilterEvent) => {
   return dispatch => { //TODO: change to fetching, Event to number
     dispatch({
       type: types.SAVE_EDIT_EVENT
     });
-    EventService.update(event, event.id)
+    const saveFunc = (!event.id || event.id <= 0) ? EventService.add(event) : EventService.update(event, event.id);
+    saveFunc
       .then(ob => {
         console.log('save ', ob);
         dispatch({
           type: types.SAVE_EDIT_EVENT_SUCCESS,
         });
+        dispatch(clearEvents());
+        filterEvents(types.CHANGE_FILTER_EVENT_SUCCESS, filterEvent, dispatch);
       })
       .catch(err => {
         console.log(err);
@@ -178,6 +185,7 @@ export const saveEditEvent = (event: Event) => {
       });
   }
 }
+
 
 function filterEvents(typeAction: string, filterEvent: FilterEvent, dispatch: any, skip?: number) {
   let date = moment(filterEvent.selectedDate);
@@ -238,23 +246,23 @@ export const getCategoriesSuccess = categories => ({
 
 export const getParticipantsByEvent = (event: Event) => {
   return dispatch => {
-      dispatch({
-          type: types.GET_EVENT_PARTICIPANTS,
-          payload: event
-      });
-      getEventParticipants(types.GET_EVENT_PARTICIPANTS_SUCCESS, event, dispatch);
+    dispatch({
+      type: types.GET_EVENT_PARTICIPANTS,
+      payload: event
+    });
+    getEventParticipants(types.GET_EVENT_PARTICIPANTS_SUCCESS, event, dispatch);
   }
 }
 
 export const infinityLoadEventParticipants = (skip: number, event: Event) => {
   return dispatch => {
-      console.log('infinity load ', skip, event);
-      dispatch({
-          type: types.GET_EVENT_PARTICIPANTS,
-          payload: event
-      });
+    console.log('infinity load ', skip, event);
+    dispatch({
+      type: types.GET_EVENT_PARTICIPANTS,
+      payload: event
+    });
 
-      getEventParticipants(types.INFINITY_LOAD_EVENT_PARTICIPANTS_SUCCESS, event, dispatch, skip);
+    getEventParticipants(types.INFINITY_LOAD_EVENT_PARTICIPANTS_SUCCESS, event, dispatch, skip);
   }
 }
 
@@ -263,41 +271,41 @@ function getEventParticipants(typeAction: string, event: Event, dispatch: any, s
   const take = 10;
   const takeRequest = `&take=${take}`;
   ActorService.searchGet(`/?eventId=${event.id}${takeRequest}${skipRequest}`)
-      .then(ob => {
-          console.log('fetch', ob);
-          dispatch({
-              type: typeAction,
-              payload: ob,
-              isFetchingFull: ob.length < take
-          });
-      })
-      .catch(err => {
-          console.log(err);
-          dispatch({
-              type: types.CLOSE_EVENT_PARTICIPANTS
-          })
+    .then(ob => {
+      console.log('fetch', ob);
+      dispatch({
+        type: typeAction,
+        payload: ob,
+        isFetchingFull: ob.length < take
       });
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: types.CLOSE_EVENT_PARTICIPANTS
+      })
+    });
 }
 
 export const getMaterialsByEvent = (event: Event) => {
   return dispatch => {
-      dispatch({
-          type: types.GET_EVENT_MATERIALS,
-          payload: event
-      });
-      getEventMaterials(types.GET_EVENT_MATERIALS_SUCCESS, event, dispatch);
+    dispatch({
+      type: types.GET_EVENT_MATERIALS,
+      payload: event
+    });
+    getEventMaterials(types.GET_EVENT_MATERIALS_SUCCESS, event, dispatch);
   }
 }
 
 export const infinityLoadEventMaterials = (skip: number, event: Event) => {
   return dispatch => {
-      console.log('infinity load ', skip, event);
-      dispatch({
-          type: types.GET_EVENT_MATERIALS,
-          payload: event
-      });
+    console.log('infinity load ', skip, event);
+    dispatch({
+      type: types.GET_EVENT_MATERIALS,
+      payload: event
+    });
 
-      getEventMaterials(types.INFINITY_LOAD_EVENT_MATERIALS_SUCCESS, event, dispatch, skip);
+    getEventMaterials(types.INFINITY_LOAD_EVENT_MATERIALS_SUCCESS, event, dispatch, skip);
   }
 }
 
@@ -306,20 +314,20 @@ function getEventMaterials(typeAction: string, event: Event, dispatch: any, skip
   const take = 30;
   const takeRequest = `&take=${take}`;
   MaterialService.searchGet(`/?eventId=${event.id}${takeRequest}${skipRequest}`)
-      .then(ob => {
-          console.log('fetch', ob);
-          dispatch({
-              type: typeAction,
-              payload: ob,
-              isFetchingFull: ob.length < take
-          });
-      })
-      .catch(err => {
-          console.log(err);
-          dispatch({
-              type: types.CLOSE_EVENT_MATERIALS
-          })
+    .then(ob => {
+      console.log('fetch', ob);
+      dispatch({
+        type: typeAction,
+        payload: ob,
+        isFetchingFull: ob.length < take
       });
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: types.CLOSE_EVENT_MATERIALS
+      })
+    });
 }
 
 export const VisibilityFilters = {

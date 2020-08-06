@@ -10,6 +10,7 @@ import { debounce } from '@microsoft/sp-lodash-subset';
 import * as $ from 'jquery';
 import CommentEditForm from '../../../../lib/webparts/rcrCalendar/components/CommentEditForm';
 import User from '../Models/User';
+import { IAppReducer } from '../Reducers';
 
 const Feedback = () => {
 
@@ -42,6 +43,7 @@ const Feedback = () => {
     const selectedEventForComments: Event = useSelector(state => state.comment.selectedEvent as Event);
     const isFetching = useSelector(state => state.comment.isFetching as boolean);
     const editRecord = useSelector(state => state.comment.editingComment as Comment);
+    const users: User[] = useSelector((state: IAppReducer) => state.root.users);
 
     const dispatch = useDispatch();
 
@@ -67,12 +69,12 @@ const Feedback = () => {
         const newRecord = new Comment();
         newRecord.id = 0;
         newRecord.event = selectedEventForComments;
-        newRecord.eventId = selectedEventForComments.id;
+        newRecord.eventID = selectedEventForComments.id;
         newRecord.links = [];
         newRecord.materials = [];
         console.log('port', window.location.port);
-        if (window.location.port === '4321') {
-            newRecord.author = selectedEventForComments.author;
+        if (window.location.port === '4321') { // Todo временное решение, т.к. аутентификации нет, особенно в воркбенче
+            newRecord.author = selectedEventForComments.author ?? users[0];
         }
         dispatch(editComment(newRecord));
     }
@@ -83,13 +85,13 @@ const Feedback = () => {
             (<Modal title={'Отзывы'} onCancel={closeViewCommentForm} visible={true} key='commentsModal'
                 cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}
                 width={900} footer={false}>
+                <div className={'headers'} >
+                    <Button type='primary' shape='round' size='large' name='NewCommentBtn' onClick={newEditForm}>
+                        Новая запись
+                    </Button>
+                </div>
                 <div key={`commentsModal_${selectedEventForComments.id}`} onScroll={e => onScroll()}
                     className={'commentsModal'} style={{ maxHeight: '900px', overflow: 'auto' }} >
-                    <div className={'headers'} >
-                        <Button type='primary' shape='round' size='large' name='NewCommentBtn' onClick={newEditForm}>
-                            Новая запись
-                        </Button>
-                    </div>
                     {/* <ul style={styles}> */}
                     {viewComments.map(el =>
                         <div key={`eventComment_${el.id}`}>
