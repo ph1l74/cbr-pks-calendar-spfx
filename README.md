@@ -11,6 +11,13 @@ npm i
 npm i -g gulp
 gulp 
 ```
+### При возникновении ошибок компилляции
+```bash
+npm install
+npm run fixbuild
+gulp bundle --ship
+gulp package-solution --ship
+```
 
 При построении проекта будут созданы сделующие директории:
 

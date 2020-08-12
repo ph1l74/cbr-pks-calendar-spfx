@@ -12,9 +12,13 @@ export const parseUid = (uid: string) => {
 
 export const uploadFile = options => {
 
-    const { onSuccess, onError, file, onProgress } = options;
+    const { onSuccess, onError, file, onProgress, data } = options;
 
     const fmData = new FormData();
+    if (data && data.objId && data.type){
+        fmData.append('objId', data.objId);
+        fmData.append('objType', data.type);
+    }
     const config = {
         headers: { "content-type": "multipart/form-data" },
         onUploadProgress: event => {

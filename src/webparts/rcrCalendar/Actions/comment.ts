@@ -93,7 +93,7 @@ export const saveEditComment = (record: Comment) => {
                 dispatch({
                     type: types.SET_EVENT_COUNT_COMMENT,
                     eventId: record.eventID,
-                    addingCount: 1
+                    addingCount: record.id > 0 ? 0 : 1
                 });
                 let event = new Event();
                 event.id = record.eventID;

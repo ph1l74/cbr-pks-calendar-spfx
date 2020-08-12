@@ -12,9 +12,11 @@ import User from '../Models/User';
 
 interface IRootStore {
     categories: Category[];
-    users: User[],
+    users: User[];
     editMode: any;
-    isFetchingCategories: boolean,
+    isFetchingCategories: boolean;
+    currentUser: User;
+    userName: string;
 }
 
 const initState: IRootStore =
@@ -35,6 +37,8 @@ const initState: IRootStore =
     categories: [],
     users: [],
     isFetchingCategories: false,
+    currentUser: undefined,
+    userName: '',
 }
 
 const rootReducer = (state = initState, action) => {
@@ -58,6 +62,13 @@ const rootReducer = (state = initState, action) => {
             console.log('showing editForm');
             return { ...state, editMode: action.value }
 
+        case types.SET_USERNAME:
+            {
+                const userName = action.userName;
+                let curUser = getUserByName(state.users, userName, state.currentUser);
+                return { ...state, userName: userName, currentUser: curUser }
+            }
+
         case types.GET_CATEGORIES:
             return { ...state, isFetchingCategories: true }
         case types.GET_CATEGORIES_SUCCESS:
@@ -66,7 +77,10 @@ const rootReducer = (state = initState, action) => {
         case types.GET_USERS:
             return { ...state, isFetchingCategories: true }
         case types.GET_USERS_SUCCESS:
-            return { ...state, users: action.payload, isFetchingCategories: false }
+            {
+                let curUser = getUserByName(action.payload, state.userName, state.currentUser);
+                return { ...state, users: action.payload, currentUser: curUser, isFetchingCategories: false }
+            }
 
         default:
             return state
@@ -275,7 +289,7 @@ const viewEventReducer = (state = viewEventInit, action) => {
     }
 }
 
-export interface IAppReducer{
+export interface IAppReducer {
     root: IRootStore,
     event: IEventStore,
     comment: ICommentStore,
@@ -288,3 +302,15 @@ export default combineReducers<IAppReducer>({
     comment: commentReducer,
     viewEvent: viewEventReducer,
 })
+
+function getUserByName(users: User[], userName: string, currentUser: User) {
+    let curUser = currentUser;
+    if (userName === 'workbench') {
+        curUser = curUser ?? (users.length > 0 ? users[0] : undefined);
+    }
+    else {
+        const findUsers = users.filter(ob => ob.login === userName);
+        curUser = findUsers.length > 0 ? findUsers[0] : undefined;
+    }
+    return curUser;
+}

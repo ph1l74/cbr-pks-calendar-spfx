@@ -322,7 +322,10 @@ const EditFormCard = () => {
                         defaultFileList={recordFileList.fileList as UploadFile<any>[]} //beforeUpload={() => false}
                         //action = {file => {console.log('upload file', file); return '';}} 
                         // action={handleUpload}
-                        customRequest={uploadFile}
+                        customRequest={(options => {
+                            options.data = {type: 'event', objId: editingEvent.id};
+                            uploadFile(options);
+                        })}
                         // action={`${config.API_URL}Attachments`}
                         onChange={(info) => {
                             // console.log('onchange upload', info);

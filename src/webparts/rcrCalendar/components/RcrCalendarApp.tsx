@@ -46,7 +46,10 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
 
     const dispatch = useDispatch();
 
-    const contentElement = $('div[class*=content_]');
+    const contentElement = (window.location.port === '4321') ? $('div[class*=content_]') : $('div[class*=scrollRegion]');
+    document.onscroll = (ev) => {
+        console.log('document scroll', ev);
+    };
     contentElement.scroll(debounce(() => {
         const {
             // loadUsers
@@ -60,7 +63,7 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
 
         // Checks that the page has scrolled to the bottom
         if ( // contentElement.clientHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
-            eventsCount > 0 && contentElement.innerHeight() + contentElement.scrollTop() + 50 > contentElement[0].scrollHeight) {
+            eventsCount > 0 && contentElement.innerHeight() + contentElement.scrollTop() + 0 >= contentElement[0].scrollHeight) {
             console.log('Infinity load', currentFilter, eventsCount);
             dispatch(infinityLoadEvents(eventsCount, currentFilter));
         }

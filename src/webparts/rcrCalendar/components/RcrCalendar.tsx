@@ -35,7 +35,7 @@ export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> 
         </div>
       </Provider>
     );
-  }
+  } 
 
   handleScroll = (e: React.UIEvent<HTMLElement>): void => {
     console.log('infinite scroll');
