@@ -17,6 +17,7 @@ interface IRootStore {
     isFetchingCategories: boolean;
     currentUser: User;
     userName: string;
+    userId: string;
 }
 
 const initState: IRootStore =
@@ -39,6 +40,7 @@ const initState: IRootStore =
     isFetchingCategories: false,
     currentUser: undefined,
     userName: '',
+    userId: '',
 }
 
 const rootReducer = (state = initState, action) => {
@@ -65,8 +67,9 @@ const rootReducer = (state = initState, action) => {
         case types.SET_USERNAME:
             {
                 const userName = action.userName;
+                const userId = action.userId;
                 let curUser = getUserByName(state.users, userName, state.currentUser);
-                return { ...state, userName: userName, currentUser: curUser }
+                return { ...state, userName: userName, userId: userId, currentUser: curUser }
             }
 
         case types.GET_CATEGORIES:
@@ -309,7 +312,7 @@ function getUserByName(users: User[], userName: string, currentUser: User) {
         curUser = curUser ?? (users.length > 0 ? users[0] : undefined);
     }
     else {
-        const findUsers = users.filter(ob => ob.login === userName);
+        const findUsers = users.filter(ob => ob.login.split('@')[0] === userName );
         curUser = findUsers.length > 0 ? findUsers[0] : undefined;
     }
     return curUser;

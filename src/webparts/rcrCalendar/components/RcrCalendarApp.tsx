@@ -29,6 +29,8 @@ import { closeEventComments } from '../Actions/comment';
 import Feedback from './Feedback';
 import { editEvent } from '../Actions';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { IAppReducer } from '../Reducers';
+import User from '../Models/User';
 registerLocale('ru', ru);
 
 const EditIcon = props => <EditOutlined {...props} />
@@ -43,6 +45,7 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
     const currentFilter = useSelector(state => state.event.filterEvent);
     const isFetching = useSelector(state => state.event.isFetching);
     const isCommentFetching = useSelector(state => state.comment.isFetching as boolean);
+    const currentUser: User = useSelector((state: IAppReducer) => state.root.currentUser);
 
     const dispatch = useDispatch();
 
@@ -133,6 +136,7 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
         newRecord.links = [];
         newRecord.materials = [];
         newRecord.actors = [];
+        newRecord.author = currentUser;
         if (window.location.port === '4321') {
             // newRecord.author = selectedEventForComments.author;
         }

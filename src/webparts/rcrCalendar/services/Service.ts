@@ -1,13 +1,23 @@
 // import Maybe from '../util/Maybe'
 import config from '../constants/config';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import * as moment from 'moment';
+import { auth } from '../utils/auth';
 
 export default class Service<T> {
     private dataHandlers: Array<(value: T, index: number) => void> = [];
 
     constructor(public apiPath: string) {
         this.apiPath = apiPath;
+        
+    axios.interceptors.request.use((config: AxiosRequestConfig) => {
+        let token = auth.getToken();
+
+        if (token) {
+          config.headers['authorization'] = 'Token ' + token;
+        }
+        return config;
+      });      
     }
 
     public async findAll(sliceDate?: string): Promise<T[]> {

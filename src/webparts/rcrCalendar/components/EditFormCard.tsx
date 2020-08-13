@@ -27,6 +27,7 @@ import { AttachmentService } from '../services/Services';
 import axios from 'axios';
 import { parseUid, uploadFile } from '../utils/Utils';
 import FilterEvent from '../utils/IFilterEvent';
+import { ConvertDateWithoutZone } from '../utils/DateTime';
 registerLocale('ru', ru)
 
 const { TextArea } = Input
@@ -99,8 +100,8 @@ const EditFormCard = () => {
         editEvent.name = editValues.eventName;
         editEvent.category = editValues.category ? categories.filter(ob => ob.id === editValues.category)[0] : undefined;
         editEvent.location = editValues.location;
-        editEvent.startDate = startDate;
-        editEvent.endDate = endDate;
+        editEvent.startDate = ConvertDateWithoutZone(startDate);
+        editEvent.endDate = ConvertDateWithoutZone(endDate);
         console.log(editingEvent, editEvent);
         dispatch(saveEditEvent(editEvent, filterEvent));
     }

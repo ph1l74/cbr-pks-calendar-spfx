@@ -71,28 +71,29 @@ export const setAuth = (): any => {
             web.currentUser.get()
               .then(res => {
                 console.log(res);
-                currentUserName = res;
+                currentUserName = res.LoginName as string;
+                const loginInfo = currentUserName.split('\\');
+                setUser(dispatch, loginInfo[loginInfo.length - 1], res.UserId?.NameId);
               })
               .catch(err => {
                 console.log(err);
+                setUser(dispatch, currentUserName, '');
               });
           })
             .catch(err => {
               console.log(err);
+              setUser(dispatch, currentUserName, '');
             });
         })
           .catch(err => {
             console.log(err);
+            setUser(dispatch, currentUserName, '');
           });
       }
       catch (ex) {
         console.log(ex);
+        setUser(dispatch, currentUserName, '');
       }
-      dispatch({
-        // type: 'SET_AUTH',
-        type: types.SET_USERNAME,
-        userName: currentUserName
-      });
     }
   }
 }
@@ -209,6 +210,15 @@ export const saveEditEvent = (event: Event, filterEvent: FilterEvent) => {
   }
 }
 
+
+function setUser(dispatch: any, currentUserName: string, currentUserId: string) {
+  dispatch({
+    // type: 'SET_AUTH',
+    type: types.SET_USERNAME,
+    userName: currentUserName,
+    userId: currentUserId
+  });
+}
 
 function filterEvents(typeAction: string, filterEvent: FilterEvent, dispatch: any, skip?: number) {
   let date = moment(filterEvent.selectedDate);
