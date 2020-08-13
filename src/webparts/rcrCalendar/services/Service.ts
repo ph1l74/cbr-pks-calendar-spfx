@@ -2,19 +2,26 @@
 import config from '../constants/config';
 import axios, { AxiosRequestConfig } from 'axios';
 import * as moment from 'moment';
-import { auth } from '../utils/auth';
+import { getToken } from '../utils/auth';
 
 export default class Service<T> {
+    
+    public static userName: string;
+    public static userId: string;
+
     private dataHandlers: Array<(value: T, index: number) => void> = [];
 
     constructor(public apiPath: string) {
         this.apiPath = apiPath;
         
     axios.interceptors.request.use((config: AxiosRequestConfig) => {
-        let token = auth.getToken();
+        let token = getToken(Service.userName, Service.userId);
+        if (Date.now() > token.expires + token.issued){
+            console.log('token expired');
+        }
 
         if (token) {
-          config.headers['authorization'] = 'Token ' + token;
+          config.headers['authorization'] = 'Token ' + token.token;
         }
         return config;
       });      

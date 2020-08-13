@@ -9,6 +9,7 @@ import Material from '../Models/Material';
 import Actor from '../Models/Actor';
 import Category from '../Models/Category';
 import User from '../Models/User';
+import Service from '../../../../lib/webparts/rcrCalendar/services/Service';
 
 interface IRootStore {
     categories: Category[];
@@ -69,6 +70,8 @@ const rootReducer = (state = initState, action) => {
                 const userName = action.userName;
                 const userId = action.userId;
                 let curUser = getUserByName(state.users, userName, state.currentUser);
+                Service.userName = userName;
+                Service.userId = userId;
                 return { ...state, userName: userName, userId: userId, currentUser: curUser }
             }
 
