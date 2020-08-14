@@ -11,6 +11,8 @@ import { editComment, deleteComment } from '../Actions/comment';
 import config from '../constants/config';
 const { Link } = Anchor;
 
+const unknownImage = require("../Icons/unknown.png") as string;
+
 const FeedbackEl = (props: { comment: Comment }) => {
     const dispatch = useDispatch();
     const [commentInfo, setCommentInfo] = React.useState(props.comment);
@@ -33,8 +35,14 @@ const FeedbackEl = (props: { comment: Comment }) => {
             <div className={styles.avatar}></div>
             <div className={styles.content}>
                 <div className={styles.name} style={{ display: 'inline-flex' }}>
-                    <div style={{ color: 'blue', paddingRight: '30px' }}>
+                    <div className={styles.authorInfo}>
+                        <div className={styles.avatar}>
+                            <img width='25px' style={{ borderRadius: '50%' }}
+                                src={author.img && author.img.toString().length > 0 ? author.img.toString() : unknownImage}></img>
+                        </div>
+                        <div className={styles.authorName}>
                         {author ? `${author.firstName} ${author.lastName} ${author.patronymic}      ` : null}
+                        </div>
                     </div>
                     <div style={{ paddingRight: '30px' }}>
                         {`${moment(commentInfo.modifiedDate).format('DD.MM.yyyy')}      `}

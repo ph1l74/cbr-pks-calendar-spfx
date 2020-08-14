@@ -178,6 +178,35 @@ export const editEvent = (editingEvent: Event) => {
   }
 }
 
+export const deleteEvent = (record: Event, filterEvent: FilterEvent, isRefresh: boolean) => {
+  const eventId = record.id;
+  return dispatch => { //TODO: change to fetching, Event to number
+    dispatch({
+      type: types.DELETE_EVENT,
+      editRecord: record,
+    });
+    EventService.remove(record.id)
+      .then(ob => {
+        console.log('delete', ob);
+        dispatch({
+          type: types.DELETE_EVENT_SUCCESS,
+          deleteId: eventId,
+        });
+        if (isRefresh) {
+          dispatch(clearEvents());
+          filterEvents(types.CHANGE_FILTER_EVENT_SUCCESS, filterEvent, dispatch);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch({
+          type: types.DELETE_EVENT_SUCCESS,
+          deleteId: undefined,
+        });
+      });
+  }
+}
+
 export const clearEvents = () => ({
   type: types.CLEAR_EVENTS
 })

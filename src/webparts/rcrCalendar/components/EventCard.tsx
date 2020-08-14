@@ -5,13 +5,17 @@ import Participants from './Participants';
 import Materials from './Materials';
 import Event from '../Models/Event';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEditMode, editEvent, getParticipantsByEvent, getMaterialsByEvent, infinityLoadEventMaterials, infinityLoadEventParticipants } from '../Actions';
+import { setEditMode, editEvent, getParticipantsByEvent, getMaterialsByEvent, infinityLoadEventMaterials, infinityLoadEventParticipants, deleteEvent } from '../Actions';
 import * as moment from 'moment';
 import { getCommentsByEvent } from '../Actions/comment';
 import * as $ from 'jquery';
 import { IAppReducer } from '../Reducers';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Tooltip, Button, message, Popconfirm } from 'antd';
+import FilterEvent from '../utils/IFilterEvent';
 
 const editIcon = require("../Icons/Edit.svg") as string;
+const DeleteIcon = props => <DeleteOutlined {...props} />
 const EventCard = (props: { eventCard: Event }) => {
 
   // modal types
@@ -33,6 +37,7 @@ const EventCard = (props: { eventCard: Event }) => {
   const isFetchingFull: boolean = useSelector(state => state.viewEvent.isFetchingFull as boolean);
   const events: Event[] = useSelector((state: IAppReducer) => state.event.events.map(ob => ob.Value).reduce((a, b) => a.concat(b)));
   const wasEditComment: boolean = useSelector((state: IAppReducer) => state.event.wasEditComment);
+  const filterEvent: FilterEvent = useSelector((state: IAppReducer) => state.event.filterEvent);
 
   // event card styled by categorie color
   const categorieColor = cardInfo.category.color ? cardInfo.category.color : '#000000';
@@ -51,6 +56,11 @@ const EventCard = (props: { eventCard: Event }) => {
     console.log('send open editform');
     // dispatch(setEditMode(1))
     dispatch(editEvent(cardInfo));
+  }
+
+  const deleteRecord = () => {
+    console.log('send delete event');
+    dispatch(deleteEvent(cardInfo, filterEvent, events.length < 10));
   }
 
   function openModal(type: number): void {
@@ -115,6 +125,16 @@ const EventCard = (props: { eventCard: Event }) => {
       <div className={styles.info} style={categorieBorderStyle}>
         <a className={styles.editLink} onClick={openEditForm}>
           <img src={editIcon} className={styles.editIcon} />
+        </a>
+        <a className={styles.editIcon}>
+          <Popconfirm
+            title="Вы действительно хотите удалить событие?"
+            onConfirm={deleteRecord}
+            okText="OK" cancelText="Отмена" >
+            <Tooltip title="Удалить событие">
+              <Button icon={<DeleteIcon />} style={{ color: '#eb780d', marginLeft: '10px', borderWidth: '0px' }}></Button>
+            </Tooltip>
+          </Popconfirm>
         </a>
         <div className={styles.header}>
           {

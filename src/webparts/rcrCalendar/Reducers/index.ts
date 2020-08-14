@@ -125,6 +125,16 @@ const eventReducer = (state = eventInit, action) => {
         //     let findObjs = state.events.filter(ob => ob.id === action.id);
         //     return findObjs.length > 0 ? findObjs[0] : null;
 
+        case types.DELETE_EVENT:
+            return { ...state, isFetching: true }
+        case types.DELETE_EVENT_SUCCESS:
+            {
+                let newEvents = state.events;
+                newEvents.forEach(eg => {
+                    eg.Value = eg.Value.filter(ob => ob.id !== action.deleteId);
+                });
+                return { ...state, events: newEvents, isFetching: false }
+            }
         case types.CHANGE_DATE:
             state.filterEvent.selectedDate = action.payload;
             return { ...state, date: action.payload, isFetching: true }
@@ -315,7 +325,7 @@ function getUserByName(users: User[], userName: string, currentUser: User) {
         curUser = curUser ?? (users.length > 0 ? users[0] : undefined);
     }
     else {
-        const findUsers = users.filter(ob => ob.login.split('@')[0] === userName );
+        const findUsers = users.filter(ob => ob.login.split('@')[0] === userName);
         curUser = findUsers.length > 0 ? findUsers[0] : undefined;
     }
     return curUser;
