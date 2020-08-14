@@ -28,6 +28,7 @@ import axios from 'axios';
 import { parseUid, uploadFile } from '../utils/Utils';
 import FilterEvent from '../utils/IFilterEvent';
 import { ConvertDateWithoutZone } from '../utils/DateTime';
+import { RuleObject } from 'antd/lib/form';
 registerLocale('ru', ru)
 
 const { TextArea } = Input
@@ -79,31 +80,37 @@ const EditFormCard = () => {
 
     function saveEditForm(): void {
         const editValues = form.getFieldsValue();
-        console.log('save editform', editingEvent, editValues.fullDay, editValues);
-        let editEvent = editingEvent;
-        if (editValues.participants) {
-            editEvent.actors = editValues.participants.map(ob => new Actor(editingEvent.id, ob));
+        if (form.getFieldsError().map(ob => ob.errors.length).reduce((a, b) => a = a + b) === 0) {
+        // if (form.isFieldsValidating(['description', 'dateFrom', 'dateTo', 'eventName', 'location', 'category'])) {
+            console.log('save editform', editingEvent, editValues.fullDay, editValues);
+            let editEvent = editingEvent;
+            if (editValues.participants) {
+                editEvent.actors = editValues.participants.map(ob => new Actor(editingEvent.id, ob));
+            }
+            if (editValues.fullDay) {
+                editEvent.fullDay = editValues.fullDay;
+            }
+            editEvent.description = editValues.description;
+            if (editValues.freeVisiting) {
+                editEvent.freeVisiting = editValues.freeVisiting;
+            }
+            if (editValues.materials) {
+                editEvent.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
+            }
+            if (editValues.links) {
+                editEvent.links = editValues.links.map(ob => new Link(0, ob));
+            }
+            editEvent.name = editValues.eventName;
+            editEvent.category = editValues.category ? categories.filter(ob => ob.id === editValues.category)[0] : undefined;
+            editEvent.location = editValues.location;
+            editEvent.startDate = ConvertDateWithoutZone(startDate);
+            editEvent.endDate = ConvertDateWithoutZone(endDate);
+            console.log(editingEvent, editEvent);
+            dispatch(saveEditEvent(editEvent, filterEvent));
         }
-        if (editValues.fullDay) {
-            editEvent.fullDay = editValues.fullDay;
+        else {
+            message.error('Данные не могут быть сохранены, т.к. имеются ошибки ввода!');
         }
-        editEvent.description = editValues.description;
-        if (editValues.freeVisiting) {
-            editEvent.freeVisiting = editValues.freeVisiting;
-        }
-        if (editValues.materials) {
-            editEvent.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
-        }
-        if (editValues.links) {
-            editEvent.links = editValues.links.map(ob => new Link(0, ob));
-        }
-        editEvent.name = editValues.eventName;
-        editEvent.category = editValues.category ? categories.filter(ob => ob.id === editValues.category)[0] : undefined;
-        editEvent.location = editValues.location;
-        editEvent.startDate = ConvertDateWithoutZone(startDate);
-        editEvent.endDate = ConvertDateWithoutZone(endDate);
-        console.log(editingEvent, editEvent);
-        dispatch(saveEditEvent(editEvent, filterEvent));
     }
     // const pickerStart = new DatePicker({defaultValue: moment(editingEvent.startDate, 'YYYY-MM-DD'), onChange: (value) => {console.log(value)}})
 
@@ -127,19 +134,42 @@ const EditFormCard = () => {
         })
     });
 
+    const checkDate = (rule, value, type: string) => {
+        let labelDate = type === 'end' ? 'окончания' : 'начала';
+        // if (!value) {
+        //     return Promise.reject(`Пожалуйста, введите время ${labelDate} события.`);
+        // }
+        const editValues = form.getFieldsValue();
+        if ((type === 'end' && value && value < editValues.dateFrom)) {
+            return Promise.reject(`Дата окончания не может быть меньше даты начала события! Пожалуйста, введите корректное время ${labelDate} события.`);
+        }
+        return Promise.resolve();
+    };
+
     const setDate = (date: Date, prevValue: Date) => {
-        let val = prevValue;
+        let val = prevValue ?? date;
+        if (!date) {
+            return undefined;
+        }
         val.setDate(date.getDate());
         val.setMonth(date.getMonth());
         val.setFullYear(date.getFullYear());
+        val.setSeconds(0);
+        val.setMilliseconds(0);
         return val;
     }
     const setHours = (hoursDate: moment.Moment, prevValue: Date) => {
+        prevValue = prevValue ?? new Date(hoursDate.year(), hoursDate.month(), hoursDate.date(), hoursDate.hour(), hoursDate.minute());
         prevValue.setHours(hoursDate.hours());
+        prevValue.setSeconds(0);
+        prevValue.setMilliseconds(0);
         return prevValue;
     }
     const setMinutes = (minutesDate: moment.Moment, prevValue: Date) => {
+        prevValue = prevValue ?? new Date(minutesDate.year(), minutesDate.month(), minutesDate.date(), minutesDate.hour(), minutesDate.minute());
         prevValue.setMinutes(minutesDate.minutes());
+        prevValue.setSeconds(0);
+        prevValue.setMilliseconds(0);
         return prevValue;
     }
     // const handleUpload = async (file: RcFile)=> {
@@ -178,9 +208,9 @@ const EditFormCard = () => {
                     {...tailLayout}
                     label='Название'
                     name='eventName'
-                    rules={[{ required: true, message: 'Пожалуйста, введите название события.' }]}
+                    rules={[{ required: true, message: 'Пожалуйста, введите название события.' }, { type: 'string', max: 256, message: 'Длина не может превышать 256 символов' }]}
                 >
-                    <Input defaultValue={editingEvent.name} onChange={(value) => {
+                    <Input maxLength={255} defaultValue={editingEvent.name} onChange={(value) => {
                         // editingEvent.name = value.target.value;
                         form.setFieldsValue({ eventName: value.target.value });
                     }} />
@@ -213,7 +243,14 @@ const EditFormCard = () => {
                     {...tailLayout}
                     label='Время начала'
                     name='dateFrom'
-                    rules={[{ required: true }]}
+                    rules={[{ required: true, message: 'Пожалуйста, введите время начала события.' },
+                    {
+                        validator: (_, value) => checkDate(_, value, 'start')
+                        // validator: (rule: RuleObject, value: any) => {
+                        //     console.log('validator', rule, value);
+                        //     checkDate(rule, value, 'start');
+                        // }
+                    }]}
                 >
                     {/* <DatePickerJS props={{ onChange: (value) => {
                         console.log('change date', value);
@@ -224,7 +261,8 @@ const EditFormCard = () => {
                             console.log('change date', value, startDate); //Todo: много лишнего
                             const newVal = setDate(value, startDate);
                             setStartDate(newVal);
-                            form.setFieldsValue({ startDate: newVal });
+                            form.setFieldsValue({ dateFrom: newVal });
+                            form.validateFields(['dateFrom', 'dateTo']);
                         }} />
                     <TimePicker name='dateFrom_hour'
                         placeholder='00:'
@@ -234,7 +272,8 @@ const EditFormCard = () => {
                             console.log('change hour', value, startDate);
                             const newVal = setHours(value, startDate);
                             setStartDate(newVal);
-                            form.setFieldsValue({ startDate: newVal });
+                            form.setFieldsValue({ dateFrom: newVal });
+                            form.validateFields(['dateFrom', 'dateTo']);
                         }}
                     />
                     <TimePicker name='dateFrom_minute'
@@ -244,7 +283,8 @@ const EditFormCard = () => {
                             console.log('change minutes', value, startDate);
                             const newVal = setMinutes(value, startDate);
                             setStartDate(newVal);
-                            form.setFieldsValue({ startDate: newVal });
+                            form.setFieldsValue({ dateFrom: newVal });
+                            form.validateFields(['dateFrom', 'dateTo']);
                         }}
                     />
                 </Form.Item>
@@ -253,7 +293,10 @@ const EditFormCard = () => {
                     {...tailLayout}
                     label='Время окончания'
                     name='dateTo'
-                    rules={[{ required: true }]}
+                    rules={[{ required: true, message: 'Пожалуйста, введите время окончания события.' },
+                    {
+                        validator: (_, value) => checkDate(_, value, 'end')
+                    }]}
                 >
                     <DatePicker dateFormat='dd.MM.yyyy' locale='ru' selected={endDate} name='dateTo_date'
                         showYearDropdown showMonthDropdown useShortMonthInDropdown
@@ -261,7 +304,8 @@ const EditFormCard = () => {
                             console.log('change date', value, endDate);
                             const newVal = setDate(value, endDate);
                             setEndDate(newVal);
-                            form.setFieldsValue({ endDate: newVal });
+                            form.setFieldsValue({ dateTo: newVal });
+                            form.validateFields(['dateFrom', 'dateTo']);
                         }} />
                     <TimePicker name='dateTo_hour'
                         placeholder='00:' allowClear={false} format={'HH'}
@@ -270,7 +314,8 @@ const EditFormCard = () => {
                             console.log('change hour', value, endDate);
                             const newVal = setHours(value, endDate);
                             setEndDate(newVal);
-                            form.setFieldsValue({ endDate: newVal });
+                            form.setFieldsValue({ dateTo: newVal });
+                            form.validateFields(['dateFrom', 'dateTo']);
                         }}
                     />
                     <TimePicker name='dateTo_minute'
@@ -280,7 +325,8 @@ const EditFormCard = () => {
                             console.log('change minutes', value, endDate);
                             const newVal = setMinutes(value, endDate);
                             setEndDate(newVal);
-                            form.setFieldsValue({ endDate: newVal });
+                            form.setFieldsValue({ dateTo: newVal });
+                            form.validateFields(['dateFrom', 'dateTo']);
                         }}
                     />
                 </Form.Item>
@@ -297,7 +343,7 @@ const EditFormCard = () => {
                     label='Описание'
                     name='description'
                 >
-                    <TextArea autoSize={{ minRows: 3, maxRows: 3 }} defaultValue={editingEvent.description} onChange={(value) => {
+                    <TextArea maxLength={2500} autoSize={{ minRows: 3, maxRows: 3 }} defaultValue={editingEvent.description} onChange={(value) => {
                         form.setFieldsValue({ description: value.target.value });
                     }} />
                 </Form.Item>
@@ -324,7 +370,7 @@ const EditFormCard = () => {
                         //action = {file => {console.log('upload file', file); return '';}} 
                         // action={handleUpload}
                         customRequest={(options => {
-                            options.data = {type: 'event', objId: editingEvent.id};
+                            options.data = { type: 'event', objId: editingEvent.id };
                             uploadFile(options);
                         })}
                         // action={`${config.API_URL}Attachments`}
@@ -336,15 +382,15 @@ const EditFormCard = () => {
                             if (info.file.status === 'done') {
                                 message.success(`${info.file.name} был загружен`);
                                 let newFileList = recordFileList.fileList;
-                                newFileList.push({uid: info.file.uid, name: info.file.name, status: info.file.status});
-                                form.setFieldsValue({ materials: {fileList: newFileList } });
+                                newFileList.push({ uid: info.file.uid, name: info.file.name, status: info.file.status });
+                                form.setFieldsValue({ materials: { fileList: newFileList } });
                                 setRecordFileList({ fileList: newFileList })
                             } else if (info.file.status === 'error') {
                                 message.error(`${info.file.name} не был загружен.`);
                             }
                             if (info.file.status === 'removed') {
                                 const actualMaterials = recordFileList.fileList.filter(ob => ob.uid.toString() !== info.file.uid);
-                                form.setFieldsValue({ materials: {fileList: actualMaterials } });
+                                form.setFieldsValue({ materials: { fileList: actualMaterials } });
                                 setRecordFileList({ fileList: actualMaterials });
                             }
                         }}>
@@ -356,7 +402,7 @@ const EditFormCard = () => {
 
 
                 <Form.Item {...tailLayout} label='Ссылки' name='links'>
-                    <Select mode='tags' style={{ width: '100%' }} placeholder='Введите ссылку и нажмите Etner' maxTagCount = {30}
+                    <Select mode='tags' style={{ width: '100%' }} placeholder='Введите ссылку и нажмите Etner' maxTagCount={30}
                         defaultValue={editingEvent.links.map(ob => ob.linkName)} onChange={value => {
                             form.setFieldsValue({ links: value });
                         }}>

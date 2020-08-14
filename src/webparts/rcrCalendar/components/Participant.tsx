@@ -3,13 +3,13 @@ import styles from './Participants.module.scss';
 
 const Participant = ({ userInfo }) => {
 
-    const bgImage = (userInfo.img && userInfo.img.length > 0) ? userInfo.img : '/img/anonymous.jpg';
+    const bgImage = (userInfo.img && userInfo.img.length > 0) ? userInfo.img : '/lib/webparts/rcrCalendar/icons/unknown.png'; // '/img/anonymous.jpg';
     const avatarStyle: React.CSSProperties = {
-        backgroundImage: bgImage
+        backgroundImage: `url('${bgImage}')`
     }
 
     return (
-        <a className={styles.participant} href={userInfo.login} target="_blank">
+        <a className={styles.participant} href={userInfo.login} target='_blank'>
             <div className={styles.avatar} style={avatarStyle}>
                 {userInfo.img && userInfo.img.length > 0 ? <img src={userInfo.img}></img> : null}
             </div>

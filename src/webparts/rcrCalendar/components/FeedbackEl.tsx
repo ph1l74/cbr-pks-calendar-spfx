@@ -50,12 +50,12 @@ const FeedbackEl = (props: { comment: Comment }) => {
                 </div>
                 <div className={styles.comment}>{commentInfo.description}</div>
                 <div className={styles.materials}>
-                    {commentInfo.materials.map(el =>
-                        <a key={`material_${el.id}_${el.eventID}`} href={`${config.API_URL}attachments/${el.id}`}
+                    {commentInfo.materials.map((el, ind) =>
+                        <a key={`material_${el.id}_${el.eventID}_${ind}`} href={`${config.API_URL}attachments/${el.id}`}
                             title={el.fileName} className={styles.materialsLink} target="_blank" >{el.fileName}</a>
                     )}
-                    {commentInfo.links.map(el =>
-                        <a key={`link_${el.id}_${el.eventID}`} href={`${el.linkName}`} title={el.linkName}
+                    {commentInfo.links.map((el, ind) =>
+                        <a key={`link_${el.id}_${el.eventID}_${ind}`} href={`${el.linkName}`} title={el.linkName}
                             className={styles.materialsLink} target="_blank" >{el.linkName}</a>
                     )}
                 </div>

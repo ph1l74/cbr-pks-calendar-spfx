@@ -85,7 +85,7 @@ const Feedback = () => {
             (<Modal title={'Отзывы'} onCancel={closeViewCommentForm} visible={true} key='commentsModal'
                 cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}
                 width={900} footer={false}>
-                <div className={'headers'} >
+                <div className={styles.feedbacksHeader} >
                     <Button type='primary' shape='round' size='large' name='NewCommentBtn' onClick={newEditForm}>
                         Новая запись
                     </Button>

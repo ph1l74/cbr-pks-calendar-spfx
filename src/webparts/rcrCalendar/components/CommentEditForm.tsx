@@ -33,17 +33,22 @@ const CommentEditForm = () => {
 
     function saveEditForm(): void {
         const editValues = form.getFieldsValue();
-        console.log('save editform', editingComment, editValues);
-        let editComment = editingComment;
-        editComment.description = editValues.description;
-        if (editValues.materials) {
-            editComment.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
+        if (form.getFieldsError().map(ob => ob.errors.length).reduce((a, b) => a = a + b) === 0) {
+            console.log('save editform', editingComment, editValues);
+            let editComment = editingComment;
+            editComment.description = editValues.description;
+            if (editValues.materials) {
+                editComment.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
+            }
+            if (editValues.links) {
+                editComment.links = editValues.links.map(ob => new Link(0, ob));
+            }
+            console.log(editingComment, editComment);
+            dispatch(saveEditComment(editComment));
         }
-        if (editValues.links) {
-            editComment.links = editValues.links.map(ob => new Link(0, ob));
+        else {
+            message.error('Данные не могут быть сохранены, т.к. имеются ошибки ввода!');
         }
-        console.log(editingComment, editComment);
-        dispatch(saveEditComment(editComment));
     }
 
     const onFinish = values => {
@@ -92,6 +97,7 @@ const CommentEditForm = () => {
                     {...tailLayout}
                     label="Описание"
                     name="description"
+                    rules={[{ required: true, message: 'Пожалуйста, введите описание.' }, { type: 'string', max: 2500, message: 'Длина не может превышать 2500 символов' }]}
                 >
                     <TextArea autoSize={{ minRows: 3, maxRows: 3 }} onChange={(value) => {
                         form.setFieldsValue({ description: value.target.value });
@@ -111,15 +117,15 @@ const CommentEditForm = () => {
                             if (info.file.status === 'done') {
                                 message.success(`${info.file.name} был загружен`);
                                 let newFileList = recordFileList.fileList;
-                                newFileList.push({uid: info.file.uid, name: info.file.name, status: info.file.status});
-                                form.setFieldsValue({ materials: {fileList: newFileList } });
+                                newFileList.push({ uid: info.file.uid, name: info.file.name, status: info.file.status });
+                                form.setFieldsValue({ materials: { fileList: newFileList } });
                                 setRecordFileList({ fileList: newFileList })
                             } else if (info.file.status === 'error') {
                                 message.error(`${info.file.name} не был загружен.`);
                             }
                             if (info.file.status === 'removed') {
                                 const actualMaterials = recordFileList.fileList.filter(ob => ob.uid.toString() !== info.file.uid);
-                                form.setFieldsValue({ materials: {fileList: actualMaterials } });
+                                form.setFieldsValue({ materials: { fileList: actualMaterials } });
                                 setRecordFileList({ fileList: actualMaterials });
                             }
                         }}>
@@ -139,7 +145,7 @@ const CommentEditForm = () => {
                     </Select>
                 </Form.Item>
 
-                <Form.Item >
+                <Form.Item wrapperCol={{ offset: 17, span: 7 }} >
                     <Button type='primary' htmlType='submit' shape='round' size='large' name='SaveBtn' onClick={saveEditForm}>
                         Сохранить
                     </Button>

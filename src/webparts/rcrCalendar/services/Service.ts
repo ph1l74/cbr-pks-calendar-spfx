@@ -21,7 +21,7 @@ export default class Service<T> {
         }
 
         if (token) {
-          config.headers['authorization'] = 'Token ' + token.token;
+          config.headers['authorization'] = token.token;
         }
         return config;
       });      
