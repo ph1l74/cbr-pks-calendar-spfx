@@ -183,7 +183,7 @@ const EditFormCard = () => {
     return (
         <Modal title={'Редактирование события'} onCancel={closeEditForm} visible={editingEvent !== undefined}
             cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}
-            width={900} footer={false}>
+            width={900} footer={false} destroyOnClose={false} maskClosable={false}>
             <Form
                 {...layout}
                 form={form}
@@ -357,7 +357,7 @@ const EditFormCard = () => {
 
                 <Form.Item {...tailLayout} label='Участники'
                     name='participants'>
-                    <Select mode='multiple' style={{ width: '100%' }} placeholder='Выберите участников'
+                    <Select mode='multiple' style={{ width: 'calc(41em - 10px)' }} placeholder='Выберите участников'
                         defaultValue={editingEvent.actors.map(ob => ob.userLogin)} >
                         {renderActors()}
                     </Select>
@@ -402,7 +402,7 @@ const EditFormCard = () => {
 
 
                 <Form.Item {...tailLayout} label='Ссылки' name='links'>
-                    <Select mode='tags' style={{ width: '100%' }} placeholder='Введите ссылку и нажмите Etner' maxTagCount={30}
+                    <Select mode='tags' style={{ width: 'calc(41em - 10px)' }} placeholder='Введите ссылку и нажмите Etner' maxTagCount={30}
                         defaultValue={editingEvent.links.map(ob => ob.linkName)} onChange={value => {
                             form.setFieldsValue({ links: value });
                         }}>

@@ -77,8 +77,8 @@ const CommentEditForm = () => {
 
     return (
         <Modal title={'Редактирование отзыва'}
-            onCancel={closeEditForm}
-            visible={true}
+            onCancel={closeEditForm} visible={true}
+            maskClosable={false}
             cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}
             width={900} footer={false} key='editCommentModal'>
             <Form
@@ -137,7 +137,7 @@ const CommentEditForm = () => {
 
 
                 <Form.Item {...tailLayout} label='Ссылки' name='links'>
-                    <Select mode='tags' style={{ width: '100%' }} placeholder='Введите ссылку и нажмите Etner'
+                    <Select mode='tags' style={{ width: 'calc(41em - 10px)' }} placeholder='Введите ссылку и нажмите Etner'
                         defaultValue={editingComment.links.map(ob => ob.linkName)} onChange={value => {
                             form.setFieldsValue({ links: value });
                         }}>
