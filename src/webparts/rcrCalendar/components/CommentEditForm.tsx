@@ -7,7 +7,7 @@ import Material from '../Models/Material';
 import Link from '../Models/Link';
 import { UploadFile } from 'antd/lib/upload/interface';
 import config from '../constants/config';
-import { parseUid, uploadFile } from '../utils/Utils';
+import { parseUid, uploadFile, generateUUID } from '../utils/Utils';
 import { AttachmentService } from '../services/Services';
 
 const { TextArea } = Input
@@ -65,6 +65,8 @@ const CommentEditForm = () => {
         multiple: true,
     };
 
+    const [sessionGuid, setSessionGuid] = React.useState(generateUUID());
+
     const [recordFileList, setRecordFileList] = React.useState({
         fileList: editingComment.materials.map(ob => {
             return {
@@ -108,7 +110,10 @@ const CommentEditForm = () => {
                     <Upload multiple={true} defaultFileList={recordFileList.fileList as UploadFile<any>[]}
                         //beforeUpload={() => false}
                         // action={`${config.API_URL}Attachments`}                        
-                        customRequest={uploadFile}
+                        customRequest={(options => {
+                            options.data = { type: 'comment', objId: editingComment.id, guid: sessionGuid };
+                            uploadFile(options);
+                        })}
                         onChange={(info) => { // Todo Сделать общую функцию с событиями
                             console.log('onchange upload', info);
                             if (info.file.status !== 'uploading') {

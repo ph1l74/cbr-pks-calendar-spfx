@@ -25,7 +25,7 @@ import Link from '../Models/Link';
 import config from '../constants/config';
 import { AttachmentService } from '../services/Services';
 import axios from 'axios';
-import { parseUid, uploadFile } from '../utils/Utils';
+import { parseUid, uploadFile, generateUUID } from '../utils/Utils';
 import FilterEvent from '../utils/IFilterEvent';
 import { ConvertDateWithoutZone } from '../utils/DateTime';
 import { RuleObject } from 'antd/lib/form';
@@ -122,6 +122,9 @@ const EditFormCard = () => {
         return users.map(ob => <Select.Option key={`user_${ob.login}`} value={ob.login}>{`${ob.firstName} ${ob.lastName} ${ob.patronymic} `}</Select.Option>);
     }
     const DatePickerJS: any = DatePicker;
+    
+    const [sessionGuid, setSessionGuid] = React.useState(generateUUID());
+
     const [startDate, setStartDate] = React.useState(editingEvent.startDate);
     const [endDate, setEndDate] = React.useState(editingEvent.endDate);
     const [recordFileList, setRecordFileList] = React.useState({
@@ -198,7 +201,7 @@ const EditFormCard = () => {
                     location: editingEvent.location,
                     dateFrom: editingEvent.startDate,
                     dateTo: editingEvent.endDate,
-                    participants: editingEvent.actors.map(ob => ob.userLogin),
+                    participants: editingEvent.participants, // editingEvent.actors.map(ob => ob.userLogin),
                     links: editingEvent.links.map(ob => ob.linkName),
                 }}
                 onFinish={onFinish}
@@ -358,7 +361,7 @@ const EditFormCard = () => {
                 <Form.Item {...tailLayout} label='Участники'
                     name='participants'>
                     <Select mode='multiple' style={{ width: 'calc(41em - 10px)' }} placeholder='Выберите участников'
-                        defaultValue={editingEvent.actors.map(ob => ob.userLogin)} >
+                        defaultValue={editingEvent.participants} >
                         {renderActors()}
                     </Select>
                 </Form.Item>
@@ -370,7 +373,7 @@ const EditFormCard = () => {
                         //action = {file => {console.log('upload file', file); return '';}} 
                         // action={handleUpload}
                         customRequest={(options => {
-                            options.data = { type: 'event', objId: editingEvent.id };
+                            options.data = { type: 'event', objId: editingEvent.id, guid: sessionGuid };
                             uploadFile(options);
                         })}
                         // action={`${config.API_URL}Attachments`}

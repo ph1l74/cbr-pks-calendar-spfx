@@ -26,6 +26,7 @@ export default class Event implements Model {
     public materials: Material[];
     public links: Link[];
     public author: User;
+    public participants: string[];
     // tslint:disable-next-line:variable-name
     public _links: BaseLink;
     // [key: string]: number | string | BaseLink | Category | boolean;

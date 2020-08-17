@@ -5,7 +5,7 @@ import FilterEvent from "../utils/IFilterEvent";
 import { filterEventInit } from "../Reducers";
 import Event from '../Models/Event';
 import { sp } from '@pnp/sp/presets/all';
-import pnp from 'sp-pnp-js';
+import pnp, { Logger, PermissionKind } from 'sp-pnp-js';
 import { IContextInfo } from '@pnp/sp/sites';
 
 
@@ -74,6 +74,17 @@ export const setAuth = (): any => {
                 currentUserName = res.LoginName as string;
                 const loginInfo = currentUserName.split('\\');
                 setUser(dispatch, loginInfo[loginInfo.length - 1], res.UserId?.NameId);
+                web.getCurrentUserEffectivePermissions().then(ob => {
+                  console.log('my perm', ob);
+                  Logger.writeJSON(ob);
+                }).catch(err => console.log(err));
+                web.currentUserHasPermissions(PermissionKind.EditListItems).then(res => console.log('edit list', res));
+                web.currentUserHasPermissions(PermissionKind.ViewListItems).then(res => console.log('read list', res));
+                web.currentUserHasPermissions(PermissionKind.FullMask).then(res => console.log('full control ', res));
+                web.currentUserHasPermissions(PermissionKind.ManageWeb).then(res => console.log('Manage  ', res));
+                // web.roleAssignments.get().then(ob => console.log('roleassign', ob)).catch(err => console.log('err', err)); // Не у всех права
+                // web.roleDefinitions.get().then(ob => console.log('role def', ob));
+                // web.getUserEffectivePermissions(res.LoginName).then(ob => console.log('permission user ', ob));
               })
               .catch(err => {
                 console.log(err);

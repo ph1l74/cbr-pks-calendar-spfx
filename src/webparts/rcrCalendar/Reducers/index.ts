@@ -292,10 +292,10 @@ const viewEventReducer = (state = viewEventInit, action) => {
             return { ...state, actors: [], selectedEvent: undefined, isFetching: false, isFetchingFull: false }
         case types.INFINITY_LOAD_EVENT_PARTICIPANTS_SUCCESS:
             console.log('newRecords', state.actors, action.payload as Actor[]);
-            let actorLogins = state.actors.map(ob => ob.userLogin);
+            let actorLogins = state.actors.filter(ob => ob.user).map(ob => ob.user?.login);
             return {
                 ...state,
-                actors: state.actors.concat((action.payload as Actor[]).filter(ob => actorLogins.indexOf(ob.userLogin) < 0)),
+                actors: state.actors.concat((action.payload as Actor[]).filter(ob => ob.user && actorLogins.indexOf(ob.user.login) < 0)),
                 isFetching: false,
                 isFetchingFull: action.isFetchingFull,
             }
