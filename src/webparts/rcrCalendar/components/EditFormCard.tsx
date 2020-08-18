@@ -124,6 +124,7 @@ const EditFormCard = () => {
     const DatePickerJS: any = DatePicker;
     
     const [sessionGuid, setSessionGuid] = React.useState(generateUUID());
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const [startDate, setStartDate] = React.useState(editingEvent.startDate);
     const [endDate, setEndDate] = React.useState(editingEvent.endDate);
@@ -373,22 +374,25 @@ const EditFormCard = () => {
                         //action = {file => {console.log('upload file', file); return '';}} 
                         // action={handleUpload}
                         customRequest={(options => {
-                            options.data = { type: 'event', objId: editingEvent.id, guid: sessionGuid };
+                            options.data = { objType: 'event', objId: editingEvent.id, guid: sessionGuid };
                             uploadFile(options);
                         })}
                         // action={`${config.API_URL}Attachments`}
                         onChange={(info) => {
                             // console.log('onchange upload', info);
-                            if (info.file.status !== 'uploading') {
-                                // console.log(info.file, info.fileList);
+                            if (info.file.status === 'uploading') {
+                                setIsLoading(true);
+                                console.log(info.file, info.fileList);
                             }
                             if (info.file.status === 'done') {
+                                setIsLoading(false);
                                 message.success(`${info.file.name} был загружен`);
                                 let newFileList = recordFileList.fileList;
                                 newFileList.push({ uid: info.file.uid, name: info.file.name, status: info.file.status });
                                 form.setFieldsValue({ materials: { fileList: newFileList } });
                                 setRecordFileList({ fileList: newFileList })
                             } else if (info.file.status === 'error') {
+                                setIsLoading(false);
                                 message.error(`${info.file.name} не был загружен.`);
                             }
                             if (info.file.status === 'removed') {
@@ -414,7 +418,7 @@ const EditFormCard = () => {
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 17, span: 7 }}>
-                    <Button type='primary' htmlType='submit' shape='round' size='large' name='SaveBtn' onClick={saveEditForm}>
+                    <Button type='primary' htmlType='submit' shape='round' size='large' name='SaveBtn' disabled={isLoading} onClick={saveEditForm}>
                         Сохранить
                     </Button>
                     <Button htmlType='submit' shape='round' size='large' name='CancelBtn' onClick={closeEditForm} style={{ margin: 10 }}>

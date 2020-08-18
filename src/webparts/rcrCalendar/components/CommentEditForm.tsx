@@ -66,6 +66,7 @@ const CommentEditForm = () => {
     };
 
     const [sessionGuid, setSessionGuid] = React.useState(generateUUID());
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const [recordFileList, setRecordFileList] = React.useState({
         fileList: editingComment.materials.map(ob => {
@@ -111,21 +112,24 @@ const CommentEditForm = () => {
                         //beforeUpload={() => false}
                         // action={`${config.API_URL}Attachments`}                        
                         customRequest={(options => {
-                            options.data = { type: 'comment', objId: editingComment.id, guid: sessionGuid };
+                            options.data = { objType: 'comment', objId: editingComment.id, guid: sessionGuid };
                             uploadFile(options);
                         })}
                         onChange={(info) => { // Todo Сделать общую функцию с событиями
                             console.log('onchange upload', info);
-                            if (info.file.status !== 'uploading') {
+                            if (info.file.status === 'uploading') {
+                                setIsLoading(true);
                                 // console.log(info.file, info.fileList);
                             }
                             if (info.file.status === 'done') {
+                                setIsLoading(false);
                                 message.success(`${info.file.name} был загружен`);
                                 let newFileList = recordFileList.fileList;
                                 newFileList.push({ uid: info.file.uid, name: info.file.name, status: info.file.status });
                                 form.setFieldsValue({ materials: { fileList: newFileList } });
                                 setRecordFileList({ fileList: newFileList })
                             } else if (info.file.status === 'error') {
+                                setIsLoading(false);
                                 message.error(`${info.file.name} не был загружен.`);
                             }
                             if (info.file.status === 'removed') {
@@ -151,7 +155,7 @@ const CommentEditForm = () => {
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 17, span: 7 }} >
-                    <Button type='primary' htmlType='submit' shape='round' size='large' name='SaveBtn' onClick={saveEditForm}>
+                    <Button type='primary' htmlType='submit' shape='round' size='large' name='SaveBtn' disabled={isLoading} onClick={saveEditForm}>
                         Сохранить
                     </Button>
                     <Button htmlType='submit' shape='round' size='large' name='CancelBtn' onClick={closeEditForm} style={{ margin: 10 }}>
