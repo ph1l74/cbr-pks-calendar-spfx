@@ -7,6 +7,7 @@ import Event from '../Models/Event';
 import { sp } from '@pnp/sp/presets/all';
 import pnp, { Logger, PermissionKind } from 'sp-pnp-js';
 import { IContextInfo } from '@pnp/sp/sites';
+import { message } from "antd";
 
 
 let nextTodoId = 0
@@ -26,6 +27,10 @@ export const toggleTodo = id => ({
   id
 })
 
+export const setError = (error: string) => ({
+  type: types.SET_ERROR,
+  error: error
+})
 
 export const setAuth = (): any => {
   return async dispatch => {
@@ -229,11 +234,7 @@ export const deleteEvent = (record: Event, filterEvent: FilterEvent, isRefresh: 
         }
       })
       .catch(err => {
-        console.log(err);
-        dispatch({
-          type: types.DELETE_EVENT_SUCCESS,
-          deleteId: undefined,
-        });
+        sendError(err, dispatch, 'удалении');
       });
   }
 }
@@ -262,7 +263,7 @@ export const saveEditEvent = (event: Event, filterEvent: FilterEvent) => {
         filterEvents(types.CHANGE_FILTER_EVENT_SUCCESS, filterEvent, dispatch);
       })
       .catch(err => {
-        console.log(err);
+        sendError(err, dispatch, 'сохранении');
         dispatch({
           type: types.SAVE_EDIT_EVENT_SUCCESS,
         });
@@ -270,6 +271,12 @@ export const saveEditEvent = (event: Event, filterEvent: FilterEvent) => {
   }
 }
 
+
+export const sendError = (err: any, dispatch: any, actionName: string) => {
+  console.log(err);
+  message.error(`При ${actionName} произошла ошибка. ${err?.response?.data ?? ''}`);
+  dispatch(setError(err));
+}
 
 function setUser(dispatch: any, currentUserName: string, currentUserId: string) {
   dispatch({

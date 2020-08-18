@@ -11,6 +11,7 @@ export const SET_CON_STATUS = 'SET_CON_STATUS';
 // new types start here:
 export const SET_EDIT_MODE = 'SET_EDIT_MODE';
 
+export const SET_ERROR = 'SET_ERROR';
 export const CHANGE_DATE = 'CHANGE_DATE';
 export const CHANGE_DATE_SUCCESS = 'CHANGE_DATE_SUCCESS';
 export const CHANGE_CATEGORY = 'CHANGE_CATEGORY';

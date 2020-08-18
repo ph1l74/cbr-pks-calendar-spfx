@@ -1,4 +1,5 @@
 import { AttachmentService } from "../services/Services";
+import { message } from "antd";
 
 export const parseUid = (uid: string) => {
     let id = 0;
@@ -54,7 +55,9 @@ export const uploadFile = options => {
             console.log(res);
         })
         .catch(err => {
-            const error = new Error('Some error');
+            let errMess = 'При загрузке файлов возникла ошибка';
+            const error = new Error(errMess);
+            console.log(errMess, err);
             onError({ event: error });
         });
 }

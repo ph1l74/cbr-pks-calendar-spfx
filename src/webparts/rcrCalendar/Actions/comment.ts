@@ -3,6 +3,8 @@ import * as moment from "moment";
 import * as types from '../constants';
 import Event from '../Models/Event';
 import Comment from '../Models/Comment';
+import { setError, sendError } from ".";
+import { message } from "antd";
 
 export const getCommentsByEvent = (event: Event) => {
     return dispatch => {
@@ -100,7 +102,7 @@ export const saveEditComment = (record: Comment) => {
                 getEventComments(types.GET_EVENT_COMMENTS_SUCCESS, event, dispatch);
             })
             .catch(err => {
-                console.log(err);
+                sendError(err, dispatch, 'сохранении');
                 dispatch({
                     type: types.SAVE_EDIT_COMMENT_SUCCESS,
                 });
@@ -128,6 +130,8 @@ export const deleteComment = (editingRecord: Comment) => {
                     addingCount: -1
                 });
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                sendError(err, dispatch, 'удалении');
+            });
     }
 }
