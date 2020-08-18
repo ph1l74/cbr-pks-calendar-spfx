@@ -19,6 +19,8 @@ interface IRootStore {
     currentUser: User;
     userName: string;
     userId: string;
+    isEditor: boolean;
+    isViewer: boolean;
 }
 
 const initState: IRootStore =
@@ -42,6 +44,8 @@ const initState: IRootStore =
     currentUser: undefined,
     userName: '',
     userId: '',
+    isEditor: false,
+    isViewer: false,
 }
 
 const rootReducer = (state = initState, action) => {
@@ -73,6 +77,14 @@ const rootReducer = (state = initState, action) => {
                 Service.userName = userName;
                 Service.userId = userId;
                 return { ...state, userName: userName, userId: userId, currentUser: curUser }
+            }
+        case types.SET_IS_EDITOR:
+            {
+                return { ...state, isEditor: action.permission }
+            }
+        case types.SET_IS_VIEWER:
+            {
+                return { ...state, isViewer: action.permission }
             }
 
         case types.GET_CATEGORIES:

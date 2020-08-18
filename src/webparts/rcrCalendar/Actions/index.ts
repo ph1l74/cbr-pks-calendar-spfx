@@ -35,6 +35,14 @@ export const setAuth = (): any => {
         type: types.SET_USERNAME,
         userName: 'workbench'
       });
+      dispatch({
+        type: types.SET_IS_EDITOR,
+        permission: true
+      });
+      dispatch({
+        type: types.SET_IS_VIEWER,
+        permission: true
+      });
     }
     else {
       // sp.setup({
@@ -78,8 +86,20 @@ export const setAuth = (): any => {
                   console.log('my perm', ob);
                   Logger.writeJSON(ob);
                 }).catch(err => console.log(err));
-                web.currentUserHasPermissions(PermissionKind.EditListItems).then(res => console.log('edit list', res));
-                web.currentUserHasPermissions(PermissionKind.ViewListItems).then(res => console.log('read list', res));
+                web.currentUserHasPermissions(PermissionKind.EditListItems).then(res => {
+                  console.log('edit list', res);
+                  dispatch({
+                    type: types.SET_IS_EDITOR,
+                    permission: res === true
+                  });
+                });
+                web.currentUserHasPermissions(PermissionKind.ViewListItems).then(res => {
+                  console.log('read list', res);
+                  dispatch({
+                    type: types.SET_IS_VIEWER,
+                    permission: res === true
+                  });
+                });
                 web.currentUserHasPermissions(PermissionKind.FullMask).then(res => console.log('full control ', res));
                 web.currentUserHasPermissions(PermissionKind.ManageWeb).then(res => console.log('Manage  ', res));
                 // web.roleAssignments.get().then(ob => console.log('roleassign', ob)).catch(err => console.log('err', err)); // Не у всех права

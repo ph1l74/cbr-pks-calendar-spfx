@@ -44,6 +44,7 @@ const Feedback = () => {
     const isFetching = useSelector(state => state.comment.isFetching as boolean);
     const editRecord = useSelector(state => state.comment.editingComment as Comment);
     const users: User[] = useSelector((state: IAppReducer) => state.root.users);
+    const isEditor: boolean = useSelector((state: IAppReducer) => state.root.isEditor);
 
     const dispatch = useDispatch();
 
@@ -86,7 +87,7 @@ const Feedback = () => {
                 cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}
                 width={900} footer={false}>
                 <div className={styles.feedbacksHeader} >
-                    <Button type='primary' shape='round' size='large' name='NewCommentBtn' onClick={newEditForm}>
+                    <Button type='primary' shape='round' size='large' name='NewCommentBtn' hidden={!isEditor} onClick={newEditForm}>
                         Новая запись
                     </Button>
                 </div>

@@ -9,6 +9,7 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { editComment, deleteComment } from '../Actions/comment';
 import config from '../constants/config';
+import { IAppReducer } from '../Reducers';
 const { Link } = Anchor;
 
 const unknownImage = require("../Icons/unknown.png") as string;
@@ -17,6 +18,7 @@ const FeedbackEl = (props: { comment: Comment }) => {
     const dispatch = useDispatch();
     const [commentInfo, setCommentInfo] = React.useState(props.comment);
     const [author, setAuthor] = React.useState(props.comment.author);
+    const isEditor: boolean = useSelector((state: IAppReducer) => state.root.isEditor);
 
     const EditIcon = props => <EditOutlined {...props} />
     const DeleteIcon = props => <DeleteOutlined {...props} />
@@ -49,11 +51,11 @@ const FeedbackEl = (props: { comment: Comment }) => {
                     </div>
                     <Tooltip title="Редактировать">
                         <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }} icon={<EditIcon />}
-                            onClick={onEditClick} />
+                            hidden={!isEditor} onClick={onEditClick} />
                     </Tooltip>
                     <Tooltip title="Удалить">
                         <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }} icon={<DeleteIcon />}
-                            onClick={onDeleteClick} />
+                            hidden={!isEditor} onClick={onDeleteClick} />
                     </Tooltip>
                 </div>
                 <div className={styles.comment}>{commentInfo.description}</div>

@@ -38,6 +38,7 @@ const EventCard = (props: { eventCard: Event }) => {
   const events: Event[] = useSelector((state: IAppReducer) => state.event.events.map(ob => ob.Value).reduce((a, b) => a.concat(b)));
   const wasEditComment: boolean = useSelector((state: IAppReducer) => state.event.wasEditComment);
   const filterEvent: FilterEvent = useSelector((state: IAppReducer) => state.event.filterEvent);
+  const isEditor: boolean = useSelector((state: IAppReducer) => state.root.isEditor);
 
   // event card styled by categorie color
   const categorieColor = cardInfo.category.color ? cardInfo.category.color : '#000000';
@@ -123,10 +124,10 @@ const EventCard = (props: { eventCard: Event }) => {
         </div>
       </div>
       <div className={styles.info} style={categorieBorderStyle}>
-        <a className={styles.editLink} onClick={openEditForm}>
+        <a className={styles.editLink} onClick={openEditForm} hidden={!isEditor}>
           <img src={editIcon} className={styles.editIcon} />
         </a>
-        <a className={styles.editIcon}>
+        <a className={styles.editIcon} hidden={!isEditor}>
           <Popconfirm
             title="Вы действительно хотите удалить событие?"
             onConfirm={deleteRecord}

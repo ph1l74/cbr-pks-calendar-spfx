@@ -46,6 +46,7 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
     const isFetching = useSelector(state => state.event.isFetching);
     const isCommentFetching = useSelector(state => state.comment.isFetching as boolean);
     const currentUser: User = useSelector((state: IAppReducer) => state.root.currentUser);
+    const isEditor: boolean = useSelector((state: IAppReducer) => state.root.isEditor);
 
     const dispatch = useDispatch();
 
@@ -158,7 +159,7 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
                             {renderEvents(events)}
                         </Content>
                         <Dashboard>
-                            <div className={styles["new-button"]} >
+                            <div className={styles["new-button"]} hidden={!isEditor}>
                                 <Tooltip title="Новое событие">
                                     <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }} icon={<AddIcon />}
                                         onClick={newEditForm} />
