@@ -60,3 +60,5 @@ export const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS';
 
 export const HOST = window.location.origin;
 export const WS_HOST = window.location.origin.replace(/^http/, 'ws');
+
+export const maxRequestLength = 500 * 1024 * 1024;

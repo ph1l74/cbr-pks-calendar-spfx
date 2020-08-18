@@ -9,6 +9,7 @@ import { UploadFile } from 'antd/lib/upload/interface';
 import config from '../constants/config';
 import { parseUid, uploadFile, generateUUID } from '../utils/Utils';
 import { AttachmentService } from '../services/Services';
+import { maxRequestLength } from '../constants';
 
 const { TextArea } = Input
 
@@ -17,7 +18,7 @@ const CommentEditForm = () => {
     const [form] = Form.useForm();
 
     const dispatch = useDispatch();
-    const editingComment = useSelector(state => state.comment.editingComment as Comment);
+    const editingComment: Comment = useSelector(state => state.comment.editingComment as Comment);
 
     const layout = {
         labelCol: { span: 6 },
@@ -43,6 +44,7 @@ const CommentEditForm = () => {
             if (editValues.links) {
                 editComment.links = editValues.links.map(ob => new Link(0, ob));
             }
+            editComment.sessionGuid = sessionGuid;
             console.log(editingComment, editComment);
             dispatch(saveEditComment(editComment));
         }
@@ -77,6 +79,14 @@ const CommentEditForm = () => {
             }
         })
     });
+    const [fileList, updateFileList] = React.useState(editingComment.materials.map(ob => {
+        const props = {
+            uid: ob.id.toString(),
+            name: ob.fileName,
+            status: 'done',
+        };
+        return (props as UploadFile);
+    }));
 
     return (
         <Modal title={'Редактирование отзыва'}
@@ -108,14 +118,23 @@ const CommentEditForm = () => {
                 </Form.Item>
 
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
-                    <Upload multiple={true} defaultFileList={recordFileList.fileList as UploadFile<any>[]}
-                        //beforeUpload={() => false}
+                    <Upload multiple={true} 
+                        fileList = {fileList}
+                        // defaultFileList={recordFileList.fileList as UploadFile<any>[]}
+                        beforeUpload={(file, fileList) => {
+                            let len = fileList.map(f => f.size).reduce((s1, s2) => s1 + s2);
+                            if (len > maxRequestLength){
+                                message.error(`Размер загружаемых файлов не может превышать ${Math.round(maxRequestLength / (1024 * 1024))} МБ`);
+                            }
+                            return len <= maxRequestLength;
+                        }}
                         // action={`${config.API_URL}Attachments`}                        
                         customRequest={(options => {
                             options.data = { objType: 'comment', objId: editingComment.id, guid: sessionGuid };
                             uploadFile(options);
                         })}
                         onChange={(info) => { // Todo Сделать общую функцию с событиями
+                            updateFileList(info.fileList.filter(file => !!file.status));
                             console.log('onchange upload', info);
                             if (info.file.status === 'uploading') {
                                 setIsLoading(true);

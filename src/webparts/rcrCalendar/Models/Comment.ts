@@ -15,6 +15,7 @@ export default class Comment implements Model {
     public eventID: number;
     public materials: Material[];
     public links: Link[];
+    public sessionGuid: string;
     // tslint:disable-next-line:variable-name
     public _links: BaseLink;
     // [key: string]: string | number | Date | BaseLink | Event | boolean | Material[] | User;

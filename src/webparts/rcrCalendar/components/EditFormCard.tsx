@@ -29,6 +29,7 @@ import { parseUid, uploadFile, generateUUID } from '../utils/Utils';
 import FilterEvent from '../utils/IFilterEvent';
 import { ConvertDateWithoutZone } from '../utils/DateTime';
 import { RuleObject } from 'antd/lib/form';
+import { maxRequestLength } from '../constants';
 registerLocale('ru', ru)
 
 const { TextArea } = Input
@@ -106,6 +107,7 @@ const EditFormCard = () => {
             editEvent.startDate = ConvertDateWithoutZone(startDate);
             editEvent.endDate = ConvertDateWithoutZone(endDate);
             console.log(editingEvent, editEvent);
+            editEvent.sessionGuid = sessionGuid;
             dispatch(saveEditEvent(editEvent, filterEvent));
         }
         else {
@@ -116,10 +118,10 @@ const EditFormCard = () => {
 
 
     const renderCategories = () => {
-        return categories.map(ob => <Select.Option key={`category_${ob.id}`} value={ob.id} style={{ color: ob.color }}>{ob.name}</Select.Option>);
+        return categories.map(ob => <Select.Option name={`category_${ob.id}`} key={`category_${ob.id}`} value={ob.id} style={{ color: ob.color }}>{ob.name}</Select.Option>);
     }
     const renderActors = () => {
-        return users.map(ob => <Select.Option key={`user_${ob.login}`} value={ob.login}>{`${ob.firstName} ${ob.lastName} ${ob.patronymic} `}</Select.Option>);
+        return users.map(ob => <Select.Option name={`user_${ob.login}`} key={`user_${ob.login}`} value={ob.login}>{`${ob.firstName} ${ob.lastName} ${ob.patronymic} `}</Select.Option>);
     }
     const DatePickerJS: any = DatePicker;
     
@@ -128,6 +130,14 @@ const EditFormCard = () => {
 
     const [startDate, setStartDate] = React.useState(editingEvent.startDate);
     const [endDate, setEndDate] = React.useState(editingEvent.endDate);
+    const [fileList, updateFileList] = React.useState(editingEvent.materials.map(ob => {
+        const props = {
+            uid: ob.id.toString(),
+            name: ob.fileName,
+            status: 'done',
+        };
+        return (props as UploadFile);
+    }));
     const [recordFileList, setRecordFileList] = React.useState({
         fileList: editingEvent.materials.map(ob => {
             return {
@@ -370,7 +380,15 @@ const EditFormCard = () => {
 
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
                     <Upload multiple={true}
-                        defaultFileList={recordFileList.fileList as UploadFile<any>[]} //beforeUpload={() => false}
+                        fileList = {fileList}
+                        // defaultFileList={recordFileList.fileList as UploadFile<any>[]} 
+                        beforeUpload={(file, fileList) => {
+                            let len = fileList.map(f => f.size).reduce((s1, s2) => s1 + s2);
+                            if (len > maxRequestLength){
+                                message.error(`Размер загружаемых файлов не может превышать ${Math.round(maxRequestLength / (1024 * 1024))} МБ`);
+                            }
+                            return len <= maxRequestLength;
+                        }}
                         //action = {file => {console.log('upload file', file); return '';}} 
                         // action={handleUpload}
                         customRequest={(options => {
@@ -379,6 +397,7 @@ const EditFormCard = () => {
                         })}
                         // action={`${config.API_URL}Attachments`}
                         onChange={(info) => {
+                            updateFileList(info.fileList.filter(file => !!file.status));
                             // console.log('onchange upload', info);
                             if (info.file.status === 'uploading') {
                                 setIsLoading(true);
@@ -390,7 +409,8 @@ const EditFormCard = () => {
                                 let newFileList = recordFileList.fileList;
                                 newFileList.push({ uid: info.file.uid, name: info.file.name, status: info.file.status });
                                 form.setFieldsValue({ materials: { fileList: newFileList } });
-                                setRecordFileList({ fileList: newFileList })
+                                setRecordFileList({ fileList: newFileList });
+                                updateFileList(newFileList as UploadFile[]);
                             } else if (info.file.status === 'error') {
                                 setIsLoading(false);
                                 message.error(`${info.file.name} не был загружен.`);
@@ -399,6 +419,7 @@ const EditFormCard = () => {
                                 const actualMaterials = recordFileList.fileList.filter(ob => ob.uid.toString() !== info.file.uid);
                                 form.setFieldsValue({ materials: { fileList: actualMaterials } });
                                 setRecordFileList({ fileList: actualMaterials });
+                                updateFileList(actualMaterials as UploadFile[]);
                             }
                         }}>
                         <Button>
@@ -410,7 +431,8 @@ const EditFormCard = () => {
 
                 <Form.Item {...tailLayout} label='Ссылки' name='links'>
                     <Select mode='tags' style={{ width: 'calc(41em - 10px)' }} placeholder='Введите ссылку и нажмите Etner' maxTagCount={30}
-                        defaultValue={editingEvent.links.map(ob => ob.linkName)} onChange={value => {
+                        defaultValue={editingEvent.links.map(ob => ob.linkName)} 
+                        onChange={value => {
                             form.setFieldsValue({ links: value });
                         }}>
 

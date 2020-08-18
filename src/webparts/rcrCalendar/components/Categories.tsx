@@ -8,7 +8,6 @@ import { connect } from 'react-redux'
 const Categories = (categories: Category[]) => {
 
     const renderCategories = (categories: any) => {
-        console.log('categories', categories);
         let i = 1;
         return categories.categories.map(c => (
             <Categorie info={c} key={i++} ></Categorie>
