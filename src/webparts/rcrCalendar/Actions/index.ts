@@ -303,7 +303,13 @@ function filterEvents(typeAction: string, filterEvent: FilterEvent, dispatch: an
         payload: ob,
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: typeAction,
+        payload: [],
+      });
+    });
 }
 
 export const getCategories = (): any => {

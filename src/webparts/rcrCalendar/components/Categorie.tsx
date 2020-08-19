@@ -37,7 +37,6 @@ const Categorie = (props: {info: Category,  filterEvent: FilterEvent, selectCate
     );
 };
 
-
 const mapStateToProps = (store: any) => {
     return {
         filterEvent: store.event.filterEvent
