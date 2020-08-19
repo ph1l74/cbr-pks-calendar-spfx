@@ -1,10 +1,10 @@
-import { CommentService } from "../services/Services"
-import * as moment from "moment";
+import { CommentService } from '../services/Services'
+import * as moment from 'moment';
 import * as types from '../constants';
 import Event from '../Models/Event';
 import Comment from '../Models/Comment';
-import { setError, sendError } from ".";
-import { message } from "antd";
+import { setError, sendError } from '.';
+import { message } from 'antd';
 
 export const getCommentsByEvent = (event: Event) => {
     return dispatch => {

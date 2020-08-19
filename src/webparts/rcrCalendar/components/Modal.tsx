@@ -4,8 +4,8 @@ import styles from './Modal.module.scss';
 interface IModalProps {
     title: string,
     closeModalFn: () => void,
-    onScroll: () => void
-}
+    onScroll: () => void,
+};
 
 const Modal: React.FunctionComponent<IModalProps> = (props) => {
 
@@ -20,6 +20,6 @@ const Modal: React.FunctionComponent<IModalProps> = (props) => {
             </div>
         </div>
     );
-}
+};
 
 export default Modal;

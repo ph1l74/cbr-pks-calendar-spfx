@@ -14,12 +14,12 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { Tooltip, Button, message, Popconfirm } from 'antd';
 import FilterEvent from '../utils/IFilterEvent';
 
-const editIcon = require("../Icons/Edit.svg") as string;
+const editIcon = require('../Icons/Edit.svg') as string;
 const DeleteIcon = props => <DeleteOutlined {...props} />
 const EventCard = (props: { eventCard: Event }) => {
 
   // modal types
-  const modalTypes = ["Участники", "Материалы", "Отзывы"]
+  const modalTypes = ['Участники', 'Материалы', 'Отзывы']
 
   // react hooks instead of props
   const [cardInfo, setCardInfo] = React.useState(props.eventCard);
@@ -95,7 +95,7 @@ const EventCard = (props: { eventCard: Event }) => {
 
 
   function closeModal(): void {
-    console.log("closed modal");
+    console.log('closed modal');
     setModal(false);
   }
   moment.locale('ru');
@@ -129,10 +129,10 @@ const EventCard = (props: { eventCard: Event }) => {
         </a>
         <a className={styles.editIcon} hidden={!isEditor}>
           <Popconfirm
-            title="Вы действительно хотите удалить событие?"
+            title='Вы действительно хотите удалить событие?'
             onConfirm={deleteRecord}
-            okText="OK" cancelText="Отмена" >
-            <Tooltip title="Удалить событие">
+            okText='OK' cancelText='Отмена' >
+            <Tooltip title='Удалить событие'>
               <Button icon={<DeleteIcon />} style={{ color: '#eb780d', marginLeft: '10px', borderWidth: '0px' }}></Button>
             </Tooltip>
           </Popconfirm>
@@ -160,10 +160,10 @@ const EventCard = (props: { eventCard: Event }) => {
           </ul>
         </div>
         <div className={styles.footer}>
-          <div className="participants" onClick={() => { dispatch(getParticipantsByEvent(props.eventCard)); openModal(0); }}>Список участников ({cardInfo.participantsCount})</div>
+          <div className='participants' onClick={() => { dispatch(getParticipantsByEvent(props.eventCard)); openModal(0); }}>Список участников ({cardInfo.participantsCount})</div>
           {
             cardInfo.attachmentsCount > 0 ?
-              <div className="materials" onClick={() => { dispatch(getMaterialsByEvent(props.eventCard)); openModal(1); }}>Материалы ({cardInfo.attachmentsCount})</div>
+              <div className='materials' onClick={() => { dispatch(getMaterialsByEvent(props.eventCard)); openModal(1); }}>Материалы ({cardInfo.attachmentsCount})</div>
               :
               null
           }

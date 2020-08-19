@@ -16,8 +16,8 @@ const Categories = (categories: Category[]) => {
     // const initCategories: [ICategorieProps] = [
     //     {
     //         id: 1,
-    //         name: "Мероприятия",
-    //         color: "#ff0000"
+    //         name: 'Мероприятия',
+    //         color: '#ff0000'
     //     }
     // ]
     // const [categories, setCategories] = React.useState(initCategories);

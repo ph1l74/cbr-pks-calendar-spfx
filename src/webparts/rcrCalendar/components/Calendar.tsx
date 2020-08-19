@@ -8,7 +8,7 @@ import { changeCalendarDate } from '../Actions';
 import FilterEvent from '../utils/IFilterEvent';
 import * as moment from 'moment';
 // import 'moment/locale/ru-ru';
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 import GroupingEvent from '../Models/GroupingEvent';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -55,10 +55,10 @@ export const Calendar = () => {
     }
 
     return <div>
-        <DatePickerJS className={styles["rcr-modern-calendar"]} disableOnClickOutside="true"
+        <DatePickerJS className={styles['rcr-modern-calendar']} disableOnClickOutside='true'
             onChange={onDateChange}
             open={true} input={false} locale='ru'
-            dayClassName={"highlight"} renderDay={onRenderDay}
+            dayClassName={'highlight'} renderDay={onRenderDay}
             defaultValue={filterEvent.selectedDate} />
     </div>
 }
@@ -116,12 +116,12 @@ export const Calendar = () => {
 //             {/* <Calendar onChange={onDateChange} fullscreen={false} locale={ruRU}
 //                 defaultValue={moment(this.props.filterEvent.selectedDate)} dateFullCellRender={onDateCellRender} />
 //             <Input style={{ width: '100%' }} type='date' /> */}
-//             {/* <DatePicker open={true} disableOnClickOutside="true" className={styles["rcr-modern-calendar"]}
+//             {/* <DatePicker open={true} disableOnClickOutside='true' className={styles['rcr-modern-calendar']}
 //                 dayClassName={getDayClassName}
 //                 onChange={onDateChange} input={false} locale='ru' renderCell={(date) => console.log('rend', date)} /> */}
-//             <DatePickerJS className={styles["rcr-modern-calendar"]} disableOnClickOutside="true"
+//             <DatePickerJS className={styles['rcr-modern-calendar']} disableOnClickOutside='true'
 //                 onChange={onDateChange} open={true} input={false} locale='ru'
-//                 dayClassName={"highlight"} renderDay={onRenderDay}
+//                 dayClassName={'highlight'} renderDay={onRenderDay}
 //                 defaultValue={this.props.filterEvent.selectedDate} />
 //         </div>
 //     }
@@ -129,9 +129,9 @@ export const Calendar = () => {
 // }
 
 // // const DatePickerTSX = () => {
-// //     return <DatePickerJS className={styles["rcr-modern-calendar"]} 
+// //     return <DatePickerJS className={styles['rcr-modern-calendar']} 
 // //         onChange={onDateChange}
-// //         disableOnClickOutside="true" open="true" input={false} locale="ru" />
+// //         disableOnClickOutside='true' open='true' input={false} locale='ru' />
 
 // // }
 // const mapStateToProps = (store: any) => {

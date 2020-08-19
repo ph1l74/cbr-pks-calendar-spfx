@@ -18,7 +18,7 @@ const Categorie = (props: {info: Category,  filterEvent: FilterEvent, selectCate
     const {info} = props;
     const categorieColor = info.color ? info.color : '#000000';
     const categorieStyle: React.CSSProperties = {
-        backgroundColor: active ? categorieColor : "#ffffff"
+        backgroundColor: active ? categorieColor : '#ffffff'
     }
 
     const clickHandler = (id) => {

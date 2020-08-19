@@ -60,6 +60,7 @@
     "ajv": "~5.2.2",
     "gulp": "~3.9.1",
     "rimraf": "^3.0.2",
+    "tslint-auto-fix": "^1.0.0",
     "typescript": "^3.9.6"
   }
 }

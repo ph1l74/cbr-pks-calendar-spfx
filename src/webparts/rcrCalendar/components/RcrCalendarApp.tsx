@@ -6,13 +6,13 @@ import { Calendar } from './Calendar';
 import EventCard from './EventCard';
 import GroupingEvent from '../Models/GroupingEvent';
 import Event from '../Models/Event';
-import { sp } from '@pnp/sp/presets/all';
-import pnp from 'sp-pnp-js';
-import { WebPartContext } from '@microsoft/sp-webpart-base';
+// import { sp } from '@pnp/sp/presets/all';
+// import pnp from 'sp-pnp-js';
+// import { WebPartContext } from '@microsoft/sp-webpart-base';
 import '@pnp/sp/sites';
-import { IContextInfo } from '@pnp/sp/sites';
-import { connect } from 'react-redux'
-import { changeCalendarDate, infinityLoadEvents } from '../Actions';
+// import { IContextInfo } from '@pnp/sp/sites';
+import { connect } from 'react-redux';
+import { infinityLoadEvents } from '../Actions';
 import Categories from './Categories';
 import { useSelector, useDispatch } from 'react-redux';
 import { debounce } from 'lodash';
@@ -22,29 +22,29 @@ import Category from '../Models/Category';
 import FilterEvent from '../utils/IFilterEvent';
 import { Spin, Modal, Button, Tooltip } from 'antd';
 import * as moment from 'moment';
-import { registerLocale, setDefaultLocale } from 'react-datepicker';
+import { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
-import { closeEventComments } from '../Actions/comment';
+// import { closeEventComments } from '../Actions/comment';
 import Feedback from './Feedback';
 import { editEvent } from '../Actions';
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import { IAppReducer } from '../Reducers';
 import User from '../Models/User';
 registerLocale('ru', ru);
 
-const EditIcon = props => <EditOutlined {...props} />
-const AddIcon = props => <PlusCircleOutlined {...props} />
+// const EditIcon = props => <EditOutlined {...props} />
+const AddIcon = props => <PlusCircleOutlined {...props} />;
 
 const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDateChange: (date: Date) => void) => {
-    const editMode = useSelector(state => state.root.editMode);
-    const editingEvent: Event = useSelector(state => state.event.editingEvent as Event);
-    const selectedEventForComments: Event = useSelector(state => state.comment.selectedEvent as Event);
-    const eventsCount = useSelector(state => state.event.events.length === 0 ? 0 : (state.event.events as GroupingEvent[])
+    // const editMode = useSelector((state: IAppReducer) => state.root.editMode);
+    const editingEvent: Event = useSelector((state: IAppReducer) => state.event.editingEvent as Event);
+    const selectedEventForComments: Event = useSelector((state: IAppReducer) => state.comment.selectedEvent as Event);
+    const eventsCount: number = useSelector((state: IAppReducer) => state.event.events.length === 0 ? 0 : (state.event.events as GroupingEvent[])
         .map(evg => evg.Value).reduce((a, b) => a ? a.concat(b) : []).length);
-    const currentFilter = useSelector(state => state.event.filterEvent);
-    const isFetching = useSelector(state => state.event.isFetching);
-    const isCommentFetching = useSelector(state => state.comment.isFetching as boolean);
+    const currentFilter: FilterEvent = useSelector((state: IAppReducer) => state.event.filterEvent);
+    const isFetching: boolean = useSelector((state: IAppReducer) => state.event.isFetching as boolean);
+    // const isCommentFetching: boolean = useSelector((state: IAppReducer) => state.comment.isFetching as boolean);
     const currentUser: User = useSelector((state: IAppReducer) => state.root.currentUser);
     const isEditor: boolean = useSelector((state: IAppReducer) => state.root.isEditor);
 
@@ -115,22 +115,22 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
         console.log('New render events', events);
         moment.locale('ru');
         if (!events.events || events.events.length === 0) {
-            return <div>Нет данных</div>
+            return <div>Нет данных</div>;
         }
         return events.events.map(evg => {
-            const evGr = evg as GroupingEvent;
-            let gr = moment(evg.Key, 'YYYY-MM-DD');
+            const evGr: GroupingEvent = evg as GroupingEvent;
+            let gr: moment.Moment = moment(evg.Key, 'YYYY-MM-DD');
             // console.log(evGr.Value);
 
             return <div key={`groupingEvent_${evGr.Key}`} className={styles['month-header']}>{gr.format('MMMM')}
                 {(evGr.Value).map(ev => <EventCard eventCard={ev as Event} key={`eventCard_${ev.id}_${evg.Key}`}></EventCard>)}
-            </div>
+            </div>;
             // return (evGr.Value).map(ev => <EventCard eventCard={ev} key={`eventCard_${ev.id}_${evGr.Key}`}></EventCard>);
         });
-    }
+    };
 
     function newEditForm(): void {
-        const newRecord = new Event();
+        const newRecord: Event = new Event();
         newRecord.id = 0;
         newRecord.startDate = (moment(new Date()).hour(0).minute(0).second(0).millisecond(0)).toDate();
         newRecord.endDate = (moment(new Date()).add(1, 'd').hour(0).minute(0).second(0).millisecond(0)).toDate();
@@ -159,8 +159,8 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
                             {renderEvents(events)}
                         </Content>
                         <Dashboard>
-                            <div className={styles["new-button"]} hidden={!isEditor}>
-                                <Tooltip title="Новое событие">
+                            <div className={styles['new-button']} hidden={!isEditor}>
+                                <Tooltip title='Новое событие'>
                                     <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }} icon={<AddIcon />}
                                         onClick={newEditForm} />
                                 </Tooltip>
@@ -172,7 +172,7 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
                 </div>
             )
     );
-}
+};
 
 
 const mapStateToProps = (store: any) => {
@@ -181,12 +181,12 @@ const mapStateToProps = (store: any) => {
         events: store.event.events,
         filterEvent: store.event.filterEvent
     };
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
         // setDate: year => dispatch(changeCalendarDate(year)) // [1]
     }
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(RcrCalendarApp)
+export default connect(mapStateToProps, mapDispatchToProps)(RcrCalendarApp);

@@ -35,7 +35,7 @@ const Materials = () => {
         <Spin spinning={isFetching}>
             <div className={styles.materials} >
                 {materials.map((m, i) => (
-                    <a href={`${config.API_URL}attachments/${m.id}`} target="_blank"
+                    <a href={`${config.API_URL}attachments/${m.id}`} target='_blank'
                         key={`eventAttachments_${i}`} className={styles.element}>{m.fileName}</a>
                 ))}
             </div >

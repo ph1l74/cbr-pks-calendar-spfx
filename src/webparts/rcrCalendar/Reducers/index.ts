@@ -1,7 +1,6 @@
 import * as types from '../constants';
 import Event from '../Models/Event';
 import { combineReducers } from 'redux'
-import { EventService } from '../services/Services';
 import GroupingEvent from '../Models/GroupingEvent';
 import FilterEvent from '../utils/IFilterEvent'
 import Comment from '../Models/Comment';
@@ -21,7 +20,7 @@ interface IRootStore {
     userId: string;
     isEditor: boolean;
     isViewer: boolean;
-}
+};
 
 const initState: IRootStore =
 {

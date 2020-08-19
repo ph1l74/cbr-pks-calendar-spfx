@@ -12,7 +12,7 @@ import config from '../constants/config';
 import { IAppReducer } from '../Reducers';
 const { Link } = Anchor;
 
-const unknownImage = require("../Icons/unknown.png") as string;
+const unknownImage = require('../Icons/unknown.png') as string;
 
 const FeedbackEl = (props: { comment: Comment }) => {
     const dispatch = useDispatch();
@@ -49,11 +49,11 @@ const FeedbackEl = (props: { comment: Comment }) => {
                     <div style={{ paddingRight: '30px' }}>
                         {`${moment(commentInfo.modifiedDate).format('DD.MM.yyyy')}      `}
                     </div>
-                    <Tooltip title="Редактировать">
+                    <Tooltip title='Редактировать'>
                         <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }} icon={<EditIcon />}
                             hidden={!isEditor} onClick={onEditClick} />
                     </Tooltip>
-                    <Tooltip title="Удалить">
+                    <Tooltip title='Удалить'>
                         <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }} icon={<DeleteIcon />}
                             hidden={!isEditor} onClick={onDeleteClick} />
                     </Tooltip>
@@ -62,11 +62,11 @@ const FeedbackEl = (props: { comment: Comment }) => {
                 <div className={styles.materials}>
                     {commentInfo.materials.map((el, ind) =>
                         <a key={`material_${el.id}_${el.eventID}_${ind}`} href={`${config.API_URL}attachments/${el.id}`}
-                            title={el.fileName} className={styles.materialsLink} target="_blank" >{el.fileName}</a>
+                            title={el.fileName} className={styles.materialsLink} target='_blank' >{el.fileName}</a>
                     )}
                     {commentInfo.links.map((el, ind) =>
                         <a key={`link_${el.id}_${el.eventID}_${ind}`} href={`${el.linkName}`} title={el.linkName}
-                            className={styles.materialsLink} target="_blank" >{el.linkName}</a>
+                            className={styles.materialsLink} target='_blank' >{el.linkName}</a>
                     )}
                 </div>
             </div>

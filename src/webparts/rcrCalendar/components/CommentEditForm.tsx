@@ -97,7 +97,7 @@ const CommentEditForm = () => {
             <Form
                 {...layout}
                 form={form}
-                name="basic"
+                name='basic'
                 initialValues={{
                     description: editingComment.description,
                     materials: recordFileList,
@@ -108,8 +108,8 @@ const CommentEditForm = () => {
             >
                 <Form.Item
                     {...tailLayout}
-                    label="Описание"
-                    name="description"
+                    label='Описание'
+                    name='description'
                     rules={[{ required: true, message: 'Пожалуйста, введите описание.' }, { type: 'string', max: 2500, message: 'Длина не может превышать 2500 символов' }]}
                 >
                     <TextArea autoSize={{ minRows: 3, maxRows: 3 }} onChange={(value) => {

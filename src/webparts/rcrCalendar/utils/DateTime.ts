@@ -1,4 +1,4 @@
-import * as moment from "moment";
+import * as moment from 'moment';
 
 export const ConvertDateWithoutZone = (date: Date) => {
     // const formatDate = moment(date).zone(0).format('YYYY-MM-DDTHH:mm:ssZ');

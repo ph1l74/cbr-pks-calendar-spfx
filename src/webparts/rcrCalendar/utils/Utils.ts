@@ -1,5 +1,5 @@
-import { AttachmentService } from "../services/Services";
-import { message } from "antd";
+import { AttachmentService } from '../services/Services';
+import { message } from 'antd';
 
 export const parseUid = (uid: string) => {
     let id = 0;
@@ -42,13 +42,13 @@ export const uploadFile = options => {
         }
     }
     const config = {
-        headers: { "content-type": "multipart/form-data" },
+        headers: { 'content-type': 'multipart/form-data' },
         onUploadProgress: event => {
             console.log((event.loaded / event.total) * 100);
             onProgress({ percent: (event.loaded / event.total) * 100 }, file);
         }
     };
-    fmData.append("files", file);
+    fmData.append('files', file);
     AttachmentService.upload(fmData, config)
         .then(res => {
             onSuccess(file);

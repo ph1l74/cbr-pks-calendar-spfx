@@ -12,19 +12,22 @@ export default class Service<T> {
     private dataHandlers: Array<(value: T, index: number) => void> = [];
 
     constructor(public apiPath: string) {
-        this.apiPath = apiPath;
-        
-    axios.interceptors.request.use((config: AxiosRequestConfig) => {
-        let token = getToken(Service.userName, Service.userId);
-        if (Date.now() > token.expires + token.issued){
-            console.log('token expired');
-        }
+        this.apiPath = apiPath;        
+        this.refreshToken();      
+    }
 
-        if (token) {
-          config.headers['authorization'] = token.token;
-        }
-        return config;
-      });      
+    private refreshToken() {
+        axios.interceptors.request.use((config: AxiosRequestConfig) => {
+            let token = getToken(Service.userName, Service.userId);
+            if (Math.round(Date.now() / 1000) > token.expires + token.issued) {
+                console.log('token expired');
+            }
+
+            if (token) {
+                config.headers['authorization'] = 'Bearer ' + token.token;
+            }
+            return config;
+        });
     }
 
     public async findAll(sliceDate?: string): Promise<T[]> {
@@ -92,6 +95,7 @@ export default class Service<T> {
     }
 
     public async remove(id: number): Promise<any> {
+        // this.refreshToken(); // Обновляем токен
         const apiURL = this.apiPath;
         const response = await axios.delete(config.API_URL + apiURL + id, {
         });

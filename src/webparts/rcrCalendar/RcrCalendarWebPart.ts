@@ -1,7 +1,7 @@
-import "@pnp/polyfill-ie11";
-import "@babel/polyfill";
-//import "ie11-custom-properties";
-import "antd/dist/antd.css";
+import '@pnp/polyfill-ie11';
+import '@babel/polyfill';
+//import 'ie11-custom-properties';
+import 'antd/dist/antd.css';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';

@@ -16,30 +16,33 @@ export interface Session {
     /**
      * Timestamp indicating when the session should expire, in Unix milliseconds.
      */ 
-    expires: number;
+    // expires: number;
+    exp: number;
+    iss: string;
+    aud: string;
 }
 
 /**
  * Identical to the Session type, but without the `issued` and `expires` properties.
  */
-export type PartialSession = Omit<Session, "issued" | "expires">;
+export type PartialSession = Omit<Session, 'issued' | 'expires'>;
 
 export interface EncodeResult {
-    token: string,
-    expires: number,
-    issued: number
+    token: string;
+    expires: number;
+    issued: number;
 }
 
 export type DecodeResult =
     | {
-          type: "valid";
+          type: 'valid';
           session: Session;
       }
     | {
-          type: "integrity-error";
+          type: 'integrity-error';
       }
     | {
-          type: "invalid-token";
+          type: 'invalid-token';
       };
 
-export type ExpirationStatus = "expired" | "active" | "grace";
+export type ExpirationStatus = 'expired' | 'active' | 'grace';

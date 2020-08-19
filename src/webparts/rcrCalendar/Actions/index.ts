@@ -1,36 +1,36 @@
-import { GroupingEventService, CategoryService, EventService, UserService, MaterialService, ActorService } from "../services/Services"
-import * as moment from "moment";
+import { GroupingEventService, CategoryService, EventService, UserService, MaterialService, ActorService } from '../services/Services';
+import * as moment from 'moment';
 import * as types from '../constants';
-import FilterEvent from "../utils/IFilterEvent";
-import { filterEventInit } from "../Reducers";
+import FilterEvent from '../utils/IFilterEvent';
+import { filterEventInit } from '../Reducers';
 import Event from '../Models/Event';
 import { sp } from '@pnp/sp/presets/all';
 import pnp, { Logger, PermissionKind } from 'sp-pnp-js';
 import { IContextInfo } from '@pnp/sp/sites';
-import { message } from "antd";
+import { message } from 'antd';
 
 
-let nextTodoId = 0
+let nextTodoId = 0;
 export const addTodo = text => ({
   type: 'ADD_TODO',
   id: nextTodoId++,
   text
-})
+});
 
 export const setVisibilityFilter = filter => ({
   type: 'SET_VISIBILITY_FILTER',
   filter
-})
+});
 
 export const toggleTodo = id => ({
   type: 'TOGGLE_TODO',
   id
-})
+});
 
 export const setError = (error: string) => ({
   type: types.SET_ERROR,
   error: error
-})
+});
 
 export const setAuth = (): any => {
   return async dispatch => {
@@ -132,24 +132,24 @@ export const setAuth = (): any => {
       }
     }
   }
-}
+};
 
 export const changeCalendarDate = (dateStart: Date, filterEvent: FilterEvent) => {
   return dispatch => {
     dispatch({
       type: types.CHANGE_DATE,
-      payload: dateStart
+      payload: dateStart,
     });
     filterEvent.selectedDate = dateStart;
 
     filterEvents(types.CHANGE_FILTER_EVENT_SUCCESS, filterEvent, dispatch);
   }
-}
+};
 
 export const changeCalendarDateSuccess = events => ({
   type: types.CHANGE_DATE_SUCCESS,
-  events
-})
+  events,
+});
 
 export const changeSelectedCategory = (categoryId: number, filterEvent: FilterEvent) => {
   let categories = filterEvent.selectedCategories;
@@ -163,31 +163,31 @@ export const changeSelectedCategory = (categoryId: number, filterEvent: FilterEv
   return dispatch => {
     dispatch({
       type: types.CHANGE_FILTER_EVENT,
-      payload: filterEvent
-    })
+      payload: filterEvent,
+    });
 
     filterEvents(types.CHANGE_FILTER_EVENT_SUCCESS, filterEvent, dispatch);
   }
-}
+};
 
 export const initEvents = (): any => {
   return async dispatch => {
     console.log('init events');
     filterEvents(types.CHANGE_FILTER_EVENT_SUCCESS, filterEventInit, dispatch);
-  }
-}
+  };
+};
 
 export const infinityLoadEvents = (skip: number, filterEvent: any) => {
   return dispatch => {
     console.log('infinity load events', skip, filterEvent as FilterEvent);
     dispatch({
       type: types.CHANGE_FILTER_EVENT,
-      payload: filterEvent
+      payload: filterEvent,
     });
 
     filterEvents(types.INFINITY_LOAD_EVENT_SUCCESS, filterEvent, dispatch, skip);
   }
-}
+};
 
 export const editEvent = (editingEvent: Event) => {
   return dispatch => { //TODO: change to fetching, Event to number
@@ -212,7 +212,7 @@ export const editEvent = (editingEvent: Event) => {
       });
     }
   }
-}
+};
 
 export const deleteEvent = (record: Event, filterEvent: FilterEvent, isRefresh: boolean) => {
   const eventId = record.id;
@@ -237,20 +237,20 @@ export const deleteEvent = (record: Event, filterEvent: FilterEvent, isRefresh: 
         sendError(err, dispatch, 'удалении');
       });
   }
-}
+};
 
 export const clearEvents = () => ({
-  type: types.CLEAR_EVENTS
-})
+  type: types.CLEAR_EVENTS,
+});
 
 export const closeEditEvent = () => ({
-  type: types.CLOSE_EDIT_EVENT
-})
+  type: types.CLOSE_EDIT_EVENT,
+});
 
 export const saveEditEvent = (event: Event, filterEvent: FilterEvent) => {
   return dispatch => { //TODO: change to fetching, Event to number
     dispatch({
-      type: types.SAVE_EDIT_EVENT
+      type: types.SAVE_EDIT_EVENT,
     });
     const saveFunc = (!event.id || event.id <= 0) ? EventService.add(event) : EventService.update(event, event.id);
     saveFunc
@@ -269,23 +269,23 @@ export const saveEditEvent = (event: Event, filterEvent: FilterEvent) => {
         });
       });
   }
-}
+};
 
 
 export const sendError = (err: any, dispatch: any, actionName: string) => {
   console.log(err);
   message.error(`При ${actionName} произошла ошибка. ${err?.response?.data ?? ''}`);
   dispatch(setError(err));
-}
+};
 
 function setUser(dispatch: any, currentUserName: string, currentUserId: string) {
   dispatch({
     // type: 'SET_AUTH',
     type: types.SET_USERNAME,
     userName: currentUserName,
-    userId: currentUserId
+    userId: currentUserId,
   });
-}
+};
 
 function filterEvents(typeAction: string, filterEvent: FilterEvent, dispatch: any, skip?: number) {
   let date = moment(filterEvent.selectedDate);
@@ -303,7 +303,7 @@ function filterEvents(typeAction: string, filterEvent: FilterEvent, dispatch: an
       });
     })
     .catch(err => console.log(err));
-}
+};
 
 export const getCategories = (): any => {
   return async dispatch => {
@@ -320,7 +320,7 @@ export const getCategories = (): any => {
       })
       .catch(err => console.log(err));
   }
-}
+};
 
 export const getUsers = (): any => {
   return async dispatch => {
@@ -337,34 +337,34 @@ export const getUsers = (): any => {
       })
       .catch(err => console.log(err));
   }
-}
+};
 
 export const getCategoriesSuccess = categories => ({
   type: types.GET_CATEGORIES_SUCCESS,
   payload: categories
-})
+});
 
 export const getParticipantsByEvent = (event: Event) => {
   return dispatch => {
     dispatch({
       type: types.GET_EVENT_PARTICIPANTS,
-      payload: event
+      payload: event,
     });
     getEventParticipants(types.GET_EVENT_PARTICIPANTS_SUCCESS, event, dispatch);
   }
-}
+};
 
 export const infinityLoadEventParticipants = (skip: number, event: Event) => {
   return dispatch => {
     console.log('infinity load ', skip, event);
     dispatch({
       type: types.GET_EVENT_PARTICIPANTS,
-      payload: event
+      payload: event,
     });
 
     getEventParticipants(types.INFINITY_LOAD_EVENT_PARTICIPANTS_SUCCESS, event, dispatch, skip);
   }
-}
+};
 
 function getEventParticipants(typeAction: string, event: Event, dispatch: any, skip?: number) {
   const skipRequest = skip ? `&skip=${skip}` : '';
@@ -376,38 +376,38 @@ function getEventParticipants(typeAction: string, event: Event, dispatch: any, s
       dispatch({
         type: typeAction,
         payload: ob,
-        isFetchingFull: ob.length < take
+        isFetchingFull: ob.length < take,
       });
     })
     .catch(err => {
       console.log(err);
       dispatch({
-        type: types.CLOSE_EVENT_PARTICIPANTS
+        type: types.CLOSE_EVENT_PARTICIPANTS,
       })
     });
-}
+};
 
 export const getMaterialsByEvent = (event: Event) => {
   return dispatch => {
     dispatch({
       type: types.GET_EVENT_MATERIALS,
-      payload: event
+      payload: event,
     });
     getEventMaterials(types.GET_EVENT_MATERIALS_SUCCESS, event, dispatch);
   }
-}
+};
 
 export const infinityLoadEventMaterials = (skip: number, event: Event) => {
   return dispatch => {
     console.log('infinity load ', skip, event);
     dispatch({
       type: types.GET_EVENT_MATERIALS,
-      payload: event
+      payload: event,
     });
 
     getEventMaterials(types.INFINITY_LOAD_EVENT_MATERIALS_SUCCESS, event, dispatch, skip);
   }
-}
+};
 
 function getEventMaterials(typeAction: string, event: Event, dispatch: any, skip?: number) {
   const skipRequest = skip ? `&skip=${skip}` : '';
@@ -419,30 +419,30 @@ function getEventMaterials(typeAction: string, event: Event, dispatch: any, skip
       dispatch({
         type: typeAction,
         payload: ob,
-        isFetchingFull: ob.length < take
+        isFetchingFull: ob.length < take,
       });
     })
     .catch(err => {
       console.log(err);
       dispatch({
-        type: types.CLOSE_EVENT_MATERIALS
+        type: types.CLOSE_EVENT_MATERIALS,
       })
     });
-}
+};
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
   SHOW_COMPLETED: 'SHOW_COMPLETED',
-  SHOW_ACTIVE: 'SHOW_ACTIVE'
-}
+  SHOW_ACTIVE: 'SHOW_ACTIVE',
+};
 
 export const EventFilters = {
-  SHOW_ALL: 'SHOW_ALL'
-}
+  SHOW_ALL: 'SHOW_ALL',
+};
 
 export const setEditMode = (value) => {
   return {
     type: types.SET_EDIT_MODE,
-    value
+    value,
   }
-}
+};
