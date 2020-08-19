@@ -139,16 +139,17 @@ const EditFormCard = () => {
     }
     // const pickerStart = new DatePicker({defaultValue: moment(editingEvent.startDate, 'YYYY-MM-DD'), onChange: (value) => {console.log(value)}})
 
+
     const renderCategories = () => {
-        return categories.map(ob => <Select.Option name={`category_${ob.id}`} key={`category_${ob.id}`}
+        return categories.map(ob => <Select.Option name={`category_${ob.id}`} key={`category_${ob.id}`} 
             value={ob.id} style={{ color: ob.color }}>{ob.name}</Select.Option>);
     };
     const renderActors = () => {
-        return users.map(ob => <Select.Option name={`user_${ob.login}`} key={`user_${ob.login}`}
+        return users.map(ob => <Select.Option name={`user_${ob.login}`} key={`user_${ob.login}`} 
             value={ob.login}>{`${ob.firstName} ${ob.lastName} ${ob.patronymic} `}</Select.Option>);
     };
     const DatePickerJS: any = DatePicker;
-
+    
     const checkDate = (rule, value, type: string) => {
         const labelDate = type === 'end' ? 'окончания' : 'начала';
         // if (!value) {
@@ -378,10 +379,11 @@ const EditFormCard = () => {
                     </Select>
                 </Form.Item>
 
+
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
                     <Upload multiple={true}
                         fileList = {fileList}
-                        // defaultFileList={recordFileList.fileList as UploadFile<any>[]}
+                        // defaultFileList={recordFileList.fileList as UploadFile<any>[]} 
                         beforeUpload={(file, fileList) => {
                             const len = fileList.map(f => f.size).reduce((s1, s2) => s1 + s2);
                             if (len > maxRequestLength){
@@ -389,7 +391,7 @@ const EditFormCard = () => {
                             }
                             return len <= maxRequestLength;
                         }}
-                        //action = {file => {console.log('upload file', file); return '';}}
+                        //action = {file => {console.log('upload file', file); return '';}} 
                         // action={handleUpload}
                         customRequest={(options => {
                             options.data = { objType: 'event', objId: editingEvent.id, guid: sessionGuid };
@@ -428,9 +430,10 @@ const EditFormCard = () => {
                     </Upload >
                 </Form.Item>
 
+
                 <Form.Item {...tailLayout} label='Ссылки' name='links'>
                     <Select mode='tags' style={{ width: 'calc(41em - 10px)' }} placeholder='Введите ссылку и нажмите Etner' maxTagCount={30}
-                        defaultValue={editingEvent.links.map(ob => ob.linkName)}
+                        defaultValue={editingEvent.links.map(ob => ob.linkName)} 
                         onChange={value => {
                             form.setFieldsValue({ links: value });
                         }}>

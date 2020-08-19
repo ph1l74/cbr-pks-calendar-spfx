@@ -30,9 +30,9 @@ function getEventComments(typeAction: string, event: Event, dispatch: any, skip?
             });
         })
         .catch(err => {
-            console.log(err);
+            sendError(err, dispatch, 'загрузке данных');
             dispatch({
-                type: types.CLOSE_EVENT_COMMENTS
+                type: types.CLOSE_EDIT_COMMENT
             });
         });
 }

@@ -214,7 +214,7 @@ const eventReducer = (state = eventInit, action) => {
             return { ...state, events: newRecords, wasEditComment: true };
 
         case types.CLOSE_EDIT_EVENT:
-            return { ...state, editingEvent: undefined };
+            return { ...state, editingEvent: undefined, isFetching: false };
 
         default:
             return state;

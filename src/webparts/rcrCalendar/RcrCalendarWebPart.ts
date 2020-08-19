@@ -1,20 +1,25 @@
-import '@babel/polyfill';
-import { Version } from '@microsoft/sp-core-library';
-import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-webpart-base';
 import '@pnp/polyfill-ie11';
+import '@babel/polyfill';
 //import 'ie11-custom-properties';
 import 'antd/dist/antd.css';
-import * as strings from 'RcrCalendarWebPartStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { IRcrCalendarProps } from './components/IRcrCalendarProps';
-import RcrCalendar from './components/RcrCalendar';
+import { Version } from '@microsoft/sp-core-library';
+import {
+  BaseClientSideWebPart,
+  IPropertyPaneConfiguration,
+  PropertyPaneTextField
+} from '@microsoft/sp-webpart-base';
 
+import * as strings from 'RcrCalendarWebPartStrings';
+import RcrCalendar from './components/RcrCalendar';
+import { IRcrCalendarProps } from './components/IRcrCalendarProps';
 
 export interface IRcrCalendarWebPartProps {
   title: string;
   description: string;
 }
+
 
 export default class RcrCalendarWebPart extends BaseClientSideWebPart<IRcrCalendarWebPartProps> {
 
