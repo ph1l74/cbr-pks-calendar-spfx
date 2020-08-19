@@ -1,13 +1,13 @@
-import { GroupingEventService, CategoryService, EventService, UserService, MaterialService, ActorService } from '../services/Services';
-import * as moment from 'moment';
-import * as types from '../constants';
-import FilterEvent from '../utils/IFilterEvent';
-import { filterEventInit } from '../Reducers';
-import Event from '../Models/Event';
 import { sp } from '@pnp/sp/presets/all';
-import pnp, { Logger, PermissionKind } from 'sp-pnp-js';
 import { IContextInfo } from '@pnp/sp/sites';
 import { message } from 'antd';
+import * as moment from 'moment';
+import pnp, { Logger, PermissionKind } from 'sp-pnp-js';
+import * as types from '../constants';
+import Event from '../Models/Event';
+import { filterEventInit } from '../Reducers';
+import { ActorService, CategoryService, EventService, GroupingEventService, MaterialService, UserService } from '../services/Services';
+import FilterEvent from '../utils/IFilterEvent';
 
 
 let nextTodoId = 0;
@@ -64,7 +64,7 @@ export const setAuth = (): any => {
 
       // console.log('payload', sp);
       // console.log('fetch', pnp.sp.web.currentUser);
-      let web = pnp.sp.site.rootWeb;
+      const web = pnp.sp.site.rootWeb;
       console.log('webSPUrl', web.toUrlAndQuery());
       let currentUserName = '';
       try {
@@ -74,7 +74,7 @@ export const setAuth = (): any => {
           console.log(siteUrl);
           pnp.setup({ sp: { baseUrl: siteUrl } });
           pnp.sp.utility.getCurrentUserEmailAddresses().then(ob => {
-            let curruser = ob;
+            const curruser = ob;
             console.log(curruser);
             // let curProp = await pnp.sp.profiles.myProperties.get();
             // console.log(curProp);
@@ -87,6 +87,7 @@ export const setAuth = (): any => {
                 currentUserName = res.LoginName as string;
                 const loginInfo = currentUserName.split('\\');
                 setUser(dispatch, loginInfo[loginInfo.length - 1], res.UserId?.NameId);
+                // tslint:disable-next-line: no-shadowed-variable
                 web.getCurrentUserEffectivePermissions().then(ob => {
                   console.log('my perm', ob);
                   Logger.writeJSON(ob);
@@ -131,7 +132,7 @@ export const setAuth = (): any => {
         setUser(dispatch, currentUserName, '');
       }
     }
-  }
+  };
 };
 
 export const changeCalendarDate = (dateStart: Date, filterEvent: FilterEvent) => {
@@ -143,7 +144,7 @@ export const changeCalendarDate = (dateStart: Date, filterEvent: FilterEvent) =>
     filterEvent.selectedDate = dateStart;
 
     filterEvents(types.CHANGE_FILTER_EVENT_SUCCESS, filterEvent, dispatch);
-  }
+  };
 };
 
 export const changeCalendarDateSuccess = events => ({
@@ -167,7 +168,7 @@ export const changeSelectedCategory = (categoryId: number, filterEvent: FilterEv
     });
 
     filterEvents(types.CHANGE_FILTER_EVENT_SUCCESS, filterEvent, dispatch);
-  }
+  };
 };
 
 export const initEvents = (): any => {
@@ -186,7 +187,7 @@ export const infinityLoadEvents = (skip: number, filterEvent: any) => {
     });
 
     filterEvents(types.INFINITY_LOAD_EVENT_SUCCESS, filterEvent, dispatch, skip);
-  }
+  };
 };
 
 export const editEvent = (editingEvent: Event) => {
@@ -211,7 +212,18 @@ export const editEvent = (editingEvent: Event) => {
         editEvent: editingEvent,
       });
     }
-  }
+  };
+};
+
+export const clearEvents = () => ({
+  type: types.CLEAR_EVENTS,
+});
+
+export const sendError = (err: any, dispatch: any, actionName: string) => {
+  console.log(err);
+  const resError = err?.response?.data ?? '';
+  message.error(`При ${actionName} произошла ошибка. ${resError}`);
+  dispatch(setError(err));
 };
 
 export const deleteEvent = (record: Event, filterEvent: FilterEvent, isRefresh: boolean) => {
@@ -236,12 +248,8 @@ export const deleteEvent = (record: Event, filterEvent: FilterEvent, isRefresh: 
       .catch(err => {
         sendError(err, dispatch, 'удалении');
       });
-  }
+  };
 };
-
-export const clearEvents = () => ({
-  type: types.CLEAR_EVENTS,
-});
 
 export const closeEditEvent = () => ({
   type: types.CLOSE_EDIT_EVENT,
@@ -268,14 +276,7 @@ export const saveEditEvent = (event: Event, filterEvent: FilterEvent) => {
           type: types.SAVE_EDIT_EVENT_SUCCESS,
         });
       });
-  }
-};
-
-
-export const sendError = (err: any, dispatch: any, actionName: string) => {
-  console.log(err);
-  message.error(`При ${actionName} произошла ошибка. ${err?.response?.data ?? ''}`);
-  dispatch(setError(err));
+  };
 };
 
 function setUser(dispatch: any, currentUserName: string, currentUserId: string) {
@@ -285,10 +286,10 @@ function setUser(dispatch: any, currentUserName: string, currentUserId: string) 
     userName: currentUserName,
     userId: currentUserId,
   });
-};
+}
 
 function filterEvents(typeAction: string, filterEvent: FilterEvent, dispatch: any, skip?: number) {
-  let date = moment(filterEvent.selectedDate);
+  const date = moment(filterEvent.selectedDate);
   const day = date.date() > 9 ? date.date() : '0' + date.date();
   const months = date.months() + 1;
   const month = months > 9 ? months : '0' + months;
@@ -303,7 +304,7 @@ function filterEvents(typeAction: string, filterEvent: FilterEvent, dispatch: an
       });
     })
     .catch(err => console.log(err));
-};
+}
 
 export const getCategories = (): any => {
   return async dispatch => {
@@ -319,7 +320,7 @@ export const getCategories = (): any => {
         });
       })
       .catch(err => console.log(err));
-  }
+  };
 };
 
 export const getUsers = (): any => {
@@ -336,7 +337,7 @@ export const getUsers = (): any => {
         });
       })
       .catch(err => console.log(err));
-  }
+  };
 };
 
 export const getCategoriesSuccess = categories => ({
@@ -351,7 +352,7 @@ export const getParticipantsByEvent = (event: Event) => {
       payload: event,
     });
     getEventParticipants(types.GET_EVENT_PARTICIPANTS_SUCCESS, event, dispatch);
-  }
+  };
 };
 
 export const infinityLoadEventParticipants = (skip: number, event: Event) => {
@@ -363,7 +364,7 @@ export const infinityLoadEventParticipants = (skip: number, event: Event) => {
     });
 
     getEventParticipants(types.INFINITY_LOAD_EVENT_PARTICIPANTS_SUCCESS, event, dispatch, skip);
-  }
+  };
 };
 
 function getEventParticipants(typeAction: string, event: Event, dispatch: any, skip?: number) {
@@ -383,9 +384,9 @@ function getEventParticipants(typeAction: string, event: Event, dispatch: any, s
       console.log(err);
       dispatch({
         type: types.CLOSE_EVENT_PARTICIPANTS,
-      })
+      });
     });
-};
+}
 
 export const getMaterialsByEvent = (event: Event) => {
   return dispatch => {
@@ -394,7 +395,7 @@ export const getMaterialsByEvent = (event: Event) => {
       payload: event,
     });
     getEventMaterials(types.GET_EVENT_MATERIALS_SUCCESS, event, dispatch);
-  }
+  };
 };
 
 export const infinityLoadEventMaterials = (skip: number, event: Event) => {
@@ -406,7 +407,7 @@ export const infinityLoadEventMaterials = (skip: number, event: Event) => {
     });
 
     getEventMaterials(types.INFINITY_LOAD_EVENT_MATERIALS_SUCCESS, event, dispatch, skip);
-  }
+  };
 };
 
 function getEventMaterials(typeAction: string, event: Event, dispatch: any, skip?: number) {
@@ -426,9 +427,9 @@ function getEventMaterials(typeAction: string, event: Event, dispatch: any, skip
       console.log(err);
       dispatch({
         type: types.CLOSE_EVENT_MATERIALS,
-      })
+      });
     });
-};
+}
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
@@ -444,5 +445,5 @@ export const setEditMode = (value) => {
   return {
     type: types.SET_EDIT_MODE,
     value,
-  }
+  };
 };

@@ -1,24 +1,24 @@
 // import Maybe from '../util/Maybe'
-import config from '../constants/config';
 import axios, { AxiosRequestConfig } from 'axios';
 import * as moment from 'moment';
+import config from '../constants/config';
 import { getToken } from '../utils/auth';
 
 export default class Service<T> {
-    
+
     public static userName: string;
     public static userId: string;
 
     private dataHandlers: Array<(value: T, index: number) => void> = [];
 
     constructor(public apiPath: string) {
-        this.apiPath = apiPath;        
-        this.refreshToken();      
+        this.apiPath = apiPath;
+        this.refreshToken();
     }
 
     private refreshToken() {
         axios.interceptors.request.use((config: AxiosRequestConfig) => {
-            let token = getToken(Service.userName, Service.userId);
+            const token = getToken(Service.userName, Service.userId);
             if (Math.round(Date.now() / 1000) > token.expires + token.issued) {
                 console.log('token expired');
             }
@@ -37,8 +37,8 @@ export default class Service<T> {
         }
         let sliceDateParam = '';
         if (sliceDate) {
-            apiURL = apiURL.replace('/', '')
-            sliceDateParam = `${(apiURL.indexOf('?') > -1 ? '&' : '?') + 'slicedate=' + sliceDate}`
+            apiURL = apiURL.replace('/', '');
+            sliceDateParam = `${(apiURL.indexOf('?') > -1 ? '&' : '?') + 'slicedate=' + sliceDate}`;
         }
         if (navigator.vendor === '' && navigator.userAgent.indexOf('Firefox') < 0) {
             console.log(navigator);
@@ -47,13 +47,16 @@ export default class Service<T> {
                 config.API_URL + apiURL + `${apiURL.indexOf('?') > -1 ? '&' : '?'}time=${Date.now().toString()}` + sliceDateParam.replace('?', '&'),
                 {
                     xsrfCookieName: Date.now().toString(),
-                    //headers: { Pragma: 'no-cache' } // Что-то в Rest произошло, что для IE 11 это значение стало ненужным, но до этого запросы кэшировались
+                    //headers: { Pragma: 'no-cache' } // Что-то в Rest произошло, что для IE 11 это значение стало ненужным,
+                    // но до этого запросы кэшировались
                 });
 
-            // const newLocal: string = await response.data._embedded != null ? response.data._embedded[apiURL.replace('/', '')] : response.data; 
+            // const newLocal: string = await response.data._embedded != null ? response.data._embedded[apiURL.replace('/', '')] : response.data;
             // Так сделано из-за разного формата возвращаемых данных из Rest
 
-            const newLocal: string = await response.data._embedded != null ? response.data._embedded[apiURL.substr(0, apiURL.indexOf('/'))] : response.data; // Так сделано из-за разного формата возвращаемых данных из Rest
+            const newLocal: string = await response.data._embedded != undefined ?
+                response.data._embedded[apiURL.substr(0, apiURL.indexOf('/'))] : response.data;
+                // Так сделано из-за разного формата возвращаемых данных из Rest
 
             console.log('New parse ', newLocal);
             try {
@@ -68,8 +71,11 @@ export default class Service<T> {
         }
 
         const response = await axios.get(config.API_URL + apiURL + sliceDateParam, {});
-        // const newLocal: string = await response.data._embedded != null ? response.data._embedded[apiURL.replace('/', '')] : response.data; // Так сделано из-за разного формата возвращаемых данных из Rest
-        const newLocal: string = await response.data._embedded != null ? response.data._embedded[apiURL.substr(0, apiURL.indexOf('/'))] : response.data; // Так сделано из-за разного формата возвращаемых данных из Rest
+        // const newLocal: string = await response.data._embedded != null ? response.data._embedded[apiURL.replace('/', '')] : response.data;
+        // Так сделано из-за разного формата возвращаемых данных из Rest
+        const newLocal: string = await response.data._embedded != undefined ?
+            response.data._embedded[apiURL.substr(0, apiURL.indexOf('/'))] : response.data;
+        // Так сделано из-за разного формата возвращаемых данных из Rest
         // console.log('New parse ', response.data, response.data._embedded);
         const json: T[] = JSON.parse(JSON.stringify(newLocal), this.ConvertDateTime) as T[];
         this.dataHandlers.forEach((handler) => {
@@ -205,7 +211,7 @@ export default class Service<T> {
         return this;
     }
     public ConvertDateTime(key: any, value: any): any {
-        if (typeof value === 'string' && value != null && (key.indexOf('Dt') >= 0 || key.indexOf('Date') >= 0)) {
+        if (typeof value === 'string' && value != undefined && (key.indexOf('Dt') >= 0 || key.indexOf('Date') >= 0)) {
             const a = /^[0-9]{4}[/\-][0-9]{2}[/\-][0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}/.exec(value);
             // let a = /\/Date\((\d*)\)\//.exec(value);
             if (a) {
@@ -354,7 +360,7 @@ export class PagedService<T> {
         return this;
     }
     public ReviveDateTime(key: any, value: any): any {
-        if (typeof value === 'string' && value != null) {
+        if (typeof value === 'string' && value != undefined) {
             const a = /^[0-9]{4}[/\-][0-9]{2}[/\-][0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}/.exec(value);
             // let a = /\/Date\((\d*)\)\//.exec(value);
             if (a) {

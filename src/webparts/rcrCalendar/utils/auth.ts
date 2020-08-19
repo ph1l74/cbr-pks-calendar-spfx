@@ -1,7 +1,5 @@
-import { encode, decode, TAlgorithm } from 'jwt-simple';
-import { PartialSession, EncodeResult, Session, DecodeResult } from './authSession';
-import { useSelector } from 'react-redux';
-import { IAppReducer } from '../Reducers';
+import { decode, encode, TAlgorithm } from 'jwt-simple';
+import { DecodeResult, EncodeResult, PartialSession, Session } from './authSession';
 
 export function encodeSession(secretKey: string, partialSession: PartialSession): EncodeResult {
     // Always use HS512 to sign the token
@@ -64,7 +62,7 @@ export function decodeSession(secretKey: string, tokenString: string): DecodeRes
     return {
         type: 'valid',
         session: result
-    }
+    };
 }
 
 const secretKey = 'CalendarKeyToken';
@@ -73,14 +71,14 @@ const secretKey = 'CalendarKeyToken';
 
     export const getToken = (userName: string, userId: string) => {
         const expires = Math.round(Date.now()/1000) + (60 * 60);
-        let session: PartialSession = {
+        const session: PartialSession = {
             id: userId,
             dateCreated: Date.now(),
             username: userName,
             exp: expires,
             iss: 'RCRCalendarApp',
             aud: 'RCRCalendarApp'
-        }
+        };
         return encodeSession(secretKey, session);
     };
 // }

@@ -35,19 +35,19 @@ export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> 
         </div>
       </Provider>
     );
-  } 
+  }
 
-  handleScroll = (e: React.UIEvent<HTMLElement>): void => {
+  public handleScroll = (e: React.UIEvent<HTMLElement>): void => {
     console.log('infinite scroll');
-    e.stopPropagation() // Handy if you want to prevent event bubbling to scrollable parent
+    e.stopPropagation(); // Handy if you want to prevent event bubbling to scrollable parent
     console.log({
         event: e,
         target: e.target, // Note 1* scrollTop is undefined on e.target
         currentTarget: e.currentTarget,
         scrollTop: e.currentTarget.scrollTop,
     });
-  
+
     const { scrollTop } = e.currentTarget;
     console.log(scrollTop);
-  };
+  }
 }

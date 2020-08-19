@@ -21,4 +21,4 @@ const Participants = () => {
     );
 };
 
-export default Participants
+export default Participants;

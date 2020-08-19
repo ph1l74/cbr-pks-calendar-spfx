@@ -30,9 +30,9 @@ import FilterEvent from '../utils/IFilterEvent';
 import { ConvertDateWithoutZone } from '../utils/DateTime';
 import { RuleObject } from 'antd/lib/form';
 import { maxRequestLength } from '../constants';
-registerLocale('ru', ru)
+registerLocale('ru', ru);
 
-const { TextArea } = Input
+const { TextArea } = Input;
 
 const EditFormCard = () => {
 
@@ -42,6 +42,29 @@ const EditFormCard = () => {
     const categories: Category[] = useSelector(state => state.root.categories as Category[]);
     const users: User[] = useSelector(state => state.root.users as User[]);
     const filterEvent: FilterEvent = useSelector(state => state.event.filterEvent as FilterEvent);
+
+    const [sessionGuid, setSessionGuid] = React.useState(generateUUID());
+    const [isLoading, setIsLoading] = React.useState(false);
+
+    const [startDate, setStartDate] = React.useState(editingEvent.startDate);
+    const [endDate, setEndDate] = React.useState(editingEvent.endDate);
+    const [fileList, updateFileList] = React.useState(editingEvent.materials.map(ob => {
+        const props = {
+            uid: ob.id.toString(),
+            name: ob.fileName,
+            status: 'done',
+        };
+        return (props as UploadFile);
+    }));
+    const [recordFileList, setRecordFileList] = React.useState({
+        fileList: editingEvent.materials.map(ob => {
+            return {
+                uid: ob.id.toString(),
+                name: ob.fileName,
+                status: 'done',
+            };
+        })
+    });
 
     const layout = {
         labelCol: { span: 6 },
@@ -84,7 +107,7 @@ const EditFormCard = () => {
         if (form.getFieldsError().map(ob => ob.errors.length).reduce((a, b) => a = a + b) === 0) {
         // if (form.isFieldsValidating(['description', 'dateFrom', 'dateTo', 'eventName', 'location', 'category'])) {
             console.log('save editform', editingEvent, editValues.fullDay, editValues);
-            let editEvent = editingEvent;
+            const editEvent = editingEvent;
             if (editValues.participants) {
                 editEvent.actors = editValues.participants.map(ob => new Actor(editingEvent.id, ob));
             }
@@ -118,38 +141,17 @@ const EditFormCard = () => {
 
 
     const renderCategories = () => {
-        return categories.map(ob => <Select.Option name={`category_${ob.id}`} key={`category_${ob.id}`} value={ob.id} style={{ color: ob.color }}>{ob.name}</Select.Option>);
-    }
+        return categories.map(ob => <Select.Option name={`category_${ob.id}`} key={`category_${ob.id}`} 
+            value={ob.id} style={{ color: ob.color }}>{ob.name}</Select.Option>);
+    };
     const renderActors = () => {
-        return users.map(ob => <Select.Option name={`user_${ob.login}`} key={`user_${ob.login}`} value={ob.login}>{`${ob.firstName} ${ob.lastName} ${ob.patronymic} `}</Select.Option>);
-    }
+        return users.map(ob => <Select.Option name={`user_${ob.login}`} key={`user_${ob.login}`} 
+            value={ob.login}>{`${ob.firstName} ${ob.lastName} ${ob.patronymic} `}</Select.Option>);
+    };
     const DatePickerJS: any = DatePicker;
     
-    const [sessionGuid, setSessionGuid] = React.useState(generateUUID());
-    const [isLoading, setIsLoading] = React.useState(false);
-
-    const [startDate, setStartDate] = React.useState(editingEvent.startDate);
-    const [endDate, setEndDate] = React.useState(editingEvent.endDate);
-    const [fileList, updateFileList] = React.useState(editingEvent.materials.map(ob => {
-        const props = {
-            uid: ob.id.toString(),
-            name: ob.fileName,
-            status: 'done',
-        };
-        return (props as UploadFile);
-    }));
-    const [recordFileList, setRecordFileList] = React.useState({
-        fileList: editingEvent.materials.map(ob => {
-            return {
-                uid: ob.id.toString(),
-                name: ob.fileName,
-                status: 'done',
-            }
-        })
-    });
-
     const checkDate = (rule, value, type: string) => {
-        let labelDate = type === 'end' ? 'окончания' : 'начала';
+        const labelDate = type === 'end' ? 'окончания' : 'начала';
         // if (!value) {
         //     return Promise.reject(`Пожалуйста, введите время ${labelDate} события.`);
         // }
@@ -161,7 +163,7 @@ const EditFormCard = () => {
     };
 
     const setDate = (date: Date, prevValue: Date) => {
-        let val = prevValue ?? date;
+        const val = prevValue ?? date;
         if (!date) {
             return undefined;
         }
@@ -171,21 +173,21 @@ const EditFormCard = () => {
         val.setSeconds(0);
         val.setMilliseconds(0);
         return val;
-    }
+    };
     const setHours = (hoursDate: moment.Moment, prevValue: Date) => {
         prevValue = prevValue ?? new Date(hoursDate.year(), hoursDate.month(), hoursDate.date(), hoursDate.hour(), hoursDate.minute());
         prevValue.setHours(hoursDate.hours());
         prevValue.setSeconds(0);
         prevValue.setMilliseconds(0);
         return prevValue;
-    }
+    };
     const setMinutes = (minutesDate: moment.Moment, prevValue: Date) => {
         prevValue = prevValue ?? new Date(minutesDate.year(), minutesDate.month(), minutesDate.date(), minutesDate.hour(), minutesDate.minute());
         prevValue.setMinutes(minutesDate.minutes());
         prevValue.setSeconds(0);
         prevValue.setMilliseconds(0);
         return prevValue;
-    }
+    };
     // const handleUpload = async (file: RcFile)=> {
     //     console.log('upload file', file);
     //     const formData = new FormData();
@@ -383,7 +385,7 @@ const EditFormCard = () => {
                         fileList = {fileList}
                         // defaultFileList={recordFileList.fileList as UploadFile<any>[]} 
                         beforeUpload={(file, fileList) => {
-                            let len = fileList.map(f => f.size).reduce((s1, s2) => s1 + s2);
+                            const len = fileList.map(f => f.size).reduce((s1, s2) => s1 + s2);
                             if (len > maxRequestLength){
                                 message.error(`Размер загружаемых файлов не может превышать ${Math.round(maxRequestLength / (1024 * 1024))} МБ`);
                             }
@@ -406,7 +408,7 @@ const EditFormCard = () => {
                             if (info.file.status === 'done') {
                                 setIsLoading(false);
                                 message.success(`${info.file.name} был загружен`);
-                                let newFileList = recordFileList.fileList;
+                                const newFileList = recordFileList.fileList;
                                 newFileList.push({ uid: info.file.uid, name: info.file.name, status: info.file.status });
                                 form.setFieldsValue({ materials: { fileList: newFileList } });
                                 setRecordFileList({ fileList: newFileList });
@@ -450,6 +452,6 @@ const EditFormCard = () => {
             </Form>
         </Modal>
     );
-}
+};
 
 export default EditFormCard;

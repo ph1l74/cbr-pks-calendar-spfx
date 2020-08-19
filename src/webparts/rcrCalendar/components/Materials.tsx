@@ -41,6 +41,6 @@ const Materials = () => {
             </div >
         </Spin>
     );
-}
+};
 
-export default Materials
+export default Materials;

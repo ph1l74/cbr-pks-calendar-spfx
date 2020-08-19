@@ -1,17 +1,13 @@
 import * as React from 'react';
-import { Form, Input, Checkbox, Button, Select, Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { DatePicker, TimePicker } from 'antd';
-import * as moment from 'moment';
+import { Form, Input, Checkbox, Button, Select, Upload } from 'antd';
+import { TimePicker } from 'antd';
 import { DatePickerTSX } from './DatePickerTSX';
 
-const { TextArea } = Input
+const { TextArea } = Input;
 
 const EditForm = () => {
 
     const [form] = Form.useForm();
-
-
 
     const fileListInit = [
         {
@@ -22,8 +18,7 @@ const EditForm = () => {
         },
     ];
 
-
-    const [fileList, setFileList] = React.useState(fileListInit);
+    const [] = React.useState(fileListInit);
 
     const layout = {
         labelCol: { span: 6 },
@@ -33,7 +28,6 @@ const EditForm = () => {
         wrapperCol: { offset: 2, span: 16 },
     };
 
-
     const onFinish = values => {
         console.log('Success:', values);
     };
@@ -42,27 +36,11 @@ const EditForm = () => {
         console.log('Failed:', errorInfo);
     };
 
-    const onGenderChange = value => {
-        switch (value) {
-            case 'male':
-                form.setFieldsValue({ note: 'Hi, man!' });
-                return;
-            case 'female':
-                form.setFieldsValue({ note: 'Hi, lady!' });
-                return;
-            case 'other':
-                form.setFieldsValue({ note: 'Hi there!' });
-                return;
-        }
-    };
-
     const props = {
         action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
         onChange: this.handleChange,
         multiple: true,
     };
-
-
 
     return (
         <Form
@@ -160,7 +138,6 @@ const EditForm = () => {
                 </Select>
             </Form.Item>
 
-
             <Form.Item {...tailLayout} label='Материалы'
                 name='materials'>
                 <Upload  {...props}>
@@ -169,7 +146,6 @@ const EditForm = () => {
                     </Button>
                 </Upload >
             </Form.Item>
-
 
             <Form.Item {...tailLayout} label='Ссылки'
                 name='links'>
@@ -188,6 +164,6 @@ const EditForm = () => {
             </Form.Item>
         </Form>
     );
-}
+};
 
 export default EditForm;

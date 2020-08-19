@@ -1,17 +1,15 @@
 import * as React from 'react';
-import { Form, Input, Checkbox, Button, Select, Upload, Modal, message } from 'antd';
+import { Form, Input, Button, Select, Upload, Modal, message } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeEditComment, saveEditComment } from '../Actions/comment';
 import Comment from '../Models/Comment';
 import Material from '../Models/Material';
 import Link from '../Models/Link';
 import { UploadFile } from 'antd/lib/upload/interface';
-import config from '../constants/config';
 import { parseUid, uploadFile, generateUUID } from '../utils/Utils';
-import { AttachmentService } from '../services/Services';
 import { maxRequestLength } from '../constants';
 
-const { TextArea } = Input
+const { TextArea } = Input;
 
 const CommentEditForm = () => {
 
@@ -28,6 +26,27 @@ const CommentEditForm = () => {
         wrapperCol: { offset: 2, span: 16 },
     };
 
+    const [sessionGuid] = React.useState(generateUUID());
+    const [isLoading, setIsLoading] = React.useState(false);
+
+    const [recordFileList, setRecordFileList] = React.useState({
+        fileList: editingComment.materials.map(ob => {
+            return {
+                uid: ob.id.toString(),
+                name: ob.fileName,
+                status: 'done',
+            };
+        })
+    });
+    const [fileList, updateFileList] = React.useState(editingComment.materials.map(ob => {
+        const props = {
+            uid: ob.id.toString(),
+            name: ob.fileName,
+            status: 'done',
+        };
+        return (props as UploadFile);
+    }));
+
     function closeEditForm(): void {
         dispatch(closeEditComment());
     }
@@ -36,7 +55,7 @@ const CommentEditForm = () => {
         const editValues = form.getFieldsValue();
         if (form.getFieldsError().map(ob => ob.errors.length).reduce((a, b) => a = a + b) === 0) {
             console.log('save editform', editingComment, editValues);
-            let editComment = editingComment;
+            const editComment = editingComment;
             editComment.description = editValues.description;
             if (editValues.materials) {
                 editComment.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
@@ -60,33 +79,6 @@ const CommentEditForm = () => {
     const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
     };
-
-    const props = {
-        action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-        onChange: this.handleChange,
-        multiple: true,
-    };
-
-    const [sessionGuid, setSessionGuid] = React.useState(generateUUID());
-    const [isLoading, setIsLoading] = React.useState(false);
-
-    const [recordFileList, setRecordFileList] = React.useState({
-        fileList: editingComment.materials.map(ob => {
-            return {
-                uid: ob.id.toString(),
-                name: ob.fileName,
-                status: 'done',
-            }
-        })
-    });
-    const [fileList, updateFileList] = React.useState(editingComment.materials.map(ob => {
-        const props = {
-            uid: ob.id.toString(),
-            name: ob.fileName,
-            status: 'done',
-        };
-        return (props as UploadFile);
-    }));
 
     return (
         <Modal title={'Редактирование отзыва'}
@@ -118,17 +110,17 @@ const CommentEditForm = () => {
                 </Form.Item>
 
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
-                    <Upload multiple={true} 
+                    <Upload multiple={true}
                         fileList = {fileList}
                         // defaultFileList={recordFileList.fileList as UploadFile<any>[]}
                         beforeUpload={(file, fileList) => {
-                            let len = fileList.map(f => f.size).reduce((s1, s2) => s1 + s2);
+                            const len = fileList.map(f => f.size).reduce((s1, s2) => s1 + s2);
                             if (len > maxRequestLength){
                                 message.error(`Размер загружаемых файлов не может превышать ${Math.round(maxRequestLength / (1024 * 1024))} МБ`);
                             }
                             return len <= maxRequestLength;
                         }}
-                        // action={`${config.API_URL}Attachments`}                        
+                        // action={`${config.API_URL}Attachments`}
                         customRequest={(options => {
                             options.data = { objType: 'comment', objId: editingComment.id, guid: sessionGuid };
                             uploadFile(options);
@@ -143,10 +135,10 @@ const CommentEditForm = () => {
                             if (info.file.status === 'done') {
                                 setIsLoading(false);
                                 message.success(`${info.file.name} был загружен`);
-                                let newFileList = recordFileList.fileList;
+                                const newFileList = recordFileList.fileList;
                                 newFileList.push({ uid: info.file.uid, name: info.file.name, status: info.file.status });
                                 form.setFieldsValue({ materials: { fileList: newFileList } });
-                                setRecordFileList({ fileList: newFileList })
+                                setRecordFileList({ fileList: newFileList });
                             } else if (info.file.status === 'error') {
                                 setIsLoading(false);
                                 message.error(`${info.file.name} не был загружен.`);
@@ -162,7 +154,6 @@ const CommentEditForm = () => {
                     </Button>
                     </Upload >
                 </Form.Item>
-
 
                 <Form.Item {...tailLayout} label='Ссылки' name='links'>
                     <Select mode='tags' style={{ width: 'calc(41em - 10px)' }} placeholder='Введите ссылку и нажмите Etner'
@@ -184,6 +175,6 @@ const CommentEditForm = () => {
             </Form>
         </Modal>
     );
-}
+};
 
 export default CommentEditForm;

@@ -15,7 +15,7 @@ export interface Session {
     issued: number;
     /**
      * Timestamp indicating when the session should expire, in Unix milliseconds.
-     */ 
+     */
     // expires: number;
     exp: number;
     iss: string;

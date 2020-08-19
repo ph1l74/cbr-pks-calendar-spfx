@@ -1,7 +1,7 @@
-import Model from './Model'
-import BaseLink from './BaseLink'
-import Event from './Event'
 import Comment from '../../../../lib/webparts/rcrCalendar/Models/Comment';
+import BaseLink from './BaseLink';
+import Event from './Event';
+import Model from './Model';
 
 export default class Link implements Model {
     constructor(id: number, linkName: string){

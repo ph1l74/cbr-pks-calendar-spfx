@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styles from './Categories.module.scss';
 import Categorie from './Categorie';
-import { ICategorieProps } from './ICategorieProps';
 import Category from '../Models/Category';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 const Categories = (categories: Category[]) => {
 
@@ -12,7 +11,7 @@ const Categories = (categories: Category[]) => {
         return categories.categories.map(c => (
             <Categorie info={c} key={i++} ></Categorie>
         ));
-    }
+    };
     // const initCategories: [ICategorieProps] = [
     //     {
     //         id: 1,
@@ -28,7 +27,7 @@ const Categories = (categories: Category[]) => {
             {renderCategories(categories)}
         </div>
     );
-}
+};
 
 const mapStateToProps = (store: any) => {
     console.log('root', store.root);
@@ -36,6 +35,6 @@ const mapStateToProps = (store: any) => {
         categories: store.root.categories,
         // isFetchingCategories: store.root.isFetchingCategories
     };
-}
+};
 
-export default connect(mapStateToProps)(Categories)
+export default connect(mapStateToProps)(Categories);

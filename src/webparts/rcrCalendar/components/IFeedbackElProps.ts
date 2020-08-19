@@ -1,5 +1,5 @@
 
 interface IFeedbackElProps {
-    title: string,
-    closeModalFn: () => void
+    title: string;
+    closeModalFn: () => void;
 }

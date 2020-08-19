@@ -10,7 +10,9 @@
     "build": "gulp bundle",
     "clean": "gulp clean",
     "test": "gulp test",
-    "fixbuild": "rimraf .\\node_modules\\@microsoft\\gulp-core-build-typescript\\node_modules\\typescript"
+    "fixbuild": "rimraf .\\node_modules\\@microsoft\\gulp-core-build-typescript\\node_modules\\typescript",
+    "lint": "tslint --project tslint.json",
+    "fixlint": "tslint --fix -c ./tslint.json 'src/**/*{.ts,.tsx}'"
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
@@ -42,7 +44,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "sp-pnp-js": "^3.0.10",
-    "styled-components": "^5.1.1"
+    "styled-components": "^5.1.1",
+    "tslint": "^6.1.3"
   },
   "resolutions": {
     "@types/react": "16.8.8"

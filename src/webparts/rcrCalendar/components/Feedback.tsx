@@ -4,8 +4,8 @@ import styles from './Feedback.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button } from 'antd';
 import { closeEventComments, infinityLoadEventComments, editComment } from '../Actions/comment';
-import Comment from '../Models/Comment'
-import Event from '../Models/Event'
+import Comment from '../Models/Comment';
+import Event from '../Models/Event';
 import { debounce } from '@microsoft/sp-lodash-subset';
 import * as $ from 'jquery';
 import CommentEditForm from '../../../../lib/webparts/rcrCalendar/components/CommentEditForm';
@@ -14,31 +14,6 @@ import { IAppReducer } from '../Reducers';
 
 const Feedback = () => {
 
-    // const initFeedbacks = [
-    //     {
-    //         name: 'Завьялова Мария Владимировна',
-    //         date: '16.05.2019',
-    //         img: '/img/65zmv.jpg',
-    //         description: 'Для сведения участников',
-    //         attachments: [{ name: 'rcr.xlsx', url: '/attachments/rcr.xlsx' }, { name: 'Таблица переходов статусов.xlsx', url: '/attachments/tps.xlsx' }],
-    //         links: ['http://ppod.cbr.ru/awesome', 'http://cbrportal.cbr.ru/dep/dep_it/cr']
-    //     },
-    //     {
-    //         name: 'Кузыева Лилия Ураловна',
-    //         date: '14.05.2019',
-    //         img: '/img/65klu.jpg',
-    //         description: 'Полезное мероприятие',
-    //         links: ['http://vk.com/id1']
-    //     },
-    // ]
-
-    // const [feedback, setFeedback] = React.useState(initFeedbacks)
-
-    // React.useEffect(() => {
-    //     // ask feedbacks
-    // }, [])
-
-    // const users: User[] = useSelector(state => state.root.users as User[]);
     const viewComments: Comment[] = useSelector(state => state.comment.comments as Comment[]);
     const selectedEventForComments: Event = useSelector(state => state.comment.selectedEvent as Event);
     const isFetching = useSelector(state => state.comment.isFetching as boolean);
@@ -64,7 +39,7 @@ const Feedback = () => {
             dispatch(infinityLoadEventComments(viewComments.length, selectedEventForComments));
         }
         // });
-    }
+    };
 
     function newEditForm(): void {
         const newRecord = new Comment();
@@ -102,8 +77,8 @@ const Feedback = () => {
                 </div>
             </Modal>)
 
-    )
+    );
 
-}
+};
 
 export default Feedback;

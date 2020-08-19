@@ -1,5 +1,4 @@
 import { AttachmentService } from '../services/Services';
-import { message } from 'antd';
 
 export const parseUid = (uid: string) => {
     let id = 0;
@@ -8,8 +7,8 @@ export const parseUid = (uid: string) => {
     }
     catch{ }
     id = id ?? 0;
-    return isNaN(id) ? 0 : id; // 
-}
+    return isNaN(id) ? 0 : id; //
+};
 
 export const generateUUID = () => { // Public Domain/MIT
     var d = new Date().getTime();//Timestamp
@@ -25,7 +24,7 @@ export const generateUUID = () => { // Public Domain/MIT
         }
         return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
-}
+};
 
 export const uploadFile = options => {
 
@@ -55,9 +54,9 @@ export const uploadFile = options => {
             console.log(res);
         })
         .catch(err => {
-            let errMess = 'При загрузке файлов возникла ошибка';
+            const errMess = 'При загрузке файлов возникла ошибка';
             const error = new Error(errMess);
             console.log(errMess, err);
             onError({ event: error });
         });
-}
+};

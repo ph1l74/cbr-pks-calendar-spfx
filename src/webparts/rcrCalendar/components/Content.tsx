@@ -8,7 +8,7 @@ export default class Content extends React.Component<IContentProps, {}> {
     super(props);
 
   }
-  
+
   public render(): React.ReactElement<IContentProps> {
     return (
       <div className={styles.content} >
@@ -18,5 +18,5 @@ export default class Content extends React.Component<IContentProps, {}> {
       </div >
     );
   }
-  
+
 }

@@ -20,7 +20,7 @@ import * as $ from 'jquery';
 import EditFormCard from './EditFormCard';
 import Category from '../Models/Category';
 import FilterEvent from '../utils/IFilterEvent';
-import { Spin, Modal, Button, Tooltip } from 'antd';
+import { Spin, Button, Tooltip } from 'antd';
 import * as moment from 'moment';
 import { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -36,11 +36,12 @@ registerLocale('ru', ru);
 // const EditIcon = props => <EditOutlined {...props} />
 const AddIcon = props => <PlusCircleOutlined {...props} />;
 
-const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDateChange: (date: Date) => void) => {
+const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent) => {
     // const editMode = useSelector((state: IAppReducer) => state.root.editMode);
     const editingEvent: Event = useSelector((state: IAppReducer) => state.event.editingEvent as Event);
     const selectedEventForComments: Event = useSelector((state: IAppReducer) => state.comment.selectedEvent as Event);
-    const eventsCount: number = useSelector((state: IAppReducer) => state.event.events.length === 0 ? 0 : (state.event.events as GroupingEvent[])
+    const eventsCount: number = useSelector((state: IAppReducer) =>
+        state.event.events.length === 0 ? 0 : (state.event.events as GroupingEvent[])
         .map(evg => evg.Value).reduce((a, b) => a ? a.concat(b) : []).length);
     const currentFilter: FilterEvent = useSelector((state: IAppReducer) => state.event.filterEvent);
     const isFetching: boolean = useSelector((state: IAppReducer) => state.event.isFetching as boolean);
@@ -50,7 +51,8 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
 
     const dispatch = useDispatch();
 
-    const contentElement = (window.location.port === '4321') ? $('div[class*=content_]') : $('div[class*=scrollRegion]');
+    const contentElement = (window.location.port === '4321') ?
+        $('div[class*=content_]') : $('div[class*=scrollRegion]');
     document.onscroll = (ev) => {
         console.log('document scroll', ev);
     };
@@ -73,44 +75,6 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
         }
     }));
 
-    //const [events, setEvents] = React.useState([]);
-
-    // const filterSelectedDay = async (selectedDay: Date) => {
-    //     // sp.setup({
-    //     //     sp: {
-    //     //         baseUrl: 'http://sp2019/',
-    //     //         headers: {
-    //     //             Accept: 'application/json;odata=verbose'
-    //     //         }
-    //     //     }
-    //     // });
-    //     // sp.setup({
-    //     //     spfxContext: this.context
-    //     // });
-
-    //     // console.log('payload', sp);
-    //     // console.log('fetch', pnp.sp.web.currentUser);
-    //     let web = pnp.sp.site.rootWeb;
-    //     console.log(web.toUrlAndQuery());
-    //     try {
-    //         const oContext: IContextInfo = await sp.site.getContextInfo();
-    //         const siteUrl = oContext.SiteFullUrl;
-    //         console.log(siteUrl);
-    //         pnp.setup({ sp: { baseUrl: siteUrl } });
-    //         let curruser = await pnp.sp.utility.getCurrentUserEmailAddresses();
-    //         console.log(curruser);
-    //         // let curProp = await pnp.sp.profiles.myProperties.get();
-    //         // console.log(curProp);
-    //         //let curruser = await sp.web.currentUser.get();
-    //         //console.log(curruser.Email, curruser.Id, curruser.LoginName, curruser.Title, curruser.UserId, curruser.UserPrincipalName);
-
-    //         web.currentUser.get().then(res => console.log(res)).catch(err => console.log(err));
-    //     }
-    //     catch (ex) {
-    //         console.log(ex);
-    //     }
-    // }
-
     const renderEvents = (events: any) => {
         console.log('New render events', events);
         moment.locale('ru');
@@ -119,7 +83,7 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
         }
         return events.events.map(evg => {
             const evGr: GroupingEvent = evg as GroupingEvent;
-            let gr: moment.Moment = moment(evg.Key, 'YYYY-MM-DD');
+            const gr: moment.Moment = moment(evg.Key, 'YYYY-MM-DD');
             // console.log(evGr.Value);
 
             return <div key={`groupingEvent_${evGr.Key}`} className={styles['month-header']}>{gr.format('MMMM')}
@@ -161,8 +125,8 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
                         <Dashboard>
                             <div className={styles['new-button']} hidden={!isEditor}>
                                 <Tooltip title='Новое событие'>
-                                    <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }} icon={<AddIcon />}
-                                        onClick={newEditForm} />
+                                    <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }}
+                                    icon={<AddIcon />} onClick={newEditForm} />
                                 </Tooltip>
                             </div>
                             <Calendar ></Calendar>
@@ -174,7 +138,6 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent, setDa
     );
 };
 
-
 const mapStateToProps = (store: any) => {
     console.log(store.event);
     return {
@@ -183,10 +146,10 @@ const mapStateToProps = (store: any) => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = () => {
     return {
         // setDate: year => dispatch(changeCalendarDate(year)) // [1]
-    }
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RcrCalendarApp);

@@ -1,5 +1,5 @@
 {
-  "extends": "@microsoft/sp-tslint-rules/base-tslint.json",
+  // "extends": "@microsoft/sp-tslint-rules/base-tslint.json",
   "rules": {
     "class-name": false,
     "export-name": false,
@@ -11,22 +11,32 @@
     "no-construct": false,
     "no-duplicate-variable": true,
     "no-eval": false,
-    "no-function-expression": true,
+    // "no-function-expression": true,
     "no-internal-module": true,
-    "no-shadowed-variable": true,
+    "no-shadowed-variable": false,
     "no-switch-case-fall-through": true,
-    "no-unnecessary-semicolons": true,
+    // "no-unnecessary-semicolons": true,
     "no-unused-expression": true,
-    "no-use-before-declare": true,
-    "no-with-statement": true,
+    // "no-use-before-declare": true,
+    // "no-with-statement": true,
     "semicolon": true,
     "trailing-comma": false,
     "typedef": false,
     "typedef-whitespace": false,
-    "use-named-parameter": true,
+    // "use-named-parameter": true,
     "variable-name": false,
     "whitespace": false,
-    "variable-declaration": false,
-    "one-variable-per-declaration": false
+    "variable-declaration": true,
+    "one-variable-per-declaration": false,
+    "prefer-const": true,
+    "no-null-keyword": true,
+    "no-trailing-whitespace": true,
+    "no-unused-variable": true,
+    "one-line": true,
+    "no-consecutive-blank-lines": true,
+    "max-line-length": [
+      true,
+      150
+    ]
   }
 }

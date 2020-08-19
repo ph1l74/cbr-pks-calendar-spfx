@@ -5,29 +5,30 @@ import Participants from './Participants';
 import Materials from './Materials';
 import Event from '../Models/Event';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEditMode, editEvent, getParticipantsByEvent, getMaterialsByEvent, infinityLoadEventMaterials, infinityLoadEventParticipants, deleteEvent } from '../Actions';
+import { editEvent, getParticipantsByEvent, getMaterialsByEvent, infinityLoadEventMaterials,
+  infinityLoadEventParticipants, deleteEvent } from '../Actions';
 import * as moment from 'moment';
 import { getCommentsByEvent } from '../Actions/comment';
 import * as $ from 'jquery';
 import { IAppReducer } from '../Reducers';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Tooltip, Button, message, Popconfirm } from 'antd';
+import { Tooltip, Button, Popconfirm } from 'antd';
 import FilterEvent from '../utils/IFilterEvent';
 
 const editIcon = require('../Icons/Edit.svg') as string;
-const DeleteIcon = props => <DeleteOutlined {...props} />
+const DeleteIcon = props => <DeleteOutlined {...props} />;
 const EventCard = (props: { eventCard: Event }) => {
 
   // modal types
-  const modalTypes = ['Участники', 'Материалы', 'Отзывы']
+  const modalTypes = ['Участники', 'Материалы', 'Отзывы'];
 
   // react hooks instead of props
-  const [cardInfo, setCardInfo] = React.useState(props.eventCard);
+  const [cardInfo] = React.useState(props.eventCard);
 
   // open modal state
 
   const [stateModal, setModal] = React.useState(false);
-  const [modalType, setModalType] = React.useState(null);
+  const [modalType, setModalType] = React.useState(undefined);
 
   const dispatch = useDispatch();
   const selectedEventForView: Event = useSelector(state => state.viewEvent.selectedEvent as Event);
@@ -45,24 +46,23 @@ const EventCard = (props: { eventCard: Event }) => {
   const categorieStyle: React.CSSProperties = {
     color: categorieColor,
     borderColor: categorieColor,
-  }
+  };
 
   const categorieBorderStyle: React.CSSProperties = {
     borderColor: categorieColor
-  }
+  };
 
-
-  // 
+  //
   const openEditForm = () => {
     console.log('send open editform');
     // dispatch(setEditMode(1))
     dispatch(editEvent(cardInfo));
-  }
+  };
 
   const deleteRecord = () => {
     console.log('send delete event');
     dispatch(deleteEvent(cardInfo, filterEvent, events.length < 10));
-  }
+  };
 
   function openModal(type: number): void {
     setModalType(type);
@@ -91,8 +91,7 @@ const EventCard = (props: { eventCard: Event }) => {
         }
       }
     }
-  }
-
+  };
 
   function closeModal(): void {
     console.log('closed modal');
@@ -148,7 +147,7 @@ const EventCard = (props: { eventCard: Event }) => {
             // cardInfo.isParticipant ?
             //   <div className={styles.status}>Вы участник</div>
             //   :
-            null
+            undefined
           }
           <div className={styles.location}>{cardInfo.location}</div>
         </div>
@@ -160,14 +159,20 @@ const EventCard = (props: { eventCard: Event }) => {
           </ul>
         </div>
         <div className={styles.footer}>
-          <div className='participants' onClick={() => { dispatch(getParticipantsByEvent(props.eventCard)); openModal(0); }}>Список участников ({cardInfo.participantsCount})</div>
+          <div className='participants' onClick={() => { dispatch(getParticipantsByEvent(props.eventCard)); openModal(0); }}>
+            Список участников ({cardInfo.participantsCount})
+          </div>
           {
             cardInfo.attachmentsCount > 0 ?
-              <div className='materials' onClick={() => { dispatch(getMaterialsByEvent(props.eventCard)); openModal(1); }}>Материалы ({cardInfo.attachmentsCount})</div>
+              <div className='materials' onClick={() => { dispatch(getMaterialsByEvent(props.eventCard)); openModal(1); }}>
+                Материалы ({cardInfo.attachmentsCount})
+              </div>
               :
-              null
+              undefined
           }
-          <div className='comment' onClick={() => { dispatch(getCommentsByEvent(props.eventCard)) }}>Отзывы {actualEvent.feedbacksCount > 0 ? `(${actualEvent.feedbacksCount})` : null}</div>
+          <div className='comment' onClick={() => { dispatch(getCommentsByEvent(props.eventCard)); }}>
+            Отзывы {actualEvent.feedbacksCount > 0 ? `(${actualEvent.feedbacksCount})` : undefined}
+          </div>
         </div>
       </div>
       {
@@ -183,10 +188,10 @@ const EventCard = (props: { eventCard: Event }) => {
             }
           </Modal>
           :
-          null
+          undefined
       }
     </div>
-  )
-}
+  );
+};
 
 export default EventCard;

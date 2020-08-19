@@ -20,16 +20,16 @@ const FeedbackEl = (props: { comment: Comment }) => {
     const [author, setAuthor] = React.useState(props.comment.author);
     const isEditor: boolean = useSelector((state: IAppReducer) => state.root.isEditor);
 
-    const EditIcon = props => <EditOutlined {...props} />
-    const DeleteIcon = props => <DeleteOutlined {...props} />
+    const EditIcon = props => <EditOutlined {...props} />;
+    const DeleteIcon = props => <DeleteOutlined {...props} />;
     const onEditClick = () => {
         console.log('on edit click');
         dispatch(editComment(commentInfo));
-    }
+    };
     const onDeleteClick = () => {
         console.log('on delete click');
         dispatch(deleteComment(commentInfo));
-    }
+    };
 
     return (
         // <div className={cardStyles.card}>
@@ -43,7 +43,7 @@ const FeedbackEl = (props: { comment: Comment }) => {
                                 src={author.img && author.img.toString().length > 0 ? author.img.toString() : unknownImage}></img>
                         </div>
                         <div className={styles.authorName}>
-                        {author ? `${author.firstName} ${author.lastName} ${author.patronymic}      ` : null}
+                        {author ? `${author.firstName} ${author.lastName} ${author.patronymic}      ` : undefined}
                         </div>
                     </div>
                     <div style={{ paddingRight: '30px' }}>
@@ -71,8 +71,8 @@ const FeedbackEl = (props: { comment: Comment }) => {
                 </div>
             </div>
         </div>
-    )
+    );
 
-}
+};
 
 export default FeedbackEl;

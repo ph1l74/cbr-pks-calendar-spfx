@@ -2,10 +2,10 @@ import * as React from 'react';
 import styles from './Modal.module.scss';
 
 interface IModalProps {
-    title: string,
-    closeModalFn: () => void,
-    onScroll: () => void,
-};
+    title: string;
+    closeModalFn: () => void;
+    onScroll: () => void;
+}
 
 const Modal: React.FunctionComponent<IModalProps> = (props) => {
 

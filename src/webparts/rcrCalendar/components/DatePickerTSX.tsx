@@ -7,6 +7,6 @@ const DatePickerJS: any = DatePicker;
 
 export class DatePickerTSX extends React.Component {
     public render() {
-        return <DatePickerJS/>
+        return <DatePickerJS/>;
     }
 }
