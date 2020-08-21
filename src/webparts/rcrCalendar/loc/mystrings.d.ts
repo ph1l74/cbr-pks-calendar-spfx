@@ -3,6 +3,7 @@ declare interface IRcrCalendarWebPartStrings {
   BasicGroupName: string;
   TitleFieldLabel: string;
   DescriptionFieldLabel: string;
+  DescriptionUrlApi: string;
 }
 
 declare module 'RcrCalendarWebPartStrings' {

@@ -12,6 +12,7 @@ import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { getCategories, getUsers, setAuth } from '../Actions';
 import { initEvents } from '../Actions';
+import Service from '../services/Service';
 
 const middleware = [thunk, createLogger({ collapsed: true })];
 
@@ -20,13 +21,14 @@ export const store = createStore(reducers, applyMiddleware(...middleware));
   // + window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 // )
 
-store.dispatch(getCategories());
-store.dispatch(getUsers());
-store.dispatch(initEvents());
 store.dispatch(setAuth());
+// store.dispatch(getCategories());
+// // store.dispatch(getUsers());
+// store.dispatch(initEvents());
 
 export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> {
   public render(): React.ReactElement<IRcrCalendarProps> {
+    Service.urlApi = this.props.urlApi;
     return (
       <Provider store={store} onScroll={this.handleScroll}>
         <div className={styles.rcrCalendar} >

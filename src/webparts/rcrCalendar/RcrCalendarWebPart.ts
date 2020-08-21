@@ -14,21 +14,25 @@ import {
 import * as strings from 'RcrCalendarWebPartStrings';
 import RcrCalendar from './components/RcrCalendar';
 import { IRcrCalendarProps } from './components/IRcrCalendarProps';
+import Service from './services/Service';
 
 export interface IRcrCalendarWebPartProps {
   title: string;
   description: string;
+  urlApi: string;
 }
 
 
 export default class RcrCalendarWebPart extends BaseClientSideWebPart<IRcrCalendarWebPartProps> {
 
   public render(): void {
+    Service.urlApi = this.properties.urlApi;
     const element: React.ReactElement<IRcrCalendarProps > = React.createElement(
       RcrCalendar,
       {
         title: this.properties.title,
-        description: this.properties.description
+        description: this.properties.description,
+        urlApi: this.properties.urlApi
       }
     );
 
@@ -59,6 +63,9 @@ export default class RcrCalendarWebPart extends BaseClientSideWebPart<IRcrCalend
                 }),
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
+                }),
+                PropertyPaneTextField('urlApi', {
+                  label: strings.DescriptionUrlApi
                 })
               ]
             }

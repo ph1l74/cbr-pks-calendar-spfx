@@ -10,6 +10,7 @@ export default class Service<T> {
     public static userId: string;
     public static isEdit: boolean;
     public static isRead: boolean;
+    public static urlApi: string;
 
     private dataHandlers: Array<(value: T, index: number) => void> = [];
 
@@ -32,6 +33,10 @@ export default class Service<T> {
         });
     }
 
+    private getUrlApi(){
+        return Service.urlApi ? Service.urlApi : (window && window.location && window.location.port === '4321' ? config.API_URL : '');
+    }
+
     public async findAll(sliceDate?: string): Promise<T[]> {
         let apiURL = this.apiPath;
         if (!apiURL) {
@@ -46,7 +51,7 @@ export default class Service<T> {
             console.log(navigator);
             //sliceDate = YYYY-MM-DD
             const response = await axios.get(
-                config.API_URL + apiURL + `${apiURL.indexOf('?') > -1 ? '&' : '?'}time=${Date.now().toString()}` + sliceDateParam.replace('?', '&'),
+                this.getUrlApi() + apiURL + `${apiURL.indexOf('?') > -1 ? '&' : '?'}time=${Date.now().toString()}` + sliceDateParam.replace('?', '&'),
                 {
                     xsrfCookieName: Date.now().toString(),
                     //headers: { Pragma: 'no-cache' } // Что-то в Rest произошло, что для IE 11 это значение стало ненужным,
@@ -72,7 +77,7 @@ export default class Service<T> {
             }
         }
 
-        const response = await axios.get(config.API_URL + apiURL + sliceDateParam, {});
+        const response = await axios.get(this.getUrlApi() + apiURL + sliceDateParam, {});
         // const newLocal: string = await response.data._embedded != null ? response.data._embedded[apiURL.replace('/', '')] : response.data;
         // Так сделано из-за разного формата возвращаемых данных из Rest
         const newLocal: string = await response.data._embedded != undefined ?
@@ -88,7 +93,7 @@ export default class Service<T> {
 
     public async getRecord(): Promise<T> {
         const apiURL = this.apiPath;
-        const response = await axios.get(config.API_URL + apiURL, {
+        const response = await axios.get(this.getUrlApi() + apiURL, {
         });
         const json: T = (await response.data) as T;
         return json;
@@ -96,7 +101,7 @@ export default class Service<T> {
 
     public async getRecordById(id: number): Promise<T> {
         const apiURL = this.apiPath;
-        const response = await axios.get(config.API_URL + apiURL + id, {
+        const response = await axios.get(this.getUrlApi() + apiURL + id, {
         });
         const json: T = (await response.data) as T;
         return json;
@@ -105,7 +110,7 @@ export default class Service<T> {
     public async remove(id: number): Promise<any> {
         // this.refreshToken(); // Обновляем токен
         const apiURL = this.apiPath;
-        const response = await axios.delete(config.API_URL + apiURL + id, {
+        const response = await axios.delete(this.getUrlApi() + apiURL + id, {
         });
         const json = await response.data;
         return json;
@@ -114,7 +119,7 @@ export default class Service<T> {
     public async add(record: T): Promise<any> {
         const apiURL = this.apiPath;
         // console.log('Add record', record);
-        const response = await axios.post(config.API_URL + apiURL, record, {
+        const response = await axios.post(this.getUrlApi() + apiURL, record, {
         });
         // console.log('Add record', response);
         const json = await response.data;
@@ -124,13 +129,13 @@ export default class Service<T> {
     public upload(files, options): Promise<any> {
         const apiURL = this.apiPath;
         console.log('Upload record', files);
-        return axios.post(config.API_URL + apiURL, files, options);
+        return axios.post(this.getUrlApi() + apiURL, files, options);
     }
 
     public async uploadFiles(files): Promise<string> {
         const apiURL = this.apiPath;
         console.log('Upload record', files);
-        const response = await axios.post(config.API_URL + apiURL, files, {
+        const response = await axios.post(this.getUrlApi() + apiURL, files, {
             // headers: {
             //     'Content-Type': 'multipart/form-data'
             // }
@@ -142,7 +147,7 @@ export default class Service<T> {
 
     public async update(record: T, id: number): Promise<any> {
         const apiURL = this.apiPath;
-        const response = await axios.put(config.API_URL + apiURL + id, record, {
+        const response = await axios.put(this.getUrlApi() + apiURL + id, record, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
@@ -156,7 +161,7 @@ export default class Service<T> {
 
     public async search(request: string): Promise<T[]> {
         const apiURL = this.apiPath;
-        const response = await axios.post(config.API_URL + apiURL.replace('/', '') + request,
+        const response = await axios.post(this.getUrlApi() + apiURL.replace('/', '') + request,
             {
                 xsrfCookieName: Date.now().toString(),
             });
@@ -173,7 +178,7 @@ export default class Service<T> {
 
     public async searchGet(request: string): Promise<T[]> {
         const apiURL = this.apiPath;
-        const response = await axios.get(config.API_URL + apiURL.replace('/', '') + request,
+        const response = await axios.get(this.getUrlApi() + apiURL.replace('/', '') + request,
             {
                 withCredentials: false,
                 // headers: {
@@ -195,7 +200,7 @@ export default class Service<T> {
 
     public async searchParam(request: string): Promise<T> {
         const apiURL = this.apiPath;
-        const response = await axios.get(config.API_URL + apiURL.replace('/', '') + request,
+        const response = await axios.get(this.getUrlApi() + apiURL.replace('/', '') + request,
             {
                 xsrfCookieName: Date.now().toString(),
             });
@@ -232,6 +237,9 @@ export default class Service<T> {
         return value;
     }
 }
+/**
+ * @deprecated 
+ */
 // tslint:disable-next-line:max-classes-per-file
 export class PagedService<T> {
     private dataHandlers: Array<(value: T, index: number) => void> = [];

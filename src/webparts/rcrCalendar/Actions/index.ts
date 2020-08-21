@@ -118,6 +118,8 @@ export const setAuth = (): any => {
                     type: types.SET_IS_EDITOR,
                     permission: res === true
                   });
+                  dispatch(getCategories());
+                  dispatch(initEvents());
                 });
                 web.currentUserHasPermissions(PermissionKind.ViewListItems).then(res => {
                   console.log('read list', res);

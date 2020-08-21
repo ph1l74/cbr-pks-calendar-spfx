@@ -3,6 +3,7 @@ define([], function() {
     'PropertyPaneDescription': 'Веб-часть "Календарь событий"',
     'BasicGroupName': 'Базовые поля',
     'TitleFieldLabel':'Заголовок',
-    'DescriptionFieldLabel': 'Описание'
+    'DescriptionFieldLabel': 'Описание',
+    'DescriptionUrlApi': 'Адрес Api'
   }
 });
