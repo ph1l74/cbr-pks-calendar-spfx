@@ -85,8 +85,28 @@ export const setAuth = (): any => {
               .then(res => {
                 console.log(res);
                 currentUserName = res.LoginName as string;
-                const loginInfo = currentUserName.split('\\');
-                setUser(dispatch, loginInfo[loginInfo.length - 1], res.UserId?.NameId);
+                // const loginInfo = currentUserName.split('\\');
+                // setUser(dispatch, loginInfo[loginInfo.length - 1], res.UserId?.NameId);
+                setUser(dispatch, currentUserName, res.UserId?.NameId);
+                if (res.UserId?.NameId) {
+                  const userInfo = currentUserName.split('|');
+                  dispatch({
+                    type: types.GET_CURRENT_USER
+                  });
+                  UserService.searchParam('/' + (userInfo[userInfo.length - 1] as string).replace('\\', '_5C')).then(res => {
+                    console.log('curUser', res, '/' + (userInfo[userInfo.length - 1] as string).replace('\\', '_5C'));
+                    dispatch({
+                      type: types.GET_CURRENT_USER_SUCCESS,
+                      user: res
+                    });
+                  })
+                  .catch(err => {
+                    dispatch({
+                      type: types.GET_CURRENT_USER_SUCCESS,
+                      user: undefined
+                    });
+                  });
+                }
                 // tslint:disable-next-line: no-shadowed-variable
                 web.getCurrentUserEffectivePermissions().then(ob => {
                   console.log('my perm', ob);
@@ -205,7 +225,7 @@ export const editEvent = (editingEvent: Event) => {
           });
         })
         .catch(err => {
-          console.log(err);
+          sendError(err, dispatch, 'загрузке данных');
           dispatch(closeEditEvent());
         });
     }

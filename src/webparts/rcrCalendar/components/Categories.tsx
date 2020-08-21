@@ -30,10 +30,8 @@ const Categories = (categories: Category[]) => {
 };
 
 const mapStateToProps = (store: any) => {
-    console.log('root', store.root);
     return {
         categories: store.root.categories,
-        // isFetchingCategories: store.root.isFetchingCategories
     };
 };
 

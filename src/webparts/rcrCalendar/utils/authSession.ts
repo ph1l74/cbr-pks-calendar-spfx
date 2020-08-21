@@ -6,8 +6,8 @@ export interface User {
 }
 
 export interface Session {
-    id: string;
-    dateCreated: number;
+    // id: string;
+    // dateCreated: number;
     username: string;
     /**
      * Timestamp indicating when the session was created, in Unix milliseconds.
@@ -20,6 +20,8 @@ export interface Session {
     exp: number;
     iss: string;
     aud: string;
+    isEdit: boolean;
+    isRead: boolean;
 }
 
 /**

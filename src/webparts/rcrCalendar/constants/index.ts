@@ -7,6 +7,8 @@ export const ADD_ROOM = 'ADD_ROOM';
 export const JOIN_ROOM = 'JOIN_ROOM';
 export const EXIT_ROOM = 'EXIT_ROOM';
 export const SET_CON_STATUS = 'SET_CON_STATUS';
+export const GET_CURRENT_USER = 'GET_CURRENT_USER';
+export const GET_CURRENT_USER_SUCCESS = 'GET_CURRENT_USER_SUCCESS';
 
 // new types start here:
 export const SET_EDIT_MODE = 'SET_EDIT_MODE';

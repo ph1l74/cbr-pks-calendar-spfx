@@ -105,19 +105,16 @@ const EditFormCard = () => {
     function saveEditForm(): void {
         const editValues = form.getFieldsValue();
         if (form.getFieldsError().map(ob => ob.errors.length).reduce((a, b) => a = a + b) === 0) {
-        // if (form.isFieldsValidating(['description', 'dateFrom', 'dateTo', 'eventName', 'location', 'category'])) {
-            console.log('save editform', editingEvent, editValues.fullDay, editValues);
+            // if (form.isFieldsValidating(['description', 'dateFrom', 'dateTo', 'eventName', 'location', 'category'])) {
+            console.log('save editform', editingEvent, editValues.allDay, editValues);
             const editEvent = editingEvent;
             if (editValues.participants) {
                 editEvent.actors = editValues.participants.map(ob => new Actor(editingEvent.id, ob));
+                editEvent.participants = editValues.participants;
             }
-            if (editValues.fullDay) {
-                editEvent.fullDay = editValues.fullDay;
-            }
+            editEvent.allDay = editValues.allDay ?? false;
             editEvent.description = editValues.description;
-            if (editValues.freeVisiting) {
-                editEvent.freeVisiting = editValues.freeVisiting;
-            }
+            editEvent.freeVisit = editValues.freeVisiting ?? false;
             if (editValues.materials) {
                 editEvent.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
             }
@@ -141,15 +138,15 @@ const EditFormCard = () => {
 
 
     const renderCategories = () => {
-        return categories.map(ob => <Select.Option name={`category_${ob.id}`} key={`category_${ob.id}`} 
+        return categories.map(ob => <Select.Option name={`category_${ob.id}`} key={`category_${ob.id}`}
             value={ob.id} style={{ color: ob.color }}>{ob.name}</Select.Option>);
     };
     const renderActors = () => {
-        return users.map(ob => <Select.Option name={`user_${ob.login}`} key={`user_${ob.login}`} 
+        return users.map(ob => <Select.Option name={`user_${ob.login}`} key={`user_${ob.login}`}
             value={ob.login}>{`${ob.firstName} ${ob.lastName} ${ob.patronymic} `}</Select.Option>);
     };
     const DatePickerJS: any = DatePicker;
-    
+
     const checkDate = (rule, value, type: string) => {
         const labelDate = type === 'end' ? 'окончания' : 'начала';
         // if (!value) {
@@ -205,9 +202,9 @@ const EditFormCard = () => {
                 form={form}
                 name='basic'
                 initialValues={{
-                    fullDay: editingEvent.fullDay,
+                    allDay: editingEvent.allDay,
                     description: editingEvent.description,
-                    freeVisiting: editingEvent.freeVisiting,
+                    freeVisiting: editingEvent.freeVisit,
                     materials: recordFileList,
                     eventName: editingEvent.name,
                     category: editingEvent.category?.id,
@@ -347,10 +344,10 @@ const EditFormCard = () => {
                     />
                 </Form.Item>
 
-                {/* <Form.Item {...tailLayout} name='fullDay' valuePropName='checked' label='Событие на весь день'> */}
-                <Form.Item {...tailLayout} name='fullDay' label='Событие на весь день'>
-                    <Checkbox defaultChecked={editingEvent.fullDay} onChange={value => {
-                        form.setFieldsValue({ fullDay: value.target.checked });
+                {/* <Form.Item {...tailLayout} name='allDay' valuePropName='checked' label='Событие на весь день'> */}
+                <Form.Item {...tailLayout} name='allDay' label='Событие на весь день'>
+                    <Checkbox defaultChecked={editingEvent.allDay} onChange={event => {
+                        form.setFieldsValue({ allDay: event.target.checked });
                     }} />
                 </Form.Item>
 
@@ -359,15 +356,15 @@ const EditFormCard = () => {
                     label='Описание'
                     name='description'
                 >
-                    <TextArea maxLength={2500} autoSize={{ minRows: 3, maxRows: 3 }} defaultValue={editingEvent.description} onChange={(value) => {
-                        form.setFieldsValue({ description: value.target.value });
+                    <TextArea maxLength={2500} autoSize={{ minRows: 3, maxRows: 3 }} defaultValue={editingEvent.description} onChange={(event) => {
+                        form.setFieldsValue({ description: event.target.value });
                     }} />
                 </Form.Item>
 
                 <Form.Item {...tailLayout} name='freeVisiting' label='Свободное посещение'>
-                    <Checkbox defaultChecked={editingEvent.freeVisiting} onChange={value => {
-                        console.log('freeVisiting', value.target.checked);
-                        form.setFieldsValue({ freeVisiting: value.target.checked });
+                    <Checkbox defaultChecked={editingEvent.freeVisit} onChange={event => {
+                        // console.log('freeVisiting', value.target.checked);
+                        form.setFieldsValue({ freeVisiting: event.target.checked });
                     }} />
                 </Form.Item>
 
@@ -382,11 +379,11 @@ const EditFormCard = () => {
 
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
                     <Upload multiple={true}
-                        fileList = {fileList}
+                        fileList={fileList}
                         // defaultFileList={recordFileList.fileList as UploadFile<any>[]} 
                         beforeUpload={(file, fileList) => {
                             const len = fileList.map(f => f.size).reduce((s1, s2) => s1 + s2);
-                            if (len > maxRequestLength){
+                            if (len > maxRequestLength) {
                                 message.error(`Размер загружаемых файлов не может превышать ${Math.round(maxRequestLength / (1024 * 1024))} МБ`);
                             }
                             return len <= maxRequestLength;
@@ -433,7 +430,7 @@ const EditFormCard = () => {
 
                 <Form.Item {...tailLayout} label='Ссылки' name='links'>
                     <Select mode='tags' style={{ width: 'calc(41em - 10px)' }} placeholder='Введите ссылку и нажмите Etner' maxTagCount={30}
-                        defaultValue={editingEvent.links.map(ob => ob.linkName)} 
+                        defaultValue={editingEvent.links.map(ob => ob.linkName)}
                         onChange={value => {
                             form.setFieldsValue({ links: value });
                         }}>

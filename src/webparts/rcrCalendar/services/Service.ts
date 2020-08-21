@@ -6,8 +6,10 @@ import { getToken } from '../utils/auth';
 
 export default class Service<T> {
 
-    public static userName: string;
+    public static userName: string; //Todo временное решение, потому что обращение к стору возможно из функционального компонента
     public static userId: string;
+    public static isEdit: boolean;
+    public static isRead: boolean;
 
     private dataHandlers: Array<(value: T, index: number) => void> = [];
 
@@ -18,8 +20,8 @@ export default class Service<T> {
 
     private refreshToken() {
         axios.interceptors.request.use((config: AxiosRequestConfig) => {
-            const token = getToken(Service.userName, Service.userId);
-            if (Math.round(Date.now() / 1000) > token.expires + token.issued) {
+            const token = getToken(Service.userName, Service.userId, Service.isEdit, Service.isRead);
+            if (Math.round(Date.now() / 1000) > token.expires) {
                 console.log('token expired');
             }
 

@@ -14,10 +14,10 @@ export default class Event implements Model {
     public location: string;
     public description: string;
     public authorLogin: string;
-    public fullDay: boolean;
+    public allDay: boolean;
     public startDate: Date;
     public endDate: Date;
-    public freeVisiting: boolean;
+    public freeVisit: boolean;
     public comments: Comment[];
     public participantsCount: number;
     public attachmentsCount: number;

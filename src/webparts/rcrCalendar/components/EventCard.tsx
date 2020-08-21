@@ -138,7 +138,7 @@ const EventCard = (props: { eventCard: Event }) => {
         </a>
         <div className={styles.header}>
           {
-            cardInfo.fullDay ?
+            cardInfo.allDay ?
               <div className={styles.time}>Событие на весь день</div>
               :
               <div className={styles.time}>{cardInfo.startDate.getHours()} - {cardInfo.endDate.getHours()}</div>

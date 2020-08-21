@@ -22,13 +22,11 @@ const Categorie = (props: {info: Category,  filterEvent: FilterEvent, selectCate
     };
 
     const clickHandler = (id) => {
-        console.log(id);
         setActive(!active);
         // changeSelectedCategory(id);
         props.selectCategory(id, props.filterEvent);
     };
 
-    console.log(info, props.selectCategory);
     return (
         <div className={styles.categorie} onClick={() => (clickHandler((info.id)))}>
             <div className={styles.box} style={categorieStyle}></div>

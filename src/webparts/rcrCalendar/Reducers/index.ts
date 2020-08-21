@@ -14,7 +14,7 @@ interface IRootStore {
     categories: Category[];
     users: User[];
     editMode: any;
-    isFetchingCategories: boolean;
+    isFetching: boolean;
     currentUser: User;
     userName: string;
     userId: string;
@@ -39,7 +39,7 @@ const initState: IRootStore =
     editMode: undefined,
     categories: [],
     users: [],
-    isFetchingCategories: false,
+    isFetching: false,
     currentUser: undefined,
     userName: '',
     userId: '',
@@ -77,26 +77,36 @@ const rootReducer = (state = initState, action) => {
                 Service.userId = userId;
                 return { ...state, userName: userName, userId: userId, currentUser: curUser };
             }
+        case types.GET_CURRENT_USER:
+            {
+                return { ...state, isFetching: true };
+            }
+        case types.GET_CURRENT_USER_SUCCESS:
+            {
+                return { ...state, isFetching: false, currentUser: action.user as User };
+            }
         case types.SET_IS_EDITOR:
             {
+                Service.isEdit = action.permission;
                 return { ...state, isEditor: action.permission };
             }
         case types.SET_IS_VIEWER:
             {
+                Service.isRead = action.permission;
                 return { ...state, isViewer: action.permission };
             }
 
         case types.GET_CATEGORIES:
-            return { ...state, isFetchingCategories: true };
+            return { ...state, isFetching: true };
         case types.GET_CATEGORIES_SUCCESS:
-            return { ...state, categories: action.payload, isFetchingCategories: false };
+            return { ...state, categories: action.payload, isFetching: false };
 
         case types.GET_USERS:
-            return { ...state, isFetchingCategories: true };
+            return { ...state, isFetching: true };
         case types.GET_USERS_SUCCESS:
             {
-                const curUser = getUserByName(action.payload, state.userName, state.currentUser);
-                return { ...state, users: action.payload, currentUser: curUser, isFetchingCategories: false };
+                // const curUser = getUserByName(action.payload, state.userName, state.currentUser);
+                return { ...state, users: action.payload, isFetching: false };
             }
 
         default:
@@ -336,8 +346,12 @@ function getUserByName(users: User[], userName: string, currentUser: User) {
         curUser = curUser ?? (users.length > 0 ? users[0] : undefined);
     }
     else {
-        const findUsers = users.filter(ob => ob.login.split('@')[0] === userName);
-        curUser = findUsers.length > 0 ? findUsers[0] : undefined;
+        const userInfo = userName.split('|');
+        const findUsers = users.filter(ob => ob.login === userInfo[userInfo.length - 1]);
+        if (findUsers.length > 0) {
+            curUser = findUsers[0];
+            console.log('currentUser', userInfo, userInfo[userInfo.length - 1], curUser);
+        }
     }
     return curUser;
 }

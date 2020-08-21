@@ -4,23 +4,16 @@ import { DecodeResult, EncodeResult, PartialSession, Session } from './authSessi
 export function encodeSession(secretKey: string, partialSession: PartialSession): EncodeResult {
     // Always use HS512 to sign the token
     const algorithm: TAlgorithm = 'HS512';
-    // Determine when the token should expire
     const issued = Math.round(Date.now()/1000);
-    const fifteenMinutesInMs = 60 * 60; // 1 hours
-    const expires = issued + fifteenMinutesInMs;
     const payloadSession: Session = {
         ...partialSession,
-        issued: issued,
-        // expires: expires,
-        exp: expires,
-        iss: 'RCRCalendarApp',
-        aud: 'RCRCalendarApp'
+        issued: issued
     };
 
     return {
         token: encode(payloadSession, secretKey, algorithm),
         issued: issued,
-        expires: expires
+        expires: payloadSession.exp
     };
 }
 
@@ -69,15 +62,17 @@ const secretKey = 'CalendarKeyToken';
 
 // export const auth = () => {
 
-    export const getToken = (userName: string, userId: string) => {
+    export const getToken = (userName: string, userId: string, isEdit: boolean, isRead: boolean) => {
         const expires = Math.round(Date.now()/1000) + (60 * 60);
         const session: PartialSession = {
-            id: userId,
-            dateCreated: Date.now(),
+            // id: userId,
+            // dateCreated: Date.now(),
             username: userName,
             exp: expires,
             iss: 'RCRCalendarApp',
-            aud: 'RCRCalendarApp'
+            aud: 'RCRCalendarApp',
+            isEdit: isEdit,
+            isRead: isRead
         };
         return encodeSession(secretKey, session);
     };
