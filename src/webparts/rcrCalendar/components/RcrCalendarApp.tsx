@@ -42,7 +42,7 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent) => {
     const selectedEventForComments: Event = useSelector((state: IAppReducer) => state.comment.selectedEvent as Event);
     const eventsCount: number = useSelector((state: IAppReducer) =>
         state.event.events.length === 0 ? 0 : (state.event.events as GroupingEvent[])
-        .map(evg => evg.Value).reduce((a, b) => a ? a.concat(b) : []).length);
+            .map(evg => evg.Value).reduce((a, b) => a ? a.concat(b) : []).length);
     const currentFilter: FilterEvent = useSelector((state: IAppReducer) => state.event.filterEvent);
     const isFetching: boolean = useSelector((state: IAppReducer) => state.event.isFetching as boolean);
     // const isCommentFetching: boolean = useSelector((state: IAppReducer) => state.comment.isFetching as boolean);
@@ -70,7 +70,7 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent) => {
         // Checks that the page has scrolled to the bottom
         if ( // contentElement.clientHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
             eventsCount > 0 && contentElement.innerHeight() + contentElement.scrollTop() + 0 >= contentElement[0].scrollHeight) {
-            console.log('Infinity load', currentFilter, eventsCount);
+            console.log('Infinite load', currentFilter, eventsCount, contentElement.innerHeight());
             dispatch(infinityLoadEvents(eventsCount, currentFilter));
         }
     }));
@@ -101,6 +101,13 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent) => {
         newRecord.links = [];
         newRecord.materials = [];
         newRecord.actors = [];
+        newRecord.users = [];
+        newRecord.participants = [];
+        newRecord.name = '';
+        newRecord.location = '';
+        newRecord.description = '';
+        newRecord.allDay = false;
+        newRecord.freeVisit = false;
         newRecord.author = currentUser;
         if (window.location.port === '4321') {
             // newRecord.author = selectedEventForComments.author;
@@ -108,33 +115,36 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent) => {
         dispatch(editEvent(newRecord));
     }
 
+    const renderEditForm = () => {
+        return editingEvent ?
+            <EditFormCard ></EditFormCard>
+            : (selectedEventForComments) ?
+                <Feedback />
+                : null;
+    };
     const initCategories: Category[] = [];
     return (
         // editMode && editMode === 1 ?
-        editingEvent ?
-            <EditFormCard ></EditFormCard>
-            : (selectedEventForComments) ?
-            <Feedback/>
-            :
-            (
-                <div className={styles.app}>
-                    <Spin tip='Загрузка данных...' spinning={isFetching} delay={500}>
-                        <Content filterEvent={filterEvent} >
-                            {renderEvents(events)}
-                        </Content>
-                        <Dashboard>
-                            <div className={styles['new-button']} hidden={!isEditor}>
-                                <Tooltip title='Новое событие'>
-                                    <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }}
-                                    icon={<AddIcon />} onClick={newEditForm} />
-                                </Tooltip>
-                            </div>
-                            <Calendar ></Calendar>
-                            <Categories categories={initCategories} />
-                        </Dashboard>
-                    </Spin>
-                </div>
-            )
+        <div className={styles.app}>
+            <div className='editFormContent'>
+                {renderEditForm()}
+            </div>
+            <Spin tip='Загрузка данных...' spinning={isFetching} delay={500}>
+                <Content filterEvent={filterEvent} >
+                    {renderEvents(events)}
+                </Content>
+                <Dashboard>
+                    <div className={styles['new-button']} hidden={!isEditor}>
+                        <Tooltip title='Новое событие'>
+                            <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }}
+                                icon={<AddIcon />} onClick={newEditForm} />
+                        </Tooltip>
+                    </div>
+                    <Calendar ></Calendar>
+                    <Categories categories={initCategories} />
+                </Dashboard>
+            </Spin>
+        </div>
     );
 };
 

@@ -10,8 +10,7 @@ import reducers from '../Reducers';
 import RcrCalendarApp from './RcrCalendarApp';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import { getCategories, getUsers, setAuth } from '../Actions';
-import { initEvents } from '../Actions';
+import { setAuth } from '../Actions';
 import Service from '../services/Service';
 
 const middleware = [thunk, createLogger({ collapsed: true })];

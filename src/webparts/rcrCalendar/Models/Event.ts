@@ -23,6 +23,7 @@ export default class Event implements Model {
     public attachmentsCount: number;
     public feedbacksCount: number;
     public actors: Actor[];
+    public users: User[];
     public materials: Material[];
     public links: Link[];
     public author: User;

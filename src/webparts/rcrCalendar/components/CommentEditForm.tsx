@@ -52,24 +52,34 @@ const CommentEditForm = () => {
     }
 
     function saveEditForm(): void {
-        const editValues = form.getFieldsValue();
-        if (form.getFieldsError().map(ob => ob.errors.length).reduce((a, b) => a = a + b) === 0) {
-            console.log('save editform', editingComment, editValues);
-            const editComment = editingComment;
-            editComment.description = editValues.description;
-            if (editValues.materials) {
-                editComment.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
+        function sendError() {
+            {
+                message.error('Данные не могут быть сохранены, т.к. имеются ошибки ввода!');
             }
-            if (editValues.links) {
-                editComment.links = editValues.links.map(ob => new Link(0, ob));
+        }
+        form.validateFields().then((value) => {
+            const editValues = form.getFieldsValue();
+            if (form.getFieldsError().map(ob => ob.errors.length).reduce((a, b) => a = a + b) === 0) {
+                console.log('save editform', editingComment, editValues);
+                const editComment = editingComment;
+                editComment.description = editValues.description;
+                if (editValues.materials) {
+                    editComment.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
+                }
+                if (editValues.links) {
+                    editComment.links = editValues.links.map(ob => new Link(0, ob));
+                }
+                editComment.sessionGuid = sessionGuid;
+                console.log(editingComment, editComment);
+                dispatch(saveEditComment(editComment));
             }
-            editComment.sessionGuid = sessionGuid;
-            console.log(editingComment, editComment);
-            dispatch(saveEditComment(editComment));
-        }
-        else {
-            message.error('Данные не могут быть сохранены, т.к. имеются ошибки ввода!');
-        }
+            else {
+                sendError();
+            }
+        }).catch(err => {
+            console.log(err);
+            sendError();
+        });
     }
 
     const onFinish = values => {
@@ -111,11 +121,11 @@ const CommentEditForm = () => {
 
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
                     <Upload multiple={true}
-                        fileList = {fileList}
+                        fileList={fileList}
                         // defaultFileList={recordFileList.fileList as UploadFile<any>[]}
                         beforeUpload={(file, fileList) => {
                             const len = fileList.map(f => f.size).reduce((s1, s2) => s1 + s2);
-                            if (len > maxRequestLength){
+                            if (len > maxRequestLength) {
                                 message.error(`Размер загружаемых файлов не может превышать ${Math.round(maxRequestLength / (1024 * 1024))} МБ`);
                             }
                             return len <= maxRequestLength;

@@ -48,6 +48,9 @@ export const setAuth = (): any => {
         type: types.SET_IS_VIEWER,
         permission: true
       });
+      dispatch(getCategories());
+      dispatch(getUsers());
+      dispatch(initEvents());
     }
     else {
       // sp.setup({
@@ -363,6 +366,23 @@ export const getUsers = (): any => {
     UserService.findAll()
       .then(ob => {
         console.log('fetch users', ob);
+        dispatch({
+          type: types.GET_USERS_SUCCESS,
+          payload: ob,
+        });
+      })
+      .catch(err => console.log(err));
+  };
+};
+
+export const searchUsers = (search: string): any => {
+  return async dispatch => {
+    dispatch({
+      type: types.GET_USERS,
+    });
+    UserService.searchGet(`/?search=${search}`)
+      .then(ob => {
+        console.log('search users', ob);
         dispatch({
           type: types.GET_USERS_SUCCESS,
           payload: ob,

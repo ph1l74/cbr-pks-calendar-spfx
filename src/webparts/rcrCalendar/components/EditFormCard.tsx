@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form, Input, Checkbox, Button, Select, Upload, message, Modal, } from 'antd';
+import { Form, Input, Checkbox, Button, Select, Upload, message, Modal, Tag, } from 'antd';
 import styles from './EditFormCard.module.scss';
 // import { DatePicker } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
@@ -7,7 +7,7 @@ import { TimePicker } from 'antd';
 import * as moment from 'moment';
 import { DatePickerTSX } from './DatePickerTSX';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEditMode, closeEditEvent, saveEditEvent } from '../Actions';
+import { setEditMode, closeEditEvent, saveEditEvent, searchUsers } from '../Actions';
 import Event from '../Models/Event';
 import Category from '../../../../lib/webparts/rcrCalendar/Models/Category';
 import * as ReactDOM from 'react-dom';
@@ -46,6 +46,7 @@ const EditFormCard = () => {
     const [sessionGuid, setSessionGuid] = React.useState(generateUUID());
     const [isLoading, setIsLoading] = React.useState(false);
 
+    const [selectedUsers, setSelectedUsers] = React.useState(editingEvent.users);
     const [startDate, setStartDate] = React.useState(editingEvent.startDate);
     const [endDate, setEndDate] = React.useState(editingEvent.endDate);
     const [fileList, updateFileList] = React.useState(editingEvent.materials.map(ob => {
@@ -103,39 +104,64 @@ const EditFormCard = () => {
     }
 
     function saveEditForm(): void {
-        const editValues = form.getFieldsValue();
-        if (form.getFieldsError().map(ob => ob.errors.length).reduce((a, b) => a = a + b) === 0) {
-            // if (form.isFieldsValidating(['description', 'dateFrom', 'dateTo', 'eventName', 'location', 'category'])) {
-            console.log('save editform', editingEvent, editValues.allDay, editValues);
-            const editEvent = editingEvent;
-            if (editValues.participants) {
-                editEvent.actors = editValues.participants.map(ob => new Actor(editingEvent.id, ob));
-                editEvent.participants = editValues.participants;
+        function sendError() {
+            {
+                message.error('Данные не могут быть сохранены, т.к. имеются ошибки ввода!');
             }
-            editEvent.allDay = editValues.allDay ?? false;
-            editEvent.description = editValues.description;
-            editEvent.freeVisit = editValues.freeVisiting ?? false;
-            if (editValues.materials) {
-                editEvent.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
-            }
-            if (editValues.links) {
-                editEvent.links = editValues.links.map(ob => new Link(0, ob));
-            }
-            editEvent.name = editValues.eventName;
-            editEvent.category = editValues.category ? categories.filter(ob => ob.id === editValues.category)[0] : undefined;
-            editEvent.location = editValues.location;
-            editEvent.startDate = ConvertDateWithoutZone(startDate);
-            editEvent.endDate = ConvertDateWithoutZone(endDate);
-            console.log(editingEvent, editEvent);
-            editEvent.sessionGuid = sessionGuid;
-            dispatch(saveEditEvent(editEvent, filterEvent));
         }
-        else {
-            message.error('Данные не могут быть сохранены, т.к. имеются ошибки ввода!');
-        }
+        form.validateFields().then((value) => {
+            const editValues = form.getFieldsValue();
+            if (form.getFieldsError().map(ob => ob.errors.length).reduce((a, b) => a = a + b) === 0) {
+                // if (form.isFieldsValidating(['description', 'dateFrom', 'dateTo', 'eventName', 'location', 'category'])) {
+                console.log('save editform', editingEvent, editValues.allDay, editValues);
+                const editEvent = editingEvent;
+                if (editValues.participants) {
+                    editEvent.actors = editValues.participants.map(ob => new Actor(editingEvent.id, ob));
+                    editEvent.participants = editValues.participants;
+                    editEvent.users = editValues.participants.map(ob => {
+                        const user = new User();
+                        user.login = ob;
+                        return user;
+                    });
+                }
+                editEvent.allDay = editValues.allDay ?? false;
+                editEvent.description = editValues.description;
+                editEvent.freeVisit = editValues.freeVisiting ?? false;
+                if (editValues.materials) {
+                    editEvent.materials = editValues.materials.fileList.map(ob => new Material(parseUid(ob.uid), ob.name));
+                }
+                if (editValues.links) {
+                    editEvent.links = editValues.links.map(ob => new Link(0, ob));
+                }
+                editEvent.name = editValues.eventName;
+                editEvent.category = editValues.category ? categories.filter(ob => ob.id === editValues.category)[0] : undefined;
+                editEvent.location = editValues.location;
+                editEvent.startDate = ConvertDateWithoutZone(startDate);
+                editEvent.endDate = ConvertDateWithoutZone(endDate);
+                console.log(editingEvent, editEvent);
+                editEvent.sessionGuid = sessionGuid;
+                editEvent.author = editingEvent.author ?? (users.length > 0 ? users[0] : undefined);
+                dispatch(saveEditEvent(editEvent, filterEvent));
+            }
+            else {
+                sendError();
+            }
+        }).catch(err => {
+            console.log(err);
+            sendError();
+        });
     }
     // const pickerStart = new DatePicker({defaultValue: moment(editingEvent.startDate, 'YYYY-MM-DD'), onChange: (value) => {console.log(value)}})
-
+    function tagRender(props) {
+        const { label, closable, onClose, value } = props;
+        const findUsers = selectedUsers.filter(ob => ob.login === value);
+        const findUser = findUsers.length > 0 ? findUsers[0] : null;
+        return (
+            <Tag closable={closable} onClose={onClose} style={{ marginRight: 3 }}>
+                {findUser ? `${findUser.firstName} ${findUser.lastName} ${findUser.patronymic}` : label + "111"}
+            </Tag>
+        );
+    }
 
     const renderCategories = () => {
         return categories.map(ob => <Select.Option name={`category_${ob.id}`} key={`category_${ob.id}`}
@@ -371,7 +397,14 @@ const EditFormCard = () => {
                 <Form.Item {...tailLayout} label='Участники'
                     name='participants'>
                     <Select mode='multiple' style={{ width: 'calc(41em - 10px)' }} placeholder='Выберите участников'
-                        defaultValue={editingEvent.participants} >
+                        defaultValue={editingEvent.participants} onSearch={search => { dispatch(searchUsers(search)) }}
+                        tagRender={tagRender} onChange={values => {
+                            const addingValues = values.filter(val => selectedUsers.filter(ob => ob.login === val).length === 0);
+                            let selUsers = selectedUsers;
+                            const newUsers = users.filter(us => addingValues.filter(v => v === us.login).length > 0);
+                            selUsers.push(...newUsers);
+                            setSelectedUsers(selUsers);
+                        }}>
                         {renderActors()}
                     </Select>
                 </Form.Item>

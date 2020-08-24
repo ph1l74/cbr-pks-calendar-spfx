@@ -73,7 +73,7 @@ const rootReducer = (state = initState, action) => {
                 const userName = action.userName;
                 const userId = action.userId;
                 const curUser = getUserByName(state.users, userName, state.currentUser);
-                Service.userName = userName;
+                Service.userName = userName !== 'workbench' ? userName : (curUser ? curUser.login : 'workbench');
                 Service.userId = userId;
                 return { ...state, userName: userName, userId: userId, currentUser: curUser };
             }
@@ -210,6 +210,7 @@ const eventReducer = (state = eventInit, action) => {
             const editEvent = (action.editEvent as Event);
             editEvent.startDate = new Date(editEvent.startDate.toString());
             editEvent.endDate = new Date(editEvent.endDate.toString());
+            editEvent.participants = (editEvent.users ?? []).map(ob => ob.login);
             return { ...state, editingEvent: editEvent, isFetching: false };
 
         case types.SAVE_EDIT_EVENT:
