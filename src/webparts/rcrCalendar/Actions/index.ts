@@ -6,7 +6,7 @@ import pnp, { Logger, PermissionKind } from 'sp-pnp-js';
 import * as types from '../constants';
 import Event from '../Models/Event';
 import { filterEventInit } from '../Reducers';
-import { ActorService, CategoryService, EventService, GroupingEventService, MaterialService, UserService } from '../services/Services';
+import { ActorService, CategoryService, EventService, GroupingEventService, MaterialService, UserService, CalendarService } from '../services/Services';
 import FilterEvent from '../utils/IFilterEvent';
 
 
@@ -49,7 +49,7 @@ export const setAuth = (): any => {
         permission: true
       });
       dispatch(getCategories());
-      dispatch(getUsers());
+      dispatch(getUsers()); // Только для workbench
       dispatch(initEvents());
     }
     else {
@@ -368,6 +368,25 @@ export const getUsers = (): any => {
         console.log('fetch users', ob);
         dispatch({
           type: types.GET_USERS_SUCCESS,
+          payload: ob,
+        });
+      })
+      .catch(err => console.log(err));
+  };
+};
+
+export const getCalendarDate = (startDate: moment.Moment, endDate: moment.Moment): any => {
+  return async dispatch => {
+    dispatch({
+      type: types.GET_CALENDAR_DATE,
+      start: startDate,
+      end: endDate,
+    });
+    CalendarService.searchGet(`/?startDate=${startDate.format('DD.MM.yyyy')}&endDate=${endDate.format('DD.MM.yyyy')}`)
+      .then(ob => {
+        console.log('fetch calendar dates', ob, startDate, endDate);
+        dispatch({
+          type: types.GET_CALENDAR_DATE_SUCCESS,
           payload: ob,
         });
       })

@@ -61,11 +61,6 @@ const Feedback = () => {
             (<Modal title={'Отзывы'} onCancel={closeViewCommentForm} visible={true} key='commentsModal'
                 cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}
                 width={900} footer={false}>
-                <div className={styles.feedbacksHeader} >
-                    <Button type='primary' shape='round' size='large' name='NewCommentBtn' hidden={!isEditor} onClick={newEditForm}>
-                        Новая запись
-                    </Button>
-                </div>
                 <div key={`commentsModal_${selectedEventForComments.id}`} onScroll={e => onScroll()}
                     className={'commentsModal'} style={{ maxHeight: '900px', overflow: 'auto' }} >
                     {/* <ul style={styles}> */}
@@ -74,6 +69,11 @@ const Feedback = () => {
                             <FeedbackEl comment={el} />
                         </div>
                     )}
+                </div>
+                <div className={styles.feedbacksHeader} >
+                    <Button type='primary' shape='round' size='large' className={styles.NewCommentBtn} onClick={newEditForm}>
+                        Добавить отзыв
+                    </Button>
                 </div>
             </Modal>)
 

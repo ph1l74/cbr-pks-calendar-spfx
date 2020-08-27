@@ -9,6 +9,7 @@ import GroupingEvent from '../Models/GroupingEvent';
 import Material from '../Models/Material';
 import User from '../Models/User';
 import FilterEvent from '../utils/IFilterEvent';
+import * as moment from 'moment';
 
 interface IRootStore {
     categories: Category[];
@@ -281,6 +282,9 @@ interface IViewEventStore {
     selectedEvent: Event;
     isFetching: boolean;
     isFetchingFull: boolean;
+    calendarDates: string[];
+    intervalStart: moment.Moment;
+    intervalEnd: moment.Moment;
 }
 const viewEventInit: IViewEventStore = {
     materials: [],
@@ -288,6 +292,9 @@ const viewEventInit: IViewEventStore = {
     selectedEvent: undefined,
     isFetching: false,
     isFetchingFull: false,
+    calendarDates: [],
+    intervalStart: moment(new Date()).add(-1, 'M'),
+    intervalEnd: moment(new Date()).add(1, 'M'),
 };
 const viewEventReducer = (state = viewEventInit, action) => {
     switch (action.type) {
@@ -321,7 +328,12 @@ const viewEventReducer = (state = viewEventInit, action) => {
                 isFetching: false,
                 isFetchingFull: action.isFetchingFull,
             };
-
+        case types.GET_CALENDAR_DATE: {
+            return { ...state, isFetching: true, intervalStart: action.start, intervalEnd: action.end, };
+        }
+        case types.GET_CALENDAR_DATE_SUCCESS: {
+            return { ...state, isFetching: false, calendarDates: action.payload };
+        }
         default:
             return state;
     }

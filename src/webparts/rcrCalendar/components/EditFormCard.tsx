@@ -5,7 +5,7 @@ import styles from './EditFormCard.module.scss';
 import { UploadOutlined } from '@ant-design/icons';
 import { TimePicker } from 'antd';
 import * as moment from 'moment';
-import { DatePickerTSX } from './DatePickerTSX';
+import { DatePickerTSX, MyPicker, DatePickerAutoaccept } from './DatePickerTSX';
 import { useSelector, useDispatch } from 'react-redux';
 import { setEditMode, closeEditEvent, saveEditEvent, searchUsers } from '../Actions';
 import Event from '../Models/Event';
@@ -45,6 +45,7 @@ const EditFormCard = () => {
 
     const [sessionGuid, setSessionGuid] = React.useState(generateUUID());
     const [isLoading, setIsLoading] = React.useState(false);
+    const [allDay, setAllDay] = React.useState(editingEvent.allDay);
 
     const [selectedUsers, setSelectedUsers] = React.useState(editingEvent.users);
     const [startDate, setStartDate] = React.useState(editingEvent.startDate);
@@ -199,7 +200,7 @@ const EditFormCard = () => {
     };
     const setHours = (hoursDate: moment.Moment, prevValue: Date) => {
         prevValue = prevValue ?? new Date(hoursDate.year(), hoursDate.month(), hoursDate.date(), hoursDate.hour(), hoursDate.minute());
-        prevValue.setHours(hoursDate.hours());
+        prevValue.setHours(hoursDate.hour());
         prevValue.setSeconds(0);
         prevValue.setMilliseconds(0);
         return prevValue;
@@ -303,7 +304,7 @@ const EditFormCard = () => {
                             form.setFieldsValue({ dateFrom: newVal });
                             form.validateFields(['dateFrom', 'dateTo']);
                         }} />
-                    <TimePicker name='dateFrom_hour'
+                    <TimePicker name='dateFrom_hour' disabled={allDay}
                         placeholder='00:'
                         format={'HH'} allowClear={false}
                         defaultValue={moment(startDate, 'HH')}
@@ -315,7 +316,7 @@ const EditFormCard = () => {
                             form.validateFields(['dateFrom', 'dateTo']);
                         }}
                     />
-                    <TimePicker name='dateFrom_minute'
+                    <TimePicker name='dateFrom_minute' disabled={allDay}
                         placeholder='00' allowClear={false} format={'mm'}
                         defaultValue={moment(startDate)}
                         onChange={(value, dateString) => {
@@ -346,7 +347,7 @@ const EditFormCard = () => {
                             form.setFieldsValue({ dateTo: newVal });
                             form.validateFields(['dateFrom', 'dateTo']);
                         }} />
-                    <TimePicker name='dateTo_hour'
+                    <TimePicker name='dateTo_hour' disabled={allDay}
                         placeholder='00:' allowClear={false} format={'HH'}
                         defaultValue={moment(endDate)}
                         onChange={(value, dateString) => {
@@ -357,7 +358,7 @@ const EditFormCard = () => {
                             form.validateFields(['dateFrom', 'dateTo']);
                         }}
                     />
-                    <TimePicker name='dateTo_minute'
+                    <TimePicker name='dateTo_minute' disabled={allDay}
                         placeholder='00' allowClear={false} format={'mm'}
                         defaultValue={moment(endDate)}
                         onChange={(value) => {
@@ -374,6 +375,7 @@ const EditFormCard = () => {
                 <Form.Item {...tailLayout} name='allDay' label='Событие на весь день'>
                     <Checkbox defaultChecked={editingEvent.allDay} onChange={event => {
                         form.setFieldsValue({ allDay: event.target.checked });
+                        setAllDay(event.target.checked);
                     }} />
                 </Form.Item>
 
@@ -397,7 +399,7 @@ const EditFormCard = () => {
                 <Form.Item {...tailLayout} label='Участники'
                     name='participants'>
                     <Select mode='multiple' style={{ width: 'calc(41em - 10px)' }} placeholder='Выберите участников'
-                        defaultValue={editingEvent.participants} onSearch={search => { dispatch(searchUsers(search)) }}
+                        defaultValue={editingEvent.participants} onSearch={search => { dispatch(searchUsers(search)); }}
                         tagRender={tagRender} onChange={values => {
                             const addingValues = values.filter(val => selectedUsers.filter(ob => ob.login === val).length === 0);
                             let selUsers = selectedUsers;
@@ -405,7 +407,9 @@ const EditFormCard = () => {
                             selUsers.push(...newUsers);
                             setSelectedUsers(selUsers);
                         }}>
-                        {renderActors()}
+                        {
+                            renderActors()
+                        }
                     </Select>
                 </Form.Item>
 

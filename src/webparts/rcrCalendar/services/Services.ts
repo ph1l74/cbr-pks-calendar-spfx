@@ -14,7 +14,8 @@ const CommentService = new Service<Comment>('comments/');
 const AttachmentService = new Service<any>('attachments/');
 const MaterialService = new Service<any>('materials/');
 const ActorService = new Service<any>('actors/');
+const CalendarService = new Service<string>('calendar/');
 
 export {
-    UserService, GroupingEventService, CategoryService, CommentService, EventService, AttachmentService, MaterialService, ActorService,
+    UserService, GroupingEventService, CategoryService, CommentService, EventService, AttachmentService, MaterialService, ActorService, CalendarService,
 };

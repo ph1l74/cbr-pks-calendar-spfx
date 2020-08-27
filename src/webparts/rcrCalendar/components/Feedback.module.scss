@@ -1,5 +1,6 @@
 .feedback {
     border-bottom: 1px solid #e6e9ec;
+    display: inline-flex;
     li {
         margin: 0px 40px;      
 
@@ -13,7 +14,7 @@
     .content {
         font-size: 13px;
         font-family: Arial, sans-serif;
-        width: 800px;
+        width: 780px;
         display: inline-block;
         vertical-align: top;
         .name {
@@ -21,7 +22,7 @@
             margin-right: 20px;
             padding-bottom: 5px;
             .authorInfo {
-                padding-top: 5px;
+                // padding-top: 5px;
                 color: #4689b9; 
                 padding-right: '30px';
                 display: 'flex';
@@ -48,7 +49,7 @@
         .materials {
             display: block;
             color: #4689b9;
-            padding-left: 30px;
+            // padding-left: 30px;
         }
         .links {
             display: block;
@@ -58,7 +59,11 @@
 }
 
 .feedbacksHeader{        
-    padding: 0 0 20px 0;
+    padding: 20px;
+    padding-bottom: 30px;
+    .NewCommentBtn{
+        float: right;
+    }
 }
 
 .materialsLink {

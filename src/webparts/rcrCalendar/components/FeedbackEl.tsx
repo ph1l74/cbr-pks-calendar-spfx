@@ -34,27 +34,26 @@ const FeedbackEl = (props: { comment: Comment }) => {
     return (
         // <div className={cardStyles.card}>
         <div className={styles.feedback}>
-            <div className={styles.avatar}></div>
+            <div className={styles.avatar}>
+                <img width='25px' style={{ borderRadius: '50%' }}
+                    src={author.img && author.img.toString().length > 0 ? author.img.toString() : unknownImage}></img>
+            </div>
             <div className={styles.content}>
                 <div className={styles.name} style={{ display: 'inline-flex' }}>
                     <div className={styles.authorInfo}>
-                        <div className={styles.avatar}>
-                            <img width='25px' style={{ borderRadius: '50%' }}
-                                src={author.img && author.img.toString().length > 0 ? author.img.toString() : unknownImage}></img>
-                        </div>
                         <div className={styles.authorName}>
-                        {author ? `${author.firstName} ${author.lastName} ${author.patronymic}      ` : undefined}
+                            {author ? `${author.firstName} ${author.lastName} ${author.patronymic}      ` : undefined}
                         </div>
                     </div>
                     <div style={{ paddingRight: '30px' }}>
                         {`${moment(commentInfo.modifiedDate).format('DD.MM.yyyy')}      `}
                     </div>
                     <Tooltip title='Редактировать'>
-                        <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }} icon={<EditIcon />}
+                        <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px', top: '-5px' }} icon={<EditIcon />}
                             hidden={!isEditor} onClick={onEditClick} />
                     </Tooltip>
                     <Tooltip title='Удалить'>
-                        <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px' }} icon={<DeleteIcon />}
+                        <Button type='link' style={{ color: 'cadetblue', marginLeft: '10px', top: '-5px' }} icon={<DeleteIcon />}
                             hidden={!isEditor} onClick={onDeleteClick} />
                     </Tooltip>
                 </div>

@@ -59,6 +59,9 @@ export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS';
 
 export const GET_USERS = 'GET_USERS';
 export const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS';
+export const GET_CALENDAR_DATE = 'GET_CALENDAR_DATE';
+export const GET_CALENDAR_DATE_SUCCESS = 'GET_CALENDAR_DATE_SUCCESS';
+
 
 export const HOST = window.location.origin;
 export const WS_HOST = window.location.origin.replace(/^http/, 'ws');
