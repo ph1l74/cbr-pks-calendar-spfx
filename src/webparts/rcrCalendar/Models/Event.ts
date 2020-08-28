@@ -19,6 +19,7 @@ export default class Event implements Model {
     public endDate: Date;
     public freeVisit: boolean;
     public comments: Comment[];
+    public isParticipant: boolean;
     public participantsCount: number;
     public attachmentsCount: number;
     public feedbacksCount: number;

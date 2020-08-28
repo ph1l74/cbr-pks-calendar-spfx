@@ -1,4 +1,6 @@
 import { AttachmentService } from '../services/Services';
+import * as $ from 'jquery';
+import axios, { AxiosRequestConfig } from 'axios';
 
 export const parseUid = (uid: string) => {
     let id = 0;
@@ -60,3 +62,30 @@ export const uploadFile = options => {
             onError({ event: error });
         });
 };
+
+export const DownloadWithJwtViaFormPost = (url: string, fileName: string, token: string) => {
+    // var jwtInput = $('<input type="hidden" name="jwtToken">').val('Bearer ' + token);
+    // var idInput = $('<input type="hidden" name="id">').val(id);
+    // $('<form method="post" target="_blank"></form>')
+    //             .attr("action", url)
+    //             .append(jwtInput)
+    //             .append(idInput)
+    //             .appendTo('body')
+    //             .submit()
+    //             .remove();
+    axios({
+        url: url,
+        method: 'GET',
+        responseType: 'blob', // important
+        headers: {
+            'authorization': 'Bearer ' + token
+        }
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+      });
+}

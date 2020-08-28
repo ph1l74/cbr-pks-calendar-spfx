@@ -5,8 +5,10 @@ import Participants from './Participants';
 import Materials from './Materials';
 import Event from '../Models/Event';
 import { useDispatch, useSelector } from 'react-redux';
-import { editEvent, getParticipantsByEvent, getMaterialsByEvent, infinityLoadEventMaterials,
-  infinityLoadEventParticipants, deleteEvent } from '../Actions';
+import {
+  editEvent, getParticipantsByEvent, getMaterialsByEvent, infinityLoadEventMaterials,
+  infinityLoadEventParticipants, deleteEvent
+} from '../Actions';
 import * as moment from 'moment';
 import { getCommentsByEvent } from '../Actions/comment';
 import * as $ from 'jquery';
@@ -123,18 +125,18 @@ const EventCard = (props: { eventCard: Event }) => {
         </div>
       </div>
       <div className={styles.info} style={categorieBorderStyle}>
-        <a className={styles.editLink} onClick={openEditForm} hidden={!isEditor}>
-          <img src={editIcon} className={styles.editIcon} />
-        </a>
-        <a className={styles.editIcon} hidden={!isEditor}>
+        <a className={styles.editLink} hidden={!isEditor}>
           <Popconfirm
             title='Вы действительно хотите удалить событие?'
             onConfirm={deleteRecord}
             okText='OK' cancelText='Отмена' >
             <Tooltip title='Удалить событие'>
-              <Button icon={<DeleteIcon />} style={{ color: '#eb780d', marginLeft: '10px', borderWidth: '0px' }}></Button>
+              <Button className={styles.editIcon} icon={<DeleteIcon />} style={{ color: '#eb780d', marginLeft: '10px', borderWidth: '0px' }}></Button>
             </Tooltip>
           </Popconfirm>
+        </a>
+        <a className={styles.editLink} onClick={openEditForm} hidden={!isEditor}>
+          <img src={editIcon} className={styles.editIcon} />
         </a>
         <div className={styles.header}>
           {
@@ -144,10 +146,13 @@ const EventCard = (props: { eventCard: Event }) => {
               <div className={styles.time}>{cardInfo.startDate.getHours()} - {cardInfo.endDate.getHours()}</div>
           }
           {
-            // cardInfo.isParticipant ?
-            //   <div className={styles.status}>Вы участник</div>
-            //   :
-            undefined
+            cardInfo.freeVisit ?
+              <div className={styles.freeVisit}>Свободное участие</div>
+              :
+              (cardInfo.isParticipant ?
+                <div className={styles.status}>Вы участник</div>
+                :
+                undefined)
           }
           <div className={styles.location}>{cardInfo.location}</div>
         </div>

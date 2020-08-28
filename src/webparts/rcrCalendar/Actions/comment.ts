@@ -78,6 +78,10 @@ export const closeEditComment = () => ({
     type: types.CLOSE_EDIT_COMMENT
 });
 
+export const clearEventComments = () => ({
+    type: types.CLEAR_EVENT_COMMENTS,
+  });
+  
 export const saveEditComment = (record: Comment) => {
     return dispatch => { //TODO: change to fetching, Event to number
         dispatch({
@@ -97,6 +101,7 @@ export const saveEditComment = (record: Comment) => {
                 });
                 const event = new Event();
                 event.id = record.eventID;
+                dispatch(clearEventComments());
                 getEventComments(types.GET_EVENT_COMMENTS_SUCCESS, event, dispatch);
             })
             .catch(err => {

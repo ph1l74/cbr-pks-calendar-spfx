@@ -270,6 +270,8 @@ const commentReducer = (state = commentInit, action) => {
             return { ...state, comments: state.comments.filter(ob => ob.id !== action.editRecord.id), isFetching: true };
         case types.DELETE_COMMENT_SUCCESS:
             return { ...state, isFetching: false };
+        case types.CLEAR_EVENT_COMMENTS:
+            return { ...state, comments: [] };
 
         default:
             return state;
