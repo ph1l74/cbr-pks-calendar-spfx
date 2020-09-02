@@ -30,6 +30,7 @@ import FilterEvent from '../utils/IFilterEvent';
 import { ConvertDateWithoutZone } from '../utils/DateTime';
 import { RuleObject } from 'antd/lib/form';
 import { maxRequestLength } from '../constants';
+import { RichEditor } from '../utils/RichEditor';
 registerLocale('ru', ru);
 
 const { TextArea } = Input;
@@ -384,8 +385,11 @@ const EditFormCard = () => {
                     label='Описание'
                     name='description'
                 >
-                    <TextArea maxLength={2500} autoSize={{ minRows: 3, maxRows: 3 }} defaultValue={editingEvent.description} onChange={(event) => {
+                    {/* <TextArea maxLength={2500} autoSize={{ minRows: 3, maxRows: 3 }} defaultValue={editingEvent.description} onChange={(event) => {
                         form.setFieldsValue({ description: event.target.value });
+                    }} /> */}
+                    <RichEditor maxLength={2500} height={1000} defaultValue={editingEvent.description} onChange={(value) => {
+                        form.setFieldsValue({ description: value });
                     }} />
                 </Form.Item>
 

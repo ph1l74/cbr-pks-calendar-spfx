@@ -31,6 +31,7 @@ import { editEvent } from '../Actions';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { IAppReducer } from '../Reducers';
 import User from '../Models/User';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 registerLocale('ru', ru);
 
 // const EditIcon = props => <EditOutlined {...props} />
