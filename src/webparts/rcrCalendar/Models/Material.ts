@@ -16,6 +16,7 @@ export default class Material implements Model {
     public commentID: number;
     public event: Event;
     public eventID: number;
+    public hash: string;
     [key: string]: string | number | Date | BaseLink | Comment | Event;
 
 }

@@ -83,7 +83,7 @@
     border-left: 2px solid;
     display: inline-block;
     .editLink {
-      z-index: 150;
+      z-index: 90;
       float: right;
       position: relative;
       cursor: pointer;
@@ -103,6 +103,7 @@
         margin: 0 0 10px;
         max-width: 400px;
         word-break: break-word;
+        word-wrap: break-word;
       }
 
       .status {

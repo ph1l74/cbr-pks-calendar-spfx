@@ -215,9 +215,11 @@ const eventReducer = (state = eventInit, action) => {
             return { ...state, editingEvent: editEvent, isFetching: false };
 
         case types.SAVE_EDIT_EVENT:
-            return { ...state, editingEvent: undefined, isFetching: true };
+            return { ...state, isFetching: true };
         case types.SAVE_EDIT_EVENT_SUCCESS:
             return { ...state, editingEvent: undefined, isFetching: false };
+        case types.SAVE_EDIT_EVENT_ERROR:
+            return { ...state, isFetching: false };
         case types.SET_EVENT_COUNT_COMMENT:
             const newRecords = state.events;
             newRecords.map(ob => ob.Value).reduce((a, b) => a.concat(b)).filter(ob => ob.id === action.eventId)

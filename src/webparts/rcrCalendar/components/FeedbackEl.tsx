@@ -44,7 +44,7 @@ const FeedbackEl = (props: { comment: Comment }) => {
                 <div className={styles.name} style={{ display: 'inline-flex' }}>
                     <div className={styles.authorInfo}>
                         <div className={styles.authorName}>
-                            {author ? `${author.firstName} ${author.lastName} ${author.patronymic}      ` : undefined}
+                            {author ? `${author.lastName} ${author.firstName} ${author.patronymic}      ` : undefined}
                         </div>
                     </div>
                     <div style={{ paddingRight: '30px' }}>

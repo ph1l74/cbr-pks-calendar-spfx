@@ -16,9 +16,9 @@ const Participant = ({ userInfo }) => {
             <div className={styles.avatar} style={avatarStyle}>
                 <img width='45px' style={{borderRadius: '50%'}} src={userInfo.img && userInfo.img.length > 0 ? userInfo.img : unknownImage}></img>
             </div>
+            <div>{userInfo.lastName}</div>
             <div>{userInfo.firstName}</div>
             <div>{userInfo.patronymic}</div>
-            <div>{userInfo.lastName}</div>
         </a >
     );
 };

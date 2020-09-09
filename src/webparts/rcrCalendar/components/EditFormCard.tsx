@@ -55,7 +55,7 @@ const EditFormCard = () => {
         const props = {
             uid: ob.id.toString(),
             name: ob.fileName,
-            status: 'done',
+            status: 'done'
         };
         return (props as UploadFile);
     }));
@@ -160,7 +160,7 @@ const EditFormCard = () => {
         const findUser = findUsers.length > 0 ? findUsers[0] : null;
         return (
             <Tag closable={closable} onClose={onClose} style={{ marginRight: 3 }}>
-                {findUser ? `${findUser.firstName} ${findUser.lastName} ${findUser.patronymic}` : label + "111"}
+                {findUser ? `${findUser.lastName} ${findUser.firstName} ${findUser.patronymic}` : label + "111"}
             </Tag>
         );
     }
@@ -171,7 +171,8 @@ const EditFormCard = () => {
     };
     const renderActors = () => {
         return users.map(ob => <Select.Option name={`user_${ob.login}`} key={`user_${ob.login}`}
-            value={ob.login}>{`${ob.firstName} ${ob.lastName} ${ob.patronymic} `}</Select.Option>);
+            label={`${ob.lastName} ${ob.firstName} ${ob.patronymic}`}
+            value={ob.login}>{`${ob.lastName} ${ob.firstName} ${ob.patronymic} `}</Select.Option>);
     };
     const DatePickerJS: any = DatePicker;
 
@@ -224,7 +225,7 @@ const EditFormCard = () => {
     return (
         <Modal title={'Редактирование события'} onCancel={closeEditForm} visible={editingEvent !== undefined}
             cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}
-            width={900} footer={false} destroyOnClose={false} maskClosable={false}>
+            width={900} footer={false} destroyOnClose={false} maskClosable={false} className={styles.editFormCardModal}>
             <Form
                 {...layout}
                 form={form}
@@ -388,7 +389,7 @@ const EditFormCard = () => {
                     {/* <TextArea maxLength={2500} autoSize={{ minRows: 3, maxRows: 3 }} defaultValue={editingEvent.description} onChange={(event) => {
                         form.setFieldsValue({ description: event.target.value });
                     }} /> */}
-                    <RichEditor maxLength={2500} height={1000} defaultValue={editingEvent.description} onChange={(value) => {
+                    <RichEditor maxLength={2500} height={300} defaultValue={editingEvent.description} onChange={(value) => {
                         form.setFieldsValue({ description: value });
                     }} />
                 </Form.Item>
@@ -404,6 +405,8 @@ const EditFormCard = () => {
                     name='participants'>
                     <Select mode='multiple' style={{ width: 'calc(41em - 10px)' }} placeholder='Выберите участников'
                         defaultValue={editingEvent.participants} onSearch={search => { dispatch(searchUsers(search)); }}
+                        //optionLabelProp='label'
+                        filterOption={false}
                         tagRender={tagRender} onChange={values => {
                             const addingValues = values.filter(val => selectedUsers.filter(ob => ob.login === val).length === 0);
                             let selUsers = selectedUsers;
@@ -431,7 +434,7 @@ const EditFormCard = () => {
                         }}
                         //action = {file => {console.log('upload file', file); return '';}} 
                         // action={handleUpload}
-                        customRequest={(options => {
+                        customRequest={(options => { // Отрабатывает для каждого файла, без него не работает
                             options.data = { objType: 'event', objId: editingEvent.id, guid: sessionGuid };
                             uploadFile(options);
                         })}
@@ -450,7 +453,8 @@ const EditFormCard = () => {
                                 newFileList.push({ uid: info.file.uid, name: info.file.name, status: info.file.status });
                                 form.setFieldsValue({ materials: { fileList: newFileList } });
                                 setRecordFileList({ fileList: newFileList });
-                                updateFileList(newFileList as UploadFile[]);
+                                // updateFileList(newFileList as UploadFile[]);
+                                updateFileList(info.fileList.filter(file => file.status!=='error'));
                             } else if (info.file.status === 'error') {
                                 setIsLoading(false);
                                 message.error(`${info.file.name} не был загружен.`);

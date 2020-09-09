@@ -148,7 +148,7 @@ const CommentEditForm = () => {
                                 const newFileList = recordFileList.fileList;
                                 newFileList.push({ uid: info.file.uid, name: info.file.name, status: info.file.status });
                                 form.setFieldsValue({ materials: { fileList: newFileList } });
-                                setRecordFileList({ fileList: newFileList });
+                                // setRecordFileList({ fileList: newFileList });
                             } else if (info.file.status === 'error') {
                                 setIsLoading(false);
                                 message.error(`${info.file.name} не был загружен.`);

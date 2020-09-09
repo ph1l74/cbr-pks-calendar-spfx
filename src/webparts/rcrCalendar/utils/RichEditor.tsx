@@ -79,15 +79,12 @@ class RichEditor extends Component<IRichEditorProps, IRichEditorState> {
     };
     render() {
         const { editorState } = this.state;
-        let styleEditor = {};
         if (this.props.height){
-            const rootStyle = new CSSStyleSheet();
-            rootStyle.insertRule(`.DraftEditor-root {max-height: '${this.props.height}'}`);
-            $('.rdw-editor-main').css('max-height', this.props.height);
+            $('.rdw-editor-main').css('max-height', this.props.height); // Todo Лучше в свойстве Editor
             // styleEditor = {maxHeight: this.props.height};
         }
         return (
-            <div className={styles.richEditorRoot} style={styleEditor}>
+            <div className={styles.richEditorRoot}>
                 <Editor
                     editorState={editorState}
                     wrapperClassName="rich-editor demo-wrapper"

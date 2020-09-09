@@ -302,7 +302,7 @@ export const saveEditEvent = (event: Event, filterEvent: FilterEvent) => {
       .catch(err => {
         sendError(err, dispatch, 'сохранении');
         dispatch({
-          type: types.SAVE_EDIT_EVENT_SUCCESS,
+          type: types.SAVE_EDIT_EVENT_ERROR,
         });
       });
   };
