@@ -13,12 +13,13 @@ import * as moment from 'moment';
 import { getCommentsByEvent } from '../Actions/comment';
 import * as $ from 'jquery';
 import { IAppReducer } from '../Reducers';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Tooltip, Button, Popconfirm } from 'antd';
 import FilterEvent from '../utils/IFilterEvent';
 
 const editIcon = require('../Icons/Edit.svg') as string;
 const DeleteIcon = props => <DeleteOutlined {...props} />;
+const EditIcon = props => <EditOutlined {...props} />;
 const EventCard = (props: { eventCard: Event }) => {
 
   // modal types
@@ -125,18 +126,24 @@ const EventCard = (props: { eventCard: Event }) => {
         </div>
       </div>
       <div className={styles.info} style={categorieBorderStyle}>
-        <a className={styles.editLink} hidden={!isEditor}>
+        <a className={styles.editLink} hidden={!isEditor}> {/* В интерфейсе они будут наоборот размещены */}
           <Popconfirm
             title='Вы действительно хотите удалить событие?'
             onConfirm={deleteRecord}
             okText='OK' cancelText='Отмена' >
             <Tooltip title='Удалить событие'>
-              <Button className={styles.editIcon} icon={<DeleteIcon />} style={{ color: '#eb780d', marginLeft: '10px', borderWidth: '0px' }}></Button>
+            {/* style={{ color: '#eb780d', borderWidth: '0px' }} */}
+              <Button className={styles.deleteIcon} icon={<DeleteIcon />}></Button>
             </Tooltip>
           </Popconfirm>
         </a>
-        <a className={styles.editLink} onClick={openEditForm} hidden={!isEditor}>
-          <img src={editIcon} className={styles.editIcon} />
+        <a className={styles.editLink} hidden={!isEditor}>
+          <Tooltip title='Редактировать'>
+             {/* style={{ color: 'cadetblue', marginLeft: '10px', borderWidth: '0px' }}  */}
+            <Button className={styles.editIcon} type='link'
+              icon={<EditIcon />} hidden={!isEditor} onClick={openEditForm} />
+          </Tooltip>
+          {/* <img src={editIcon} className={styles.editIcon} /> */}
         </a>
         <div className={styles.header}>
           {

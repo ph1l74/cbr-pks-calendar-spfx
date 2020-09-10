@@ -8,6 +8,14 @@ import Event from '../Models/Event';
 import { filterEventInit } from '../Reducers';
 import { ActorService, CategoryService, EventService, GroupingEventService, MaterialService, UserService, CalendarService } from '../services/Services';
 import FilterEvent from '../utils/IFilterEvent';
+import 'core-js/es6/map';
+import 'core-js/es7/reflect';
+import "@pnp/polyfill-ie11";
+import "core-js/es6/array";
+import "es6-map/implement";
+import "core-js/modules/es6.array.find";
+import { ServerProcessedDataType } from '@microsoft/sp-webpart-base/lib/core/ISerializedServerProcessedData';
+import Service from '../../../../lib/webparts/rcrCalendar/services/Service';
 
 
 let nextTodoId = 0;
@@ -32,7 +40,45 @@ export const setError = (error: string) => ({
   error: error
 });
 
-export const setAuth = (): any => {
+export const setAuth = (userName: string, userId: string): any => {
+  return async dispatch => {
+    try {
+      const web = pnp.sp.site.rootWeb;
+      console.log('webSPUrl', web.toUrlAndQuery());
+      setUser(dispatch, userName, userId);
+      UserService.searchParam('/' + userName.replace('\\', '_5C')).then(res => {
+        console.log('curUser', res, '/' + userName.replace('\\', '_5C'));
+        dispatch({
+          type: types.GET_CURRENT_USER_SUCCESS,
+          user: res
+        });
+      })
+        .catch(err => {
+          dispatch({
+            type: types.GET_CURRENT_USER_SUCCESS,
+            user: undefined
+          });
+        });
+      console.log('edit list', Service.isEdit);
+      dispatch({
+        type: types.SET_IS_EDITOR,
+        permission: Service.isEdit === true
+      });
+      console.log('read list', Service.isRead);
+      dispatch({
+        type: types.SET_IS_VIEWER,
+        permission: Service.isRead === true
+      });
+      dispatch(getCategories());
+      dispatch(initEvents());
+    }
+    catch (ex) {
+      console.log('exception ', ex);
+    }
+  }
+}
+
+export const setAuthOld = (): any => {
   return async dispatch => {
     if (window.location.port === '4321') {
       dispatch({
@@ -72,13 +118,15 @@ export const setAuth = (): any => {
       let currentUserName = '';
       try {
         sp.site.getContextInfo().then(ob => {
+          console.log('getcontext', ob);
           const oContext: IContextInfo = ob;
+          console.log('getcontext', oContext);
           const siteUrl = oContext.SiteFullUrl;
           console.log(siteUrl);
           pnp.setup({ sp: { baseUrl: siteUrl } });
           pnp.sp.utility.getCurrentUserEmailAddresses().then(ob => {
             const curruser = ob;
-            console.log(curruser);
+            console.log('curruser from sp ', curruser);
             // let curProp = await pnp.sp.profiles.myProperties.get();
             // console.log(curProp);
             //let curruser = await sp.web.currentUser.get();
@@ -86,7 +134,7 @@ export const setAuth = (): any => {
 
             web.currentUser.get()
               .then(res => {
-                console.log(res);
+                console.log('curruser', res);
                 currentUserName = res.LoginName as string;
                 // const loginInfo = currentUserName.split('\\');
                 // setUser(dispatch, loginInfo[loginInfo.length - 1], res.UserId?.NameId);
@@ -103,12 +151,12 @@ export const setAuth = (): any => {
                       user: res
                     });
                   })
-                  .catch(err => {
-                    dispatch({
-                      type: types.GET_CURRENT_USER_SUCCESS,
-                      user: undefined
+                    .catch(err => {
+                      dispatch({
+                        type: types.GET_CURRENT_USER_SUCCESS,
+                        user: undefined
+                      });
                     });
-                  });
                 }
                 // tslint:disable-next-line: no-shadowed-variable
                 web.getCurrentUserEffectivePermissions().then(ob => {
@@ -148,12 +196,12 @@ export const setAuth = (): any => {
             });
         })
           .catch(err => {
-            console.log(err);
+            console.log('sp.site.getContextInfo()', err);
             setUser(dispatch, currentUserName, '');
           });
       }
       catch (ex) {
-        console.log(ex);
+        console.log('exception getContextInfo', ex);
         setUser(dispatch, currentUserName, '');
       }
     }
@@ -320,11 +368,11 @@ function setUser(dispatch: any, currentUserName: string, currentUserId: string) 
 function filterEvents(typeAction: string, filterEvent: FilterEvent, dispatch: any, skip?: number) {
   const date = moment(filterEvent.selectedDate);
   const day = date.date() > 9 ? date.date() : '0' + date.date();
-  const months = date.months() + 1;
+  const months = date.month() + 1;
   const month = months > 9 ? months : '0' + months;
   const filterCategories = filterEvent.selectedCategories.length > 0 ? `&categories=${filterEvent.selectedCategories.join(',')}` : '';
   const skipRequest = skip ? `&skip=${skip}` : '';
-  GroupingEventService.searchGet(`/?startDate=${day}.${month}.${date.years()}${filterCategories}${skipRequest}`)
+  GroupingEventService.searchGet(`/?startDate=${day}.${month}.${date.year()}${filterCategories}${skipRequest}`)
     .then(ob => {
       console.log('fetch', ob);
       dispatch({

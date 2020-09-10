@@ -1,3 +1,4 @@
+@use './AppConsts.module' as bs;
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
 .card {
@@ -88,8 +89,13 @@
       position: relative;
       cursor: pointer;
       .editIcon {
-        height: 16px;
+        @include bs.editing-icon;
+        margin-left: 10px;
         color: cadetblue;
+      }
+      .deleteIcon {
+        @include bs.editing-icon;
+        color: #eb780d;
       }
     }
     .header {

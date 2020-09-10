@@ -20,7 +20,7 @@ export const store = createStore(reducers, applyMiddleware(...middleware));
   // + window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 // )
 
-store.dispatch(setAuth());
+// store.dispatch(setAuth());
 // store.dispatch(getCategories());
 // // store.dispatch(getUsers());
 // store.dispatch(initEvents());
@@ -28,6 +28,7 @@ store.dispatch(setAuth());
 export default class RcrCalendar extends React.Component<IRcrCalendarProps, {}> {
   public render(): React.ReactElement<IRcrCalendarProps> {
     Service.urlApi = this.props.urlApi;
+    store.dispatch(setAuth(Service.userName, Service.userId));
     return (
       <Provider store={store} onScroll={this.handleScroll}>
         <div className={styles.rcrCalendar} >

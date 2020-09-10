@@ -32,6 +32,8 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 import { IAppReducer } from '../Reducers';
 import User from '../Models/User';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { setAuth } from '../../../../lib/webparts/rcrCalendar/Actions';
+import Service from '../../../../lib/webparts/rcrCalendar/services/Service';
 registerLocale('ru', ru);
 
 // const EditIcon = props => <EditOutlined {...props} />
@@ -52,6 +54,8 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent) => {
 
     const dispatch = useDispatch();
 
+    // dispatch(setAuth(Service.userName, Service.userId));
+    
     const contentElement = (window.location.port === '4321') ?
         $('div[class*=content_]') : $('div[class*=scrollRegion]');
     document.onscroll = (ev) => {
