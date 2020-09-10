@@ -47,6 +47,7 @@
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "sass": "^1.26.10",
     "sp-pnp-js": "^3.0.10",
     "styled-components": "^5.1.1",
     "tslint": "^6.1.3"
