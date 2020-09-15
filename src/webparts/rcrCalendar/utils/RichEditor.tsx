@@ -49,7 +49,7 @@ class RichEditor extends Component<IRichEditorProps, IRichEditorState> {
         this.state = { editorState: EditorState.createWithContent(content) };
 
     }
-    onEditorStateChange = editorState => {
+    public onEditorStateChange = editorState => {
         // console.log('editorState', editorState);
         // let finalText = '';
         // let text = editorState.getCurrentContent().getBlocksAsArray();
@@ -59,11 +59,11 @@ class RichEditor extends Component<IRichEditorProps, IRichEditorState> {
         const hashtagConfig = {
             trigger: '#',
             separator: ' ',
-          }
+          };
         const markup = draftToHtml(
-            rawContentState, 
-            hashtagConfig, 
-            // directional, 
+            rawContentState,
+            hashtagConfig,
+            // directional,
             // customEntityTransform
           );
         // const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
@@ -76,8 +76,8 @@ class RichEditor extends Component<IRichEditorProps, IRichEditorState> {
         }
         this.setState({ editorState });
         this.props.onChange(markup);
-    };
-    render() {
+    }
+    public render() {
         const { editorState } = this.state;
         if (this.props.height){
             $('.rdw-editor-main').css('max-height', this.props.height); // Todo Лучше в свойстве Editor
@@ -96,7 +96,6 @@ class RichEditor extends Component<IRichEditorProps, IRichEditorState> {
     }
 }
 export { RichEditor };
-
 
 // const editorState = EditorState.createEmpty();
 // const editorStateWithoutUndo = EditorState.set(editorState, {

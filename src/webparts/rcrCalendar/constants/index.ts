@@ -46,7 +46,6 @@ export const DELETE_COMMENT_SUCCESS = 'DELETE_COMMENT_SUCCESS';
 export const SET_EVENT_COUNT_COMMENT = 'SET_EVENT_COUNT_COMMENT';
 export const CLEAR_EVENT_COMMENTS = 'CLEAR_EVENT_COMMENTS';
 
-
 // View event
 export const GET_EVENT_PARTICIPANTS = 'GET_EVENT_PARTICIPANTS';
 export const GET_EVENT_PARTICIPANTS_SUCCESS = 'GET_EVENT_PARTICIPANTS_SUCCESS';
@@ -64,7 +63,6 @@ export const GET_USERS = 'GET_USERS';
 export const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS';
 export const GET_CALENDAR_DATE = 'GET_CALENDAR_DATE';
 export const GET_CALENDAR_DATE_SUCCESS = 'GET_CALENDAR_DATE_SUCCESS';
-
 
 export const HOST = window.location.origin;
 export const WS_HOST = window.location.origin.replace(/^http/, 'ws');

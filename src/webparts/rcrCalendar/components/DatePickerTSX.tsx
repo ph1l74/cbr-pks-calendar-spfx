@@ -16,14 +16,14 @@ export const MyPicker = (props) => {
     const onBlur = () => {
         props?.onChange(val);
     };
-    return <TimePicker {...props} onPanelChange={setVal} onBlur={onBlur} />
-}
+    return <TimePicker {...props} onPanelChange={setVal} onBlur={onBlur} />;
+};
 export const DatePickerAutoaccept = (props: PickerProps<moment.Moment>) => {
     const onBlur = (elem: React.FocusEvent<HTMLInputElement>) => {
-      let value = moment(elem.target.value, props.format)
+      const value = moment(elem.target.value, props.format);
       if (value && value.isValid() && props.onChange) {
-        props.onChange(value, elem.target.value)
+        props.onChange(value, elem.target.value);
       }
-    }
-    return <TimePicker {...props} onBlur={onBlur} />
-  }
+    };
+    return <TimePicker {...props} onBlur={onBlur} />;
+  };

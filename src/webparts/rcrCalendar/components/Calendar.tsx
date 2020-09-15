@@ -1,7 +1,6 @@
 import * as React from 'react';
-import './Calendar.css';
+// import './Calendar.css';
 import * as Datetime from 'react-datetime';
-import { connect } from 'react-redux';
 
 import styles from './Calendar.module.scss';
 import { changeCalendarDate, getCalendarDate } from '../Actions';
@@ -12,7 +11,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import GroupingEvent from '../Models/GroupingEvent';
 import { useSelector, useDispatch } from 'react-redux';
 import { IAppReducer } from '../Reducers';
-import { debounce } from '@microsoft/sp-lodash-subset';
 
 const DatePickerJS: any = Datetime;
 
@@ -34,13 +32,6 @@ export const Calendar = () => {
             })
         : []);
 
-    // const [datesInterval, setDatesInterval] = React.useState({ // Хуки не используем из-за зацикливания
-    //     start: moment(new Date()).date(1).add(-2, 'w'),
-    //     end: moment(new Date()).date(1).add(1, 'month').add(2, 'w'),
-    // });
-    let changingInterval = false;
-    let searchingDate = '01.01.2020';
-
     const changeSearchDate = (start: moment.Moment, end: moment.Moment) => { // (searchDate: moment.Moment) => {
         // console.log('changeSearchDate', changingInterval, searchingDate, searchDate.format('DD.MM.yyyy'), searchDate);
         // if (searchingDate !== searchDate.format('DD.MM.yyyy')) {
@@ -55,7 +46,6 @@ export const Calendar = () => {
         if (start < intervalStart || end > intervalEnd) {
             dispatch(getCalendarDate(start, end));
         }
-        changingInterval = false;
     };
     const onDateChange = (e: any) => {
         console.log('click', e as Date);
@@ -67,11 +57,8 @@ export const Calendar = () => {
         const curDate = new Date(currentDate.year(), currentDate.month(), currentDate.date());
         const curDateM = moment(curDate).add(1, 'd');
         if (currentDate < intervalStart) { // Сложный алгоритм поиска событий по датам
-            // if (changingInterval === false) 
+            // if (changingInterval === false)
             {
-                changingInterval = true;
-                // dispatch(setDatesInterval({ start: curDateM, end: datesInterval.end }));
-                const searchDate = moment(new Date(currentDate.year(), currentDate.month(), 1)).add(1, 'month');
                 changeSearchDate(currentDate.add(-30, 'd'), intervalEnd);
                 // setDatesInterval({start: searchDate.add(-2, 'w'), end: searchDate.add(1, 'month').add(2, 'w')});
                 // dispatch(getCalendarDate(searchDate.add(-2, 'w').format('DD.MM.yyyy'),
@@ -79,11 +66,8 @@ export const Calendar = () => {
             }
         }
         else if (currentDate > intervalEnd) {
-            // if (changingInterval === false) 
+            // if (changingInterval === false)
             {
-                changingInterval = true;
-                // dispatch(setDatesInterval({ start: datesInterval.start, end: curDateM }));
-                const searchDate = moment(new Date(currentDate.year(), currentDate.month(), 1)).add(-1, 'month');
                 changeSearchDate(intervalStart, currentDate.add(30, 'd'));
                 // setDatesInterval({start: searchDate.add(-2, 'w'), end: searchDate.add(1, 'month').add(2, 'w')});
                 // dispatch(getCalendarDate(searchDate.add(-2, 'w').format('DD.MM.yyyy'),
@@ -92,8 +76,6 @@ export const Calendar = () => {
         }
         const curDate2 = new Date(curDateM.year(), curDateM.month(), curDateM.date());
         const selDate = new Date(selectedDate.year(), selectedDate.month(), selectedDate.date());
-        // console.log('render day', dayProps, currentDate.date(), currentDate.month(), currentDate.year(), curDate, selDate);
-        const curDay = currentDate.date();
         if ((curDate > selDate || curDate < selDate)
             && (datesOfEvents.filter(ob => ob.start < curDate2 && ob.end >= curDate).length > 0 ||
                 calendarDates.filter(ob => ob === currentDate.format('DD.MM.yyyy')).length > 0)
@@ -111,7 +93,7 @@ export const Calendar = () => {
     return <div>
         <DatePickerJS className={styles['rcr-modern-calendar']} disableOnClickOutside='true'
             onChange={onDateChange}
-            onBlur={(inputStr) => { console.log('onBlur', inputStr) }}
+            onBlur={(inputStr) => { console.log('onBlur', inputStr); }}
             onFocus={() => console.log('onFocus', filterEvent)}
             open={true} input={false} locale='ru'
             dayClassName={'highlight'} renderDay={onRenderDay}

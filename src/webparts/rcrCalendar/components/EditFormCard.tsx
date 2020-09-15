@@ -1,39 +1,27 @@
 import * as React from 'react';
 import { Form, Input, Checkbox, Button, Select, Upload, message, Modal, Tag, } from 'antd';
 import styles from './EditFormCard.module.scss';
-// import { DatePicker } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
 import { TimePicker } from 'antd';
 import * as moment from 'moment';
-import { DatePickerTSX, MyPicker, DatePickerAutoaccept } from './DatePickerTSX';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEditMode, closeEditEvent, saveEditEvent, searchUsers } from '../Actions';
+import { closeEditEvent, saveEditEvent, searchUsers } from '../Actions';
 import Event from '../Models/Event';
 import Category from '../../../../lib/webparts/rcrCalendar/Models/Category';
-import * as ReactDOM from 'react-dom';
-// import Modal from './Modal';
-import SingleDatePicker, { RangePicker } from 'from-antd-datepicker';
 import DatePicker from 'react-datepicker';
-import { registerLocale, setDefaultLocale } from 'react-datepicker';
+import { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
 import User from '../Models/User';
-import { UploadFile, RcFile } from 'antd/lib/upload/interface';
+import { UploadFile } from 'antd/lib/upload/interface';
 import Actor from '../Models/Actor';
 import Material from '../Models/Material';
 import Link from '../Models/Link';
-import config from '../constants/config';
-import { AttachmentService } from '../services/Services';
-import axios from 'axios';
 import { parseUid, uploadFile, generateUUID } from '../utils/Utils';
 import FilterEvent from '../utils/IFilterEvent';
 import { ConvertDateWithoutZone } from '../utils/DateTime';
-import { RuleObject } from 'antd/lib/form';
 import { maxRequestLength } from '../constants';
 import { RichEditor } from '../utils/RichEditor';
 registerLocale('ru', ru);
-
-const { TextArea } = Input;
 
 const EditFormCard = () => {
 
@@ -44,7 +32,7 @@ const EditFormCard = () => {
     const users: User[] = useSelector(state => state.root.users as User[]);
     const filterEvent: FilterEvent = useSelector(state => state.event.filterEvent as FilterEvent);
 
-    const [sessionGuid, setSessionGuid] = React.useState(generateUUID());
+    const [sessionGuid] = React.useState(generateUUID());
     const [isLoading, setIsLoading] = React.useState(false);
     const [allDay, setAllDay] = React.useState(editingEvent.allDay);
 
@@ -77,8 +65,6 @@ const EditFormCard = () => {
         wrapperCol: { offset: 2, span: 16 },
     };
 
-    const dateFormat = 'YYYY/MM/DD';
-    const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 
     const onFinish = values => {
         console.log('Success:', values);
@@ -111,7 +97,7 @@ const EditFormCard = () => {
                 message.error('Данные не могут быть сохранены, т.к. имеются ошибки ввода!');
             }
         }
-        form.validateFields().then((value) => {
+        form.validateFields().then(() => {
             const editValues = form.getFieldsValue();
             if (form.getFieldsError().map(ob => ob.errors.length).reduce((a, b) => a = a + b) === 0) {
                 // if (form.isFieldsValidating(['description', 'dateFrom', 'dateTo', 'eventName', 'location', 'category'])) {
@@ -174,7 +160,6 @@ const EditFormCard = () => {
             label={`${ob.lastName} ${ob.firstName} ${ob.patronymic}`}
             value={ob.login}>{`${ob.lastName} ${ob.firstName} ${ob.patronymic} `}</Select.Option>);
     };
-    const DatePickerJS: any = DatePicker;
 
     const checkDate = (rule, value, type: string) => {
         const labelDate = type === 'end' ? 'окончания' : 'начала';
@@ -310,7 +295,7 @@ const EditFormCard = () => {
                         placeholder='00:'
                         format={'HH'} allowClear={false}
                         defaultValue={moment(startDate, 'HH')}
-                        onChange={(value, dateString) => {
+                        onChange={(value) => {
                             console.log('change hour', value, startDate);
                             const newVal = setHours(value, startDate);
                             setStartDate(newVal);
@@ -321,7 +306,7 @@ const EditFormCard = () => {
                     <TimePicker name='dateFrom_minute' disabled={allDay}
                         placeholder='00' allowClear={false} format={'mm'}
                         defaultValue={moment(startDate)}
-                        onChange={(value, dateString) => {
+                        onChange={(value) => {
                             console.log('change minutes', value, startDate);
                             const newVal = setMinutes(value, startDate);
                             setStartDate(newVal);
@@ -342,7 +327,7 @@ const EditFormCard = () => {
                 >
                     <DatePicker dateFormat='dd.MM.yyyy' locale='ru' selected={endDate} name='dateTo_date'
                         showYearDropdown showMonthDropdown useShortMonthInDropdown
-                        onChange={(value, dateString) => {
+                        onChange={(value) => {
                             console.log('change date', value, endDate);
                             const newVal = setDate(value, endDate);
                             setEndDate(newVal);
@@ -352,7 +337,7 @@ const EditFormCard = () => {
                     <TimePicker name='dateTo_hour' disabled={allDay}
                         placeholder='00:' allowClear={false} format={'HH'}
                         defaultValue={moment(endDate)}
-                        onChange={(value, dateString) => {
+                        onChange={(value) => {
                             console.log('change hour', value, endDate);
                             const newVal = setHours(value, endDate);
                             setEndDate(newVal);
@@ -420,7 +405,6 @@ const EditFormCard = () => {
                     </Select>
                 </Form.Item>
 
-
                 <Form.Item {...tailLayout} label='Материалы' name='materials'>
                     <Upload multiple={true}
                         fileList={fileList}
@@ -471,7 +455,6 @@ const EditFormCard = () => {
                     </Button>
                     </Upload >
                 </Form.Item>
-
 
                 <Form.Item {...tailLayout} label='Ссылки' name='links'>
                     <Select mode='tags' style={{ width: 'calc(41em - 10px)' }} placeholder='Введите ссылку и нажмите Etner' maxTagCount={30}

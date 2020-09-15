@@ -81,7 +81,7 @@ export const closeEditComment = () => ({
 export const clearEventComments = () => ({
     type: types.CLEAR_EVENT_COMMENTS,
   });
-  
+
 export const saveEditComment = (record: Comment) => {
     return dispatch => { //TODO: change to fetching, Event to number
         dispatch({

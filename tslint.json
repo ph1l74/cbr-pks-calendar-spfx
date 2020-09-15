@@ -16,7 +16,10 @@
     "no-shadowed-variable": false,
     "no-switch-case-fall-through": true,
     // "no-unnecessary-semicolons": true,
-    "no-unused-expression": [true, "allow-fast-null-checks"],
+    "no-unused-expression": [
+      true,
+      "allow-fast-null-checks"
+    ],
     // "no-use-before-declare": true,
     // "no-with-statement": true,
     "semicolon": true,
@@ -34,6 +37,14 @@
     "no-unused-variable": true,
     "one-line": true,
     "no-consecutive-blank-lines": true,
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "use"
+        ]
+      }
+    ],
     "max-line-length": [
       true,
       150

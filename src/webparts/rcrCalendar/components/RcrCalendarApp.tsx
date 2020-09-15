@@ -55,7 +55,6 @@ const RcrCalendarApp = (events: GroupingEvent[], filterEvent: FilterEvent) => {
     const dispatch = useDispatch();
 
     // dispatch(setAuth(Service.userName, Service.userId));
-    
     const contentElement = (window.location.port === '4321') ?
         $('div[class*=content_]') : $('div[class*=scrollRegion]');
     document.onscroll = (ev) => {

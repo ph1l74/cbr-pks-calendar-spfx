@@ -1,0 +1,6 @@
+projectKey=EventCalendar1
+serverUrl=http://localhost:9000
+serverVersion=8.4.2.36762
+dashboardUrl=http://localhost:9000/dashboard?id=EventCalendar1
+ceTaskId=AXSQGlNPY5i6rxLy9MnR
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXSQGlNPY5i6rxLy9MnR

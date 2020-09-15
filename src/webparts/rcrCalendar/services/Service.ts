@@ -238,7 +238,7 @@ export default class Service<T> {
     }
 }
 /**
- * @deprecated 
+ * @deprecated
  */
 // tslint:disable-next-line:max-classes-per-file
 export class PagedService<T> {
