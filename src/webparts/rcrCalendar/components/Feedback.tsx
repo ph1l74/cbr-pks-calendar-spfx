@@ -50,6 +50,7 @@ const Feedback = () => {
         newRecord.materials = [];
         console.log('port', window.location.port);
         if (window.location.port === '4321') { // Todo временное решение, т.к. аутентификации нет, особенно в воркбенче
+            // tslint:disable-next-line:no-console
             newRecord.author = selectedEventForComments.author ?? users[0];
         }
         dispatch(editComment(newRecord));

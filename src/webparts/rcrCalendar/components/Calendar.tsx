@@ -1,5 +1,5 @@
 import * as React from 'react';
-// import './Calendar.css';
+import './Calendar.css';
 import * as Datetime from 'react-datetime';
 
 import styles from './Calendar.module.scss';
