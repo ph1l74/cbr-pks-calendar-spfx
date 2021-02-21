@@ -90,7 +90,7 @@
         padding-top: 20px;
         font-weight: 700;
         font-size: 21px;
-        text-transform: capitalize;
+        // text-transform: capitalize;
         color: #000000;
       }
     }
@@ -101,6 +101,11 @@
     vertical-align: top;
     width: 250px;
     margin-left: 40px;
+    .new-button {
+      padding: 0px;
+      text-align: right;
+      margin-top: -35px;
+    }
   }
 
   .header {
@@ -118,6 +123,21 @@
     background: #f2f3f3
   }
 
+}
 
-  
+.richEditorRoot{
+  background: #fff;
+  border: 1px solid #ddd;
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+code {
+  background-color: lightgray;
+  border-radius: 3px;
+}
+strong{
+  font-weight: bold;
 }

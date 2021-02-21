@@ -1,37 +1,56 @@
-import "@pnp/polyfill-ie11";
-import "@babel/polyfill";
-//import "ie11-custom-properties";
-import "antd/dist/antd.css";
+import '@babel/polyfill';
+import { Version } from '@microsoft/sp-core-library';
+import { SPPermission } from '@microsoft/sp-page-context';
+import { BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-webpart-base';
+import '@pnp/polyfill-ie11';
+import { sp } from '@pnp/sp/presets/all';
+//import 'ie11-custom-properties';
+import 'antd/dist/antd.css';
+import * as strings from 'RcrCalendarWebPartStrings';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { Version } from '@microsoft/sp-core-library';
-import {
-  BaseClientSideWebPart,
-  IPropertyPaneConfiguration,
-  PropertyPaneTextField
-} from '@microsoft/sp-webpart-base';
-
-import * as strings from 'RcrCalendarWebPartStrings';
-import RcrCalendar from './components/RcrCalendar';
 import { IRcrCalendarProps } from './components/IRcrCalendarProps';
+import RcrCalendar from './components/RcrCalendar';
+import Service from './services/Service';
+
 
 export interface IRcrCalendarWebPartProps {
   title: string;
   description: string;
+  urlApi: string;
 }
 
 export default class RcrCalendarWebPart extends BaseClientSideWebPart<IRcrCalendarWebPartProps> {
 
   public render(): void {
-    const element: React.ReactElement<IRcrCalendarProps > = React.createElement(
+    Service.urlApi = this.properties.urlApi;
+    this.initUser();
+    const element: React.ReactElement<IRcrCalendarProps> = React.createElement(
       RcrCalendar,
       {
         title: this.properties.title,
-        description: this.properties.description
+        description: this.properties.description,
+        urlApi: this.properties.urlApi
       }
     );
 
     ReactDom.render(element, this.domElement);
+  }
+
+  private initUser() {
+    console.log('this context ', this.context.pageContext.user, this.context.pageContext, this.context);
+    if (this.context && this.context.pageContext && this.context.pageContext.user) {
+      Service.userName = this.context.pageContext.user.loginName;
+      Service.userId = this.context.pageContext.legacyPageContext.systemUserKey;
+    }
+    const permissions = this.context.pageContext.web.permissions;
+    Service.isEdit = permissions.hasPermission(SPPermission.editListItems);
+    Service.isRead = permissions.hasPermission(SPPermission.viewListItems);
+    console.log('full control ', permissions.hasPermission(SPPermission.fullMask));
+    console.log('manage ', permissions.hasPermission(SPPermission.manageWeb));
+    sp.setup({
+      spfxContext: this.context
+    });
   }
 
   protected onDispose(): void {
@@ -58,6 +77,9 @@ export default class RcrCalendarWebPart extends BaseClientSideWebPart<IRcrCalend
                 }),
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
+                }),
+                PropertyPaneTextField('urlApi', {
+                  label: strings.DescriptionUrlApi
                 })
               ]
             }

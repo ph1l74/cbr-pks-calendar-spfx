@@ -1,4 +1,4 @@
 export default class FilterEvent{
-    selectedDate: Date;
-    selectedCategories: number[];
+    public selectedDate: Date;
+    public selectedCategories: number[];
 }

@@ -6,6 +6,6 @@ export default class Category implements Model {
     public name: string;
     public color: string;
     public _links: BaseLink;
-    [key: string]: string | number | Date | BaseLink;
+    // [key: string]: number | string | BaseLink;
 
 }

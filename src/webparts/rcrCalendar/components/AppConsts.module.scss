@@ -1,0 +1,6 @@
+$icon-height: 16px;
+
+@mixin editing-icon {
+    height: $icon-height;
+    border-width: 0px;
+}

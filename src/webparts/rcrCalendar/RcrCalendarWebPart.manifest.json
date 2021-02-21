@@ -21,7 +21,8 @@
     "officeFabricIconFontName": "Page",
     "properties": {
       "title":"Обучение, конференции, форумы",
-      "description": "Описание"
+      "description": "Описание",
+      "urlApi": ""
     }
   }]
 }

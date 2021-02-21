@@ -1,0 +1,27 @@
+.SingleDatePicker {
+    .DateInput__block {
+        width: 100%;
+        padding-right: 42px;
+    }
+
+    .SingleDatePickerInput_calendarIcon {
+        position: absolute;
+        right: 0;
+        padding: 0 10px;
+        line-height: 50px;
+    }
+}
+.editFormCardModal{
+    :global {
+        .rdw-colorpicker-modal {
+            left: -45px;
+        }
+        .rdw-link-modal {
+            left: -135px;
+            height: auto;
+        }
+        .rdw-embedded-modal {
+            height: auto;
+        }
+    }
+}

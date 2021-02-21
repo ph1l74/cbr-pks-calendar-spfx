@@ -1,10 +1,7 @@
-import BaseLink from "./BaseLink";
-
-
-
+import BaseLink from './BaseLink';
 
 export default interface Model {
     id: number;
-    _links: BaseLink
-    //[key: string]: string | number | undefined
+    _links: BaseLink;
+    // [key: string]: BaseLink | number | undefined
 }

@@ -1,43 +1,76 @@
 .feedback {
+    border-bottom: 1px solid #e6e9ec;
+    display: inline-flex;
+    padding-top: 15px;
     li {
-        margin: 0px 40px;
-        
-        .avatar {
-            width: 200px;
-            display: inline-block;
-            vertical-align: top;
-        }
+        margin: 0px 40px;      
 
-        .content {
-            font-size: 13px;
-            font-family: Arial, sans-serif;
-            width: 500px;
+    }
+    .avatar {
+        width: 50px;
+        display: inline-block;
+        vertical-align: top;
+        padding-right: 20px;
+    }
+    .content {
+        font-size: 13px;
+        font-family: Arial, sans-serif;
+        width: 780px;
+        display: inline-block;
+        vertical-align: top;
+        .name {
             display: inline-block;
-            vertical-align: top;
-            .name {
-                display: inline-block;
-                margin-right: 20px;
+            margin-right: 20px;
+            padding-bottom: 5px;
+            .authorInfo {
+                // padding-top: 5px;
+                color: #4689b9; 
+                display: 'flex';
+                width: 300px;
+                padding-right: 50px;
+                .authorName{
+                    padding-top: 0px;
+                }
             }
-            .date {
-                display: inline-block;
-                margin-right: 20px;
-                color: #999;
-            }
-            .controls {
-                display: inline-block;
-            }
-            .comment {
-                display: block;
-                color: rgba(0, 0, 0, 1);
-            }
-            .materials {
-                display: block;
-                color: #4689b9;
-            }
-            .links {
-                display: block;
-                color: #4689b9;
-            }
+        }
+        .date {
+            display: inline-block;
+            margin-right: 20px;
+            color: #999;
+        }
+        .controls {
+            display: inline-block;
+        }
+        .comment {
+            display: block;
+            color: rgba(0, 0, 0, 1);
+            padding-bottom: 5px;
+        }
+        .materials {
+            display: block;
+            color: #4689b9;
+            // padding-left: 30px;
+        }
+        .links {
+            display: block;
+            color: #4689b9;
         }
     }
+}
+
+.feedbacksHeader{        
+    padding: 20px;
+    padding-bottom: 30px;
+    .NewCommentBtn{
+        float: right;
+    }
+}
+
+.materialsLink {
+    display: block;
+    text-decoration: none;
+    // color: #4689b9;
+    font-size: 13px;
+    padding-bottom: 5px;
+    // padding: 0px 0 0px 16px!important;
 }
